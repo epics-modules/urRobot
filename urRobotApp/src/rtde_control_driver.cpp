@@ -292,7 +292,6 @@ void RTDEControl::poll() {
             }
 
         } else {
-            spdlog::debug("Not connected");
             setIntegerParam(isConnectedIndex_, 0);
         }
 
