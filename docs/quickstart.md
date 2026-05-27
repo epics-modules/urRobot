@@ -37,7 +37,7 @@ Consult the `ur_rtde` library documentation on how to build it from source.
 
 **Build**
 
-1. Clone or download [https://github.com/BCDA-APS/urRobot](https://github.com/BCDA-APS/urRobot)
+1. Clone or download [https://github.com/epics-modules/urRobot](https://github.com/epics-modules/urRobot)
 2. Edit configure/RELEASE to correct the paths to `EPICS_BASE` and `ASYN`
 3. `make`
 

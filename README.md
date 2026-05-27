@@ -1,7 +1,7 @@
 # Universal Robots EPICS Support Module
 
-[![Latest Release](https://img.shields.io/github/v/tag/BCDA-APS/urRobot?label=release)](https://github.com/BCDA-APS/urRobot/releases)
-[![Documentation](https://img.shields.io/badge/docs-sphinx-blue)](https://bcda-aps.github.io/urRobot/)
+[![Latest Release](https://img.shields.io/github/v/tag/epics-modules/urRobot?label=release)](https://github.com/epics-modules/urRobot/releases)
+[![Documentation](https://img.shields.io/badge/docs-sphinx-blue)](https://epics-modules.github.io/urRobot/)
 
 <p align="center">
      <a href="https://epics-controls.org/">
@@ -27,7 +27,7 @@ EPICS support module for controlling Universal Robots e-series arms (UR3e, UR5e)
 
 ## Documentation
 Full build instructions, IOC integration, usage guides, and PV reference:
-**https://bcda-aps.github.io/urRobot/**
+**https://epics-modules.github.io/urRobot/**
 
 ## License
 Copyright (c) 2026 UChicago Argonne, LLC. See [LICENSE](LICENSE) for details.
