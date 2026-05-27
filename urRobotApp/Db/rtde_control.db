@@ -1003,18 +1003,27 @@ record(ao, "$(P)Control:TCPOffset_Yaw")
 #======================
 # Custom URScripts
 #======================
-record(stringout, "$(P)Control:CustomScriptPath")
+record(lso, "$(P)Control:CustomScriptFile")
 {
     field(DESC, "Path to URScript")
     field(DTYP, "asynOctetWrite")
-    field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))CUSTOM_SCRIPT_PATH")
+    field(SIZV, 1024)
+    field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))CUSTOM_SCRIPT_FILE")
 }
 
-record(bo, "$(P)Control:RunCustomScript")
+record(lso, "$(P)Control:CustomInlineScript")
+{
+    field(DESC, "Inline URScript")
+    field(DTYP, "asynOctetWrite")
+    field(SIZV, 1024)
+    field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))CUSTOM_INLINE_SCRIPT")
+}
+
+record(bo, "$(P)Control:RunCustomScriptFile")
 {
     field(DESC, "Runs custom URScript on controller")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))RUN_CUSTOM_SCRIPT")
+    field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))RUN_CUSTOM_SCRIPT_FILE")
 }
 
 record(ao, "$(P)Control:CustomScriptTimeout")

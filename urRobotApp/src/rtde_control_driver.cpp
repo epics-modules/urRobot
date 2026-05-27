@@ -116,7 +116,7 @@ void RTDEControl::poll_custom_script() {
     if (script_finished) {
         custom_script_running_ = false;
         setIntegerParam(customScriptRunningIndex_, 0);
-        spdlog::debug("URScript done: {}", custom_script_path_);
+        spdlog::debug("URScript done");
         spdlog::debug("Reuploading RTDE control script");
         rtde_control_->reuploadScript();
         auto start = std::chrono::steady_clock::now();
@@ -184,8 +184,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("TEACH_MODE", asynParamInt32, &teachModeIndex_);
     createParam("TRIGGER_PROT_STOP", asynParamInt32, &triggerProtStopIndex_);
     createParam("MOTION_DONE_COUNT", asynParamInt32, &motionDoneCountIndex_);
-    createParam("CUSTOM_SCRIPT_PATH", asynParamOctet, &customScriptFileIndex_);
-    createParam("RUN_CUSTOM_SCRIPT", asynParamInt32, &runCustomScriptIndex_);
+    createParam("CUSTOM_SCRIPT_FILE", asynParamOctet, &customScriptFileIndex_);
+    createParam("CUSTOM_INLINE_SCRIPT", asynParamOctet, &customInlineScriptIndex_);
+    createParam("RUN_CUSTOM_SCRIPT_FILE", asynParamInt32, &runCustomScriptFileIndex_);
     createParam("CUSTOM_SCRIPT_RUNNING", asynParamInt32, &customScriptRunningIndex_);
     createParam("CUSTOM_SCRIPT_ERROR", asynParamInt32, &customScriptErrorIndex_);
     createParam("CUSTOM_SCRIPT_TIMEOUT", asynParamFloat64, &customScriptTimeoutIndex_);
@@ -490,7 +491,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         }
     }
 
-    else if (function == runCustomScriptIndex_) {
+    else if (function == runCustomScriptFileIndex_) {
         if (pending_motion_ && motion_status_ != AsyncMotionStatus::WaitingAction) {
             spdlog::warn("Motion task in progress. Cannot run script.");
             goto skip;
@@ -548,7 +549,7 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
     }
 
     if (function == customScriptFileIndex_) {
-        // Set the path, and read it every time in runCustomScriptIndex_.
+        // Set the path, and read it every time in callback for runCustomScriptFileIndex_
         if (std::filesystem::exists(value)) {
             custom_script_path_ = value;
             spdlog::debug("Successfully read URScript file: {}", value);
@@ -559,13 +560,36 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
         }
     }
 
+    else if (function == customInlineScriptIndex_) {
+        if (pending_motion_ && motion_status_ != AsyncMotionStatus::WaitingAction) {
+            spdlog::warn("Motion task in progress. Cannot run script.");
+            goto skip;
+        }
+
+        if (!script_client_->isConnected()) {
+            spdlog::error("ScriptClient not connected!");
+            goto skip;
+        }
+
+        spdlog::debug("Running inline URScript: {}", value);
+        setIntegerParam(customScriptErrorIndex_, 0);
+        rtde_control_->stopScript();
+        script_client_->sendScriptCommand(wrap_script(value));
+        custom_script_running_ = true;
+        custom_script_start_time_ = std::chrono::steady_clock::now();
+        setIntegerParam(customScriptRunningIndex_, 1);
+        drv_receive_->lock();
+        drv_receive_->getIntegerParam(outputIntRegId_, &custom_script_running_count_);
+        drv_receive_->unlock();
+    }
+
 skip:
     *nActual = strlen(value);
     callParamCallbacks();
     if (comm_ok) {
         return asynSuccess;
     } else {
-        spdlog::debug("RTDE communication error in RTDEControl::writeInt32");
+        spdlog::debug("RTDE communication error in RTDEControl::writeOctet");
         return asynError;
     }
 }

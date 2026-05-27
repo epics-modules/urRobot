@@ -1,14 +1,14 @@
 
 file {
-	name="/xorApps/epics/synApps_6_3/support/urRobot/urRobotApp/op/adl/custom_urscript.adl"
+	name="/net/s100dserv/xorApps/epics/synApps_6_3/support/urRobot/urRobotApp/op/adl/custom_urscript.adl"
 	version=030111
 }
 display {
 	object {
-		x=353
-		y=499
+		x=3511
+		y=922
 		width=330
-		height=120
+		height=180
 	}
 	clr=14
 	bclr=4
@@ -90,64 +90,33 @@ display {
 "text entry" {
 	object {
 		x=10
-		y=65
+		y=120
 		width=250
-		height=20
+		height=21
 	}
 	control {
-		chan="$(P)Control:CustomScriptPath.VAL"
+		chan="$(P)Control:CustomScriptFile.VAL$"
 		clr=14
 		bclr=51
 	}
+	format="string"
 	limits {
 	}
 }
 "message button" {
 	object {
-		x=270
-		y=65
+		x=265
+		y=120
 		width=50
-		height=20
+		height=21
 	}
 	control {
-		chan="$(P)Control:RunCustomScript.PROC"
+		chan="$(P)Control:RunCustomScriptFile.PROC"
 		clr=14
 		bclr=51
 	}
 	label="Run"
 	press_msg="1"
-}
-"text update" {
-	object {
-		x=10
-		y=40
-		width=250
-		height=20
-	}
-	monitor {
-		chan="$(P)Control:CustomScriptRunning.VAL"
-		clr=54
-		bclr=4
-	}
-	limits {
-	}
-}
-text {
-	object {
-		x=10
-		y=93
-		width=55
-		height=20
-	}
-	"basic attribute" {
-		clr=20
-	}
-	"dynamic attribute" {
-		vis="if not zero"
-		calc="A"
-		chan="$(P)Control:CustomScriptError.VAL"
-	}
-	textix="Error"
 }
 rectangle {
 	object {
@@ -187,10 +156,10 @@ text {
 }
 "message button" {
 	object {
-		x=270
-		y=90
+		x=265
+		y=95
 		width=50
-		height=20
+		height=21
 	}
 	control {
 		chan="$(P)Dashboard:Stop"
@@ -202,8 +171,8 @@ text {
 }
 "text entry" {
 	object {
-		x=210
-		y=95
+		x=265
+		y=155
 		width=50
 		height=15
 	}
@@ -217,9 +186,9 @@ text {
 }
 text {
 	object {
-		x=85
-		y=95
-		width=120
+		x=150
+		y=155
+		width=110
 		height=15
 	}
 	"basic attribute" {
@@ -227,4 +196,76 @@ text {
 	}
 	textix="Timeout(sec):"
 	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=10
+		y=80
+		width=250
+		height=21
+	}
+	control {
+		chan="$(P)Control:CustomInlineScript.VAL$"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=10
+		y=65
+		width=150
+		height=10
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Inline (runs immediately):"
+}
+text {
+	object {
+		x=10
+		y=110
+		width=70
+		height=10
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="File:"
+}
+text {
+	object {
+		x=265
+		y=55
+		width=55
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		calc="A"
+		chan="$(P)Control:CustomScriptError.VAL"
+	}
+	textix="Error"
+}
+"text update" {
+	object {
+		x=10
+		y=35
+		width=100
+		height=20
+	}
+	monitor {
+		chan="$(P)Control:CustomScriptRunning.VAL"
+		clr=54
+		bclr=4
+	}
+	limits {
+	}
 }
