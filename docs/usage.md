@@ -250,11 +250,12 @@ For point 1 in your path, you'd set the Type to "Linear", Number to 3, and Actio
 
 ## Custom URScript
 
-The Custom URScript feature allows you to upload and run arbitrary URScript programs
+The Custom URScript feature allows you to run arbitrary URScript programs
 directly on the robot controller. This is useful for operations that are not covered
 by the built-in driver commands, such as custom force control routines, specialized
 I/O sequences, or complex motion patterns.
 
+There are two ways to run a custom script: from a **file** or **inline**.
 
 When a custom script is executed, the driver:
 
@@ -267,13 +268,17 @@ When a custom script is executed, the driver:
 While a custom script is running, normal motion commands (moveJ, moveL, etc.) are
 unavailable because the RTDE control script is not active on the robot.
 
-### Basic Usage
+The driver automatically wraps the script in a function and appends a register
+increment to signal completion. Do not include your own `def`/`end` wrapper or
+register signaling.
 
-1. **Set the script path**: Write the filename of your URScript to
-   `$(P)Control:CustomScriptPath`. The file must be accessible from the IOC's
+### Running a Script File
+
+1. **Set the script path**: Write the path of your URScript file to
+   `$(P)Control:CustomScriptFile`. The file must be accessible from the IOC's
    working directory.
-2. **Run the script**:  Process `$(P)Control:RunCustomScript` to upload and execute
-   the script.
+2. **Run the script**: Process `$(P)Control:RunCustomScriptFile` to upload and
+   execute the script.
 3. **Monitor status**: `$(P)Control:CustomScriptRunning` indicates whether the
    script is currently executing. `$(P)Control:CustomScriptError` indicates if an
    error occurred (e.g. the script timed out).
@@ -283,22 +288,37 @@ unavailable because the RTDE control script is not active on the robot.
    time.
 
 The script file should contain plain URScript commands. For example, a script that
-rotates the 6th joint by -90 degrees:
+rotates the 6th joint by +90 degrees:
 
 ```
 q = get_actual_joint_positions()
-q[5] = q[5] - 1.57
+q[5] = q[5] + 1.57
 movej(q)
 ```
 
-The driver automatically wraps the script in a function and appends a register
-increment to signal completion. Do not include your own `def`/`end` wrapper or
-register signaling.
+### Running an Inline Script
+
+For short scripts that don't warrant a separate file, you can write URScript
+commands directly to `$(P)Control:CustomInlineScript`. The script executes
+immediately upon writing. There is no separate "run" step.
+
+The same status and timeout PVs (`$(P)Control:CustomScriptRunning`,
+`$(P)Control:CustomScriptError`, `$(P)Control:CustomScriptTimeout`) apply to
+inline scripts.
+
+Example using `caput`:
+
+```bash
+caput MyIOC:Control:CustomInlineScript "set_standard_digital_out(1,True)"
+```
+
+The inline script PV (`lso` record) supports strings up to 1024 characters.
+For longer scripts, use a file instead.
 
 ### Stopping a Running Script
 
 To stop a custom script while it is running, use `$(P)Dashboard:Stop` which stops
-the program at the controller level. After stopping, you will need to process
+the program at the controller level. After stopping manually, you will need to process
 `$(P)Control:ReuploadControlScript` to restore normal motion commands.
 
 ### Error Handling
@@ -320,19 +340,24 @@ when the robot reaches a waypoint during path execution. This is configured by
 setting up an `ActionSseq` and `ActionDoneCalc` pair, similar to other waypoint
 actions.
 
-To configure action number `N` (e.g. `N=3`) to run a custom script:
+To configure action number `N` (e.g. `N=3`) to run a custom script file:
 
 1. Set the script filename in `$(P)ActionSseq3.STR1` (e.g. `my_script.urscript`).
-2. Set `$(P)ActionSseq3.LNK1` to `$(P)Control:CustomScriptPath.VAL CA` so the
+2. Set `$(P)ActionSseq3.LNK1` to `$(P)Control:CustomScriptFile.VAL$ CA` so the
    filename is written to the driver when the action runs.
 3. Set `$(P)ActionSseq3.DO2` to `1`.
-4. Set `$(P)ActionSseq3.LNK2` to `$(P)Control:RunCustomScript.PROC CA` to trigger
-   script execution.
+4. Set `$(P)ActionSseq3.LNK2` to `$(P)Control:RunCustomScriptFile.PROC CA` to
+   trigger script execution.
 5. Set `$(P)ActionDoneCalc3.INPA` to `$(P)Control:CustomScriptRunning.VAL CP` so
    the calcout monitors whether the script is still running.
 6. Set `$(P)ActionDoneCalc3.CALC` to `!A` so the action is considered done when the
    script is no longer running.
 7. Optionally, set `$(P)ActionSseq3.DESC` to a description of the action.
+
+Alternatively, to use an inline script as a waypoint action, set `$(P)ActionSseq3.STR1`
+to the URScript command string and `$(P)ActionSseq3.LNK1` to
+`$(P)Control:CustomInlineScript.VAL$ CA`. Since the inline script executes
+immediately on write, no separate "run" step is needed — omit steps 3 and 4 above.
 
 After configuring the action, assign it to a waypoint by setting the waypoint's
 `ActionOpt` to `N`, or use the action override field on a path waypoint.

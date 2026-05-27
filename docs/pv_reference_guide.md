@@ -138,6 +138,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:Steady    | bi     | 1 if robot is fully at rest     |
 | Control:AsyncMoveDone   | bi     | 1 if async motion and waypoint action are complete, else 0 |
 | Control:Moving    | bi     | 1 if robot is in motion, else 0     |
+| Control:CustomScriptRunning    | bi     | 1 while a custom URScript is executing     |
+| Control:CustomScriptError    | bi     | 1 if the last custom script timed out or failed     |
 
 ***Outputs***
 
@@ -216,6 +218,10 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:TCPOffset_Roll    | ao     | TCP offset roll (rad)     |
 | Control:TCPOffset_Pitch    | ao     | TCP offset pitch (rad)     |
 | Control:TCPOffset_Yaw    | ao     | TCP offset yaw (rad)     |
+| Control:CustomScriptFile    | lso     | Path to a URScript file to run on the controller     |
+| Control:CustomInlineScript    | lso     | Inline URScript string; executes immediately on write     |
+| Control:RunCustomScriptFile    | bo     | Uploads and runs the script file set in CustomScriptFile     |
+| Control:CustomScriptTimeout    | ao     | Timeout in seconds for custom script completion (default 10)     |
 
 ***
 
