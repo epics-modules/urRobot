@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-05-20 17:37:59 by nmarks-->
+<!--Saved on 2026-05-28 09:38:57 by nmarks-->
 <display version="2.0.0">
   <name>custom_urscript</name>
-  <x>353</x>
-  <y>499</y>
+  <x>3511</x>
+  <y>922</y>
   <width>330</width>
-  <height>120</height>
+  <height>180</height>
   <background_color>
     <color red="187" green="187" blue="187">
     </color>
@@ -14,10 +14,11 @@
   <grid_step_x>5</grid_step_x>
   <widget type="textentry" version="3.0.0">
     <name>text entry #6</name>
-    <pv_name>$(P)Control:CustomScriptPath.VAL</pv_name>
+    <pv_name>$(P)Control:CustomScriptFile.VAL$</pv_name>
     <x>10</x>
-    <y>65</y>
+    <y>120</y>
     <width>250</width>
+    <height>21</height>
     <font>
       <font family="Liberation Sans" style="REGULAR" size="16.0">
       </font>
@@ -26,7 +27,7 @@
       <color red="115" green="223" blue="255">
       </color>
     </background_color>
-    <format>1</format>
+    <format>6</format>
     <show_units>false</show_units>
     <border_alarm_sensitive>false</border_alarm_sensitive>
   </widget>
@@ -34,38 +35,104 @@
     <name>message button #10</name>
     <actions>
       <action type="write_pv">
-        <pv_name>$(P)Control:RunCustomScript.PROC</pv_name>
+        <pv_name>$(P)Control:RunCustomScriptFile.PROC</pv_name>
         <value>1</value>
         <description>Write</description>
       </action>
     </actions>
-    <pv_name>$(P)Control:RunCustomScript.PROC</pv_name>
+    <pv_name>$(P)Control:RunCustomScriptFile.PROC</pv_name>
     <text>Run</text>
-    <x>270</x>
-    <y>65</y>
+    <x>265</x>
+    <y>120</y>
     <width>50</width>
-    <height>20</height>
+    <height>21</height>
     <background_color>
       <color red="115" green="223" blue="255">
       </color>
     </background_color>
   </widget>
-  <widget type="textupdate" version="2.0.0">
-    <name>text update #13</name>
-    <pv_name>$(P)Control:CustomScriptRunning.VAL</pv_name>
-    <x>10</x>
-    <y>40</y>
-    <width>250</width>
+  <widget type="rectangle" version="2.0.0">
+    <name>rectangle #13</name>
+    <width>500</width>
+    <height>30</height>
+    <line_color>
+      <color red="39" green="84" blue="141">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="39" green="84" blue="141">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>text #16</name>
+    <text>Custom URScript</text>
+    <x>5</x>
+    <y>5</y>
+    <width>175</width>
     <font>
       <font family="Liberation Sans" style="REGULAR" size="16.0">
       </font>
     </font>
     <foreground_color>
-      <color red="10" green="0" blue="184">
+      <color red="255" green="255" blue="255">
+      </color>
+    </foreground_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>text #19</name>
+    <text>$(P)</text>
+    <x>175</x>
+    <y>5</y>
+    <width>150</width>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color red="255" green="255" blue="255">
+      </color>
+    </foreground_color>
+    <horizontal_alignment>2</horizontal_alignment>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>message button #22</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>$(P)Dashboard:Stop</pv_name>
+        <value>1</value>
+        <description>Write</description>
+      </action>
+    </actions>
+    <pv_name>$(P)Dashboard:Stop</pv_name>
+    <text>Stop</text>
+    <x>265</x>
+    <y>95</y>
+    <width>50</width>
+    <height>21</height>
+    <foreground_color>
+      <color red="251" green="243" blue="74">
       </color>
     </foreground_color>
     <background_color>
-      <color red="187" green="187" blue="187">
+      <color red="253" green="0" blue="0">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>text entry #25</name>
+    <pv_name>$(P)Control:CustomScriptTimeout.VAL</pv_name>
+    <x>265</x>
+    <y>155</y>
+    <width>50</width>
+    <height>15</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="115" green="223" blue="255">
       </color>
     </background_color>
     <format>1</format>
@@ -73,10 +140,68 @@
     <border_alarm_sensitive>false</border_alarm_sensitive>
   </widget>
   <widget type="label" version="2.0.0">
-    <name>text #17</name>
-    <text>Error</text>
+    <name>text #29</name>
+    <text>Timeout(sec):</text>
+    <x>150</x>
+    <y>155</y>
+    <width>110</width>
+    <height>15</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <horizontal_alignment>2</horizontal_alignment>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>text entry #32</name>
+    <pv_name>$(P)Control:CustomInlineScript.VAL$</pv_name>
     <x>10</x>
-    <y>93</y>
+    <y>80</y>
+    <width>250</width>
+    <height>21</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="115" green="223" blue="255">
+      </color>
+    </background_color>
+    <format>6</format>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>text #36</name>
+    <text>Inline (runs immediately):</text>
+    <x>10</x>
+    <y>65</y>
+    <width>150</width>
+    <height>10</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="10.0">
+      </font>
+    </font>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>text #39</name>
+    <text>File:</text>
+    <x>10</x>
+    <y>110</y>
+    <width>70</width>
+    <height>10</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="10.0">
+      </font>
+    </font>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>text #42</name>
+    <text>Error</text>
+    <x>265</x>
+    <y>55</y>
     <width>55</width>
     <font>
       <font family="Liberation Sans" style="REGULAR" size="16.0">
@@ -96,105 +221,25 @@
       </rule>
     </rules>
   </widget>
-  <widget type="rectangle" version="2.0.0">
-    <name>rectangle #21</name>
-    <width>500</width>
-    <height>30</height>
-    <line_color>
-      <color red="39" green="84" blue="141">
-      </color>
-    </line_color>
-    <background_color>
-      <color red="39" green="84" blue="141">
-      </color>
-    </background_color>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>text #24</name>
-    <text>Custom URScript</text>
-    <x>5</x>
-    <y>5</y>
-    <width>175</width>
+  <widget type="textupdate" version="2.0.0">
+    <name>text update #46</name>
+    <pv_name>$(P)Control:CustomScriptRunning.VAL</pv_name>
+    <x>10</x>
+    <y>35</y>
     <font>
       <font family="Liberation Sans" style="REGULAR" size="16.0">
       </font>
     </font>
     <foreground_color>
-      <color red="255" green="255" blue="255">
-      </color>
-    </foreground_color>
-    <auto_size>true</auto_size>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>text #27</name>
-    <text>$(P)</text>
-    <x>175</x>
-    <y>5</y>
-    <width>150</width>
-    <font>
-      <font family="Liberation Sans" style="REGULAR" size="16.0">
-      </font>
-    </font>
-    <foreground_color>
-      <color red="255" green="255" blue="255">
-      </color>
-    </foreground_color>
-    <horizontal_alignment>2</horizontal_alignment>
-  </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>message button #30</name>
-    <actions>
-      <action type="write_pv">
-        <pv_name>$(P)Dashboard:Stop</pv_name>
-        <value>1</value>
-        <description>Write</description>
-      </action>
-    </actions>
-    <pv_name>$(P)Dashboard:Stop</pv_name>
-    <text>Stop</text>
-    <x>270</x>
-    <y>90</y>
-    <width>50</width>
-    <height>20</height>
-    <foreground_color>
-      <color red="251" green="243" blue="74">
+      <color red="10" green="0" blue="184">
       </color>
     </foreground_color>
     <background_color>
-      <color red="253" green="0" blue="0">
-      </color>
-    </background_color>
-  </widget>
-  <widget type="textentry" version="3.0.0">
-    <name>text entry #33</name>
-    <pv_name>$(P)Control:CustomScriptTimeout.VAL</pv_name>
-    <x>210</x>
-    <y>95</y>
-    <width>50</width>
-    <height>15</height>
-    <font>
-      <font family="Liberation Sans" style="REGULAR" size="16.0">
-      </font>
-    </font>
-    <background_color>
-      <color red="115" green="223" blue="255">
+      <color red="187" green="187" blue="187">
       </color>
     </background_color>
     <format>1</format>
     <show_units>false</show_units>
     <border_alarm_sensitive>false</border_alarm_sensitive>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>text #37</name>
-    <text>Timeout(sec):</text>
-    <x>85</x>
-    <y>95</y>
-    <width>120</width>
-    <height>15</height>
-    <font>
-      <font family="Liberation Sans" style="REGULAR" size="16.0">
-      </font>
-    </font>
-    <horizontal_alignment>2</horizontal_alignment>
   </widget>
 </display>
