@@ -379,6 +379,11 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         new_jog_ = true;
     }
 
+    else if (function == jogAccelerationIndex_) {
+        new_jog_ = true;
+        asynPortDriver::writeFloat64(pasynUser, value);
+    }
+
     else {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
@@ -537,6 +542,8 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     else if (function == jogFeatureIndex_) {
         new_jog_ = true;
+        // probably could just call the base class method and use value
+        // directory instead of ur_rtde::RTDEControlInterface::Feature enum
         if (value == 0) {
             jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_BASE;
         } else if (value == 1) {
