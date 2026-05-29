@@ -60,6 +60,11 @@ class RTDEControl : public asynPortDriver {
     /// TCP pose offset: x,y,z (meters), roll,pitch,yaw (radians)
     std::vector<double> tcp_offset_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
+    /// Jog speed vector: Translation speed (m/s), rotational speed (rad/s)
+    std::vector<double> jog_speeds_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    int jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_BASE;
+    bool new_jog_ = false;
+
     /// Dynamics for moveJ (all in rad/s, rad/s^2, meters)
     double joint_speed_ = 0.5;
     double joint_accel_ = 1.4;
@@ -139,15 +144,25 @@ class RTDEControl : public asynPortDriver {
     int runWaypointActionIndex_;  ///< toggled to trigger waypoint action processing
     int waypointActionDoneIndex_; ///< set to 1 by action chain when action completes
 
-    /// Script / safety
-    int reuploadCtrlScriptIndex_;
-    int stopCtrlScriptIndex_;
-    int teachModeIndex_;
-    int triggerProtStopIndex_;
+    /// URScript
     int customScriptFileIndex_;
     int customInlineScriptIndex_;
     int runCustomScriptFileIndex_;
     int customScriptRunningIndex_;
     int customScriptErrorIndex_;
     int customScriptTimeoutIndex_;
+
+    /// Jogging
+    int jogStartIndex_;
+    int jogStopIndex_;
+    int jogSpeedIndex_; ///< Vector of jog speeds, addr 0-5
+    int jogFeatureIndex_;
+    int jogAccelerationIndex_;
+    int joggingIndex_;
+
+    /// Misc
+    int reuploadCtrlScriptIndex_;
+    int stopCtrlScriptIndex_;
+    int teachModeIndex_;
+    int triggerProtStopIndex_;
 };

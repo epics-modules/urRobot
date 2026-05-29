@@ -190,6 +190,12 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("CUSTOM_SCRIPT_RUNNING", asynParamInt32, &customScriptRunningIndex_);
     createParam("CUSTOM_SCRIPT_ERROR", asynParamInt32, &customScriptErrorIndex_);
     createParam("CUSTOM_SCRIPT_TIMEOUT", asynParamFloat64, &customScriptTimeoutIndex_);
+    createParam("JOG_START", asynParamInt32, &jogStartIndex_);
+    createParam("JOG_STOP", asynParamInt32, &jogStopIndex_);
+    createParam("JOG_SPEED", asynParamFloat64, &jogSpeedIndex_);
+    createParam("JOG_FEATURE", asynParamInt32, &jogFeatureIndex_);
+    createParam("JOG_ACCELERATION", asynParamFloat64, &jogAccelerationIndex_);
+    createParam("JOGGING", asynParamInt32, &joggingIndex_);
 
     // gets log level from SPDLOG_LEVEL environment variable
     spdlog::cfg::load_env_levels();
@@ -366,6 +372,13 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         spdlog::debug("Setting linear blend to {:.4f}", linear_blend_);
     }
 
+    else if (function == jogSpeedIndex_) {
+        // convert commanded x,y,z to meters and roll, pitch, yaw to radians
+        const double val = (addr >= 3) ? (value * M_PI / 180.0) : (value / 1000.0);
+        jog_speeds_[addr] = val;
+        new_jog_ = true;
+    }
+
     else {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
@@ -520,6 +533,45 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         drv_receive_->lock();
         drv_receive_->getIntegerParam(outputIntRegId_, &custom_script_running_count_);
         drv_receive_->unlock();
+    }
+
+    else if (function == jogFeatureIndex_) {
+        new_jog_ = true;
+        if (value == 0) {
+            jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_BASE;
+        } else if (value == 1) {
+            jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_TOOL;
+        }
+    }
+
+    else if (function == jogStartIndex_) {
+        if (new_jog_) {
+            double accel = 0.0;
+            getDoubleParam(jogAccelerationIndex_, &accel);
+            // TODO: rtde_control_->jogStart(...);
+            spdlog::debug("Starting jog: feature={}; accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]",
+                          jog_feature_,
+                          accel,
+                          jog_speeds_[0],
+                          jog_speeds_[1],
+                          jog_speeds_[2],
+                          jog_speeds_[3],
+                          jog_speeds_[4],
+                          jog_speeds_[5]
+                          );
+            new_jog_ = false;
+        }
+        setIntegerParam(joggingIndex_, 1);
+    }
+
+    else if (function == jogStopIndex_) {
+        // TODO: rtde_control_->jogStop();
+        spdlog::debug("Stopping jog");
+        setIntegerParam(joggingIndex_, 0);
+    }
+
+    else {
+        asynPortDriver::writeInt32(pasynUser, value);
     }
 
 skip:

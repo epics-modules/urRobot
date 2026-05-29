@@ -1,0 +1,147 @@
+record(bi, "$(P)Control:Jogging") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOGGING")
+    field(ZNAM, "Stopped")
+    field(ONAM, "Jogging")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)Control:JogStart") {
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOG_START")
+    field(FLNK, "$(P)Control:jog_timer:set_start.PROC")
+}
+
+record(bo, "$(P)Control:JogStop") {
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOG_STOP")
+}
+
+record(ao, "$(P)Control:JogAccel") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOG_ACCELERATION")
+}
+
+record(bo, "$(P)Control:JogFeature") {
+    field(DTYP, "asynInt32")
+    field(VAL, 0)
+    field(ZNAM, "Base")
+    field(ONAM, "Tool")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOG_FEATURE")
+}
+
+record(ao, "$(P)Control:JogSpeed1") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),0,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+record(ao, "$(P)Control:JogSpeed2") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),1,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+record(ao, "$(P)Control:JogSpeed3") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),2,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+record(ao, "$(P)Control:JogSpeed4") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),3,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+record(ao, "$(P)Control:JogSpeed5") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),4,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+record(ao, "$(P)Control:JogSpeed6") {
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(PORT),5,$(TIMEOUT=1))JOG_SPEED")
+    field(PINI, "YES")
+    field(VAL, 0.0)
+    field(PREC, 4)
+}
+
+
+# Jog timeout timer adapted from stdApp/Db/timer.vdb
+#
+# Automatically processes JogStop after a timeout. Calling JogStart
+# resets the timer. This is a safety feature so EPICS clients must
+# continually call JogStart within the timeout to keep jogging.
+
+record(calcout, "$(P)Control:jog_timer:count") {
+  field(DESC, "Up/Down Counter")
+  field(INPA, "$(P)Control:jog_timer:start")
+  field(INPC, "$(P)Control:jog_timer:count.VAL")
+  field(CALC, "A?C-0.1:C")
+  field(PREC, 3)
+}
+
+record(calcout, "$(P)Control:jog_timer:trigger") {
+  field(DESC, "Trigger Set")
+  field(INPA, "$(P)Control:jog_timer:stop_start NPP NMS")
+  field(CALC, "!A")
+  field(OOPT, "Transition To Non-zero")
+  field(OUT, "$(P)Control:JogStop.PROC")
+}
+
+record(calcout, "$(P)Control:jog_timer:count_reset") {
+  field(DESC, "Reset Count and Start")
+  field(INPA, "$(P)Control:jog_timer:start")
+  field(INPC, "$(P)Control:jog_timer:count")
+  field(INPD, "$(P)Control:jog_timer:reset")
+  field(CALC, "A ? D : C")
+  field(OUT, "$(P)Control:jog_timer:count.VAL NPP NMS")
+  field(FLNK, "$(P)Control:jog_timer:stop_start.VAL PP NMS")
+}
+
+record(calcout, "$(P)Control:jog_timer:stop_start") {
+  field(DESC, "Stop/Start Counter")
+  field(SCAN, "Passive")
+  field(INPA, "$(P)Control:jog_timer:count.VAL CP NMS")
+  field(INPC, "$(P)Control:jog_timer:reset NPP NMS")
+  field(INPD, "$(P)Control:jog_timer:start")
+  field(CALC, "D&A>0?9:0")
+  field(OOPT, "On Change")
+  field(OUT, "$(P)Control:jog_timer:count.SCAN NPP NMS")
+  field(FLNK, "$(P)Control:jog_timer:trigger.PROC")
+}
+
+record(calcout, "$(P)Control:jog_timer:reset") {
+  field(DESC, "Timer Reset")
+  field(SCAN, "Passive")
+  field(INPC, "$(P)Control:jog_timer:timeout CP NMS")
+  field(CALC, "C")
+}
+
+record(bo, "$(P)Control:jog_timer:set_start") {
+    field(VAL, 1)
+    field(OUT, "$(P)Control:jog_timer:start.VAL PP")
+}
+
+record(bo, "$(P)Control:jog_timer:start") {
+  field(DESC, "Start timer")
+  field(SCAN, "Passive")
+  field(DTYP, "Soft Channel")
+  field(ZNAM, "Stop")
+  field(ONAM, "Start")
+  field(FLNK, "$(P)Control:jog_timer:count_reset")
+}
+
+record(ao, "$(P)Control:jog_timer:timeout") {
+  field(SCAN, "Passive")
+  field(DTYP, "Soft Channel")
+  field(PREC, 3)
+  field(VAL, 1.0)
+}
