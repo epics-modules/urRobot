@@ -556,7 +556,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if (new_jog_) {
             double accel = 0.0;
             getDoubleParam(jogAccelerationIndex_, &accel);
-            // TODO: rtde_control_->jogStart(...);
+            rtde_control_->speedL(jog_speeds_, 0.25, 0.5);
             spdlog::debug("Starting jog: feature={}; accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]",
                           jog_feature_,
                           accel,
@@ -573,8 +573,8 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     }
 
     else if (function == jogStopIndex_) {
-        // TODO: rtde_control_->jogStop();
         spdlog::debug("Stopping jog");
+        rtde_control_->speedStop();
         setIntegerParam(joggingIndex_, 0);
     }
 
