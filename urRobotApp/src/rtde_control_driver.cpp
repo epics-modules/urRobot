@@ -375,6 +375,7 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     else if (function == jogSpeedIndex_) {
         // convert commanded x,y,z to meters and roll, pitch, yaw to radians
         const double val = (addr >= 3) ? (value * M_PI / 180.0) : (value / 1000.0);
+        spdlog::debug("Setting jog speed[{}] to {:.4f}", addr, val);
         jog_speeds_[addr] = val;
         new_jog_ = true;
     }

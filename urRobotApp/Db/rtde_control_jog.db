@@ -15,6 +15,7 @@ record(bo, "$(P)Control:JogStart") {
 record(bo, "$(P)Control:JogStop") {
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))JOG_STOP")
+    field(FLNK, "$(P)Control:jog_timer:set_stop.PROC")
 }
 
 record(ao, "$(P)Control:JogAccel") {
@@ -127,6 +128,11 @@ record(calcout, "$(P)Control:jog_timer:reset") {
 
 record(bo, "$(P)Control:jog_timer:set_start") {
     field(VAL, 1)
+    field(OUT, "$(P)Control:jog_timer:start.VAL PP")
+}
+
+record(bo, "$(P)Control:jog_timer:set_stop") {
+    field(VAL, 0)
     field(OUT, "$(P)Control:jog_timer:start.VAL PP")
 }
 
