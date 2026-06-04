@@ -62,7 +62,6 @@ class RTDEControl : public asynPortDriver {
 
     /// Jog speed vector: Translation speed (m/s), rotational speed (rad/s)
     std::vector<double> jog_speeds_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    int jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_BASE;
     bool new_jog_ = false;
 
     /// Dynamics for moveJ (all in rad/s, rad/s^2, meters)
@@ -156,7 +155,6 @@ class RTDEControl : public asynPortDriver {
     int jogStartIndex_;
     int jogStopIndex_;
     int jogSpeedIndex_; ///< Vector of jog speeds, addr 0-5
-    int jogFeatureIndex_;
     int jogAccelerationIndex_;
     int joggingIndex_;
 

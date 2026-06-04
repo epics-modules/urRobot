@@ -193,7 +193,6 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("JOG_START", asynParamInt32, &jogStartIndex_);
     createParam("JOG_STOP", asynParamInt32, &jogStopIndex_);
     createParam("JOG_SPEED", asynParamFloat64, &jogSpeedIndex_);
-    createParam("JOG_FEATURE", asynParamInt32, &jogFeatureIndex_);
     createParam("JOG_ACCELERATION", asynParamFloat64, &jogAccelerationIndex_);
     createParam("JOGGING", asynParamInt32, &joggingIndex_);
 
@@ -541,32 +540,14 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         drv_receive_->unlock();
     }
 
-    else if (function == jogFeatureIndex_) {
-        new_jog_ = true;
-        // probably could just call the base class method and use value
-        // directory instead of ur_rtde::RTDEControlInterface::Feature enum
-        if (value == 0) {
-            jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_BASE;
-        } else if (value == 1) {
-            jog_feature_ = ur_rtde::RTDEControlInterface::FEATURE_TOOL;
-        }
-    }
-
     else if (function == jogStartIndex_) {
         if (new_jog_) {
             double accel = 0.0;
             getDoubleParam(jogAccelerationIndex_, &accel);
-            rtde_control_->speedL(jog_speeds_, 0.25, 0.5);
-            spdlog::debug("Starting jog: feature={}; accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]",
-                          jog_feature_,
-                          accel,
-                          jog_speeds_[0],
-                          jog_speeds_[1],
-                          jog_speeds_[2],
-                          jog_speeds_[3],
-                          jog_speeds_[4],
-                          jog_speeds_[5]
-                          );
+            rtde_control_->speedL(jog_speeds_, accel, 0.01);
+            spdlog::debug("Starting jog: accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]", accel,
+                          jog_speeds_[0], jog_speeds_[1], jog_speeds_[2], jog_speeds_[3], jog_speeds_[4],
+                          jog_speeds_[5]);
             new_jog_ = false;
         }
         setIntegerParam(joggingIndex_, 1);
