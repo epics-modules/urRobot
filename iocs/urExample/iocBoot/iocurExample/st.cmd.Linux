@@ -15,10 +15,19 @@ scanOnceSetQueueSize(2000)
 epicsEnvSet("SPDLOG_LEVEL","debug,mylogger=trace")
 
 # Load urRobot iocsh script with the IP address for your robot
-iocshLoad("$(URROBOT)/urRobotApp/iocsh/urRobot.iocsh", "IP=164.54.1.100")
+iocshLoad("$(URROBOT)/urRobotApp/iocsh/urRobot.iocsh", "IP=192.168.101.42")
 
-# Optionally load support for waypoints and paths
+# # Optional: Support for waypoints and paths
 # iocshLoad("$(URROBOT)/urRobotApp/iocsh/paths.iocsh")
+
+# Optional: ADURL support for wrist camera
+# iocshLoad("ADURL.iocsh", "INSTANCE=wristcam,XSIZE=640,YSIZE=480,COLORS=3")
+
+# # Wrist cam uses the following URLs:
+# "http://192.168.101.42:4242/current.jpg?type=color"
+# "http://192.168.101.42:4242/current.jpg?type=egdes"
+# "http://192.168.101.42:4242/current.jpg?type=magnitude"
+# "http://192.168.101.42:4242/current.jpg?type=annotations"
 
 ###############################################################################
 iocInit

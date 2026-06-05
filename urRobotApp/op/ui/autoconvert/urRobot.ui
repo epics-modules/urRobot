@@ -293,22 +293,22 @@ caMenu{
                 </color>
             </property>
             <property name="label">
-                <string>-Gripper</string>
+                <string>-Tool</string>
             </property>
             <property name="stackingMode">
                 <enum>Menu</enum>
             </property>
             <property name="labels">
-                <string></string>
+                <string>Robotiq Gripper;Robotiq Wrist Camera</string>
             </property>
             <property name="files">
-                <string>robotiq_gripper.adl</string>
+                <string>robotiq_gripper.adl;robotiq_wrist_camera.adl</string>
             </property>
             <property name="args">
-                <string>P=$(P)</string>
+                <string>P=$(P);P=$(P),R=wristcam:</string>
             </property>
             <property name="removeParent">
-                <string>false</string>
+                <string>false;false</string>
             </property>
         </widget>
         <widget class="caRelatedDisplay" name="caRelatedDisplay_4">

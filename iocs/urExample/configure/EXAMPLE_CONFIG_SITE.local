@@ -1,0 +1,1 @@
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE

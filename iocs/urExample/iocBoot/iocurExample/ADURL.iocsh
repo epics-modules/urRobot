@@ -1,0 +1,43 @@
+#- INSTANCE  - Used for Camera Port Name and detector pv name
+#- XSIZE     - Image Width
+#- YSIZE     - Image Height
+#- TYPE      - Image Datatype, default: Int8
+#- COLORS    - Number of colors, default: 1
+
+epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(EPICS_DB_INCLUDE_PATH=.):$(ADCORE)/db:$(ADURL)/db")
+
+# Create a URL driver
+# URLDriverConfig(const char *portName, int maxBuffers, size_t maxMemory,
+#                 int priority, int stackSize)
+URLDriverConfig("$(INSTANCE)", 0, 0)
+dbLoadRecords("$(ADURL)/db/URLDriver.template","P=$(PREFIX),R=$(INSTANCE):,PORT=$(INSTANCE),ADDR=0,TIMEOUT=1")
+
+# Create a standard arrays plugin
+NDStdArraysConfigure("$(INSTANCE)Image", 3, 0, "$(INSTANCE)", 0, 2000000)
+
+# Need to determine certain values from input parameters
+iocshRun('epicsEnvSet("__FTVL", "$($(TYPE=Int8)_VAL)")', "Int8_VAL=UCHAR, UInt8_VAL=UCHAR, Int16_VAL=SHORT, UInt16_VAL=SHORT, Int32_VAL=LONG, UInt32_VAL=LONG, Float32_VAL=DOUBLE, Float64_VAL=DOUBLE")
+iocshRun('epicsEnvSet("__TYPE", "$($(TYPE=Int8)_VAL)")', "Int8_VAL=Int8, UInt8_VAL=Int8, Int16_VAL=Int16, UInt16_VAL=Int16, Int32_VAL=Int32, UInt32_VAL=Int32, Float32_VAL=Float32, Float64_VAL=Float64")
+luaCmd("epicsEnvSet('__SIZE', tostring((COLORS*XSIZE*YSIZE)|0))", "COLORS=$(COLORS=1), XSIZE=$(XSIZE), YSIZE=$(YSIZE)")
+
+dbLoadRecords("$(ADCORE)/ADApp/Db/NDStdArrays.template", "P=$(PREFIX),R=image1:,PORT=$(INSTANCE)Image,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(INSTANCE),TYPE=$(__TYPE),FTVL=$(__FTVL),NELEMENTS=$(__SIZE)")
+
+epicsEnvUnset("__FTVL")
+epicsEnvUnset("__TYPE")
+epicsEnvUnset("__SIZE")
+
+# Load some AD plugins
+
+# Create a JPEG file saving plugin
+NDFileJPEGConfigure("FileJPEG1", $(QSIZE=20), 0, "$(INSTANCE)", 0)
+dbLoadRecords("NDFileJPEG.template",  "P=$(PREFIX),R=JPEG1:,PORT=FileJPEG1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(INSTANCE)")
+
+# Load NDPluginPva plugin
+NDPvaConfigure("PVA1", $(QSIZE=20), 0, "$(INSTANCE)", 0, $(PREFIX)Pva1:Image, 0, 0, 0)
+dbLoadRecords("NDPva.template",  "P=$(PREFIX),R=Pva1:, PORT=PVA1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(INSTANCE)")
+#Must start PVA server if this is enabled
+startPVAServer
+
+# Set the callback queue size to 5000, up from default of 2000 in base.
+# This can be needed to avoid errors "callbackRequest: cbLow ring buffer full".
+callbackSetQueueSize(5000)

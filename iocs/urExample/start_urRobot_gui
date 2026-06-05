@@ -18,8 +18,10 @@ URROBOT_PATH=$(realpath "../../")
 # IOC prefix
 PREFIX="urExample:"
 
-# some screens are used from the calc module
+# Some screens are used from the calc module
 CALC=/APSshare/epics/synApps_6_3/support/calc-R3-7-5
+# If using Robotiq wrist camera, need areaDetector
+AREA_DETECTOR="/APSshare/epics/synApps_6_3/support/areaDetector-R3-14"
 
 ####################################################
 
@@ -29,11 +31,13 @@ if [[ $DM == "caqtdm" ]]; then
     export CAQTDM_DISPLAY_PATH=$CAQTDM_DISPLAY_PATH:${UI_DIR}/autoconvert
     export CAQTDM_DISPLAY_PATH=$CAQTDM_DISPLAY_PATH:${CALC}/calcApp/op/ui
     export CAQTDM_DISPLAY_PATH=$CAQTDM_DISPLAY_PATH:${CALC}/calcApp/op/ui/autoconvert/
+    export CAQTDM_DISPLAY_PATH=$CAQTDM_DISPLAY_PATH:${AREA_DETECTOR}/ADCore/ADApp/op/ui/autoconvert/
     ${CAQTDM} -style plastique -noMsg -macro "P=${PREFIX}" "urRobot.ui" &
 elif [[ $DM == "medm" ]]; then
     export ADL_DIR=${URROBOT_PATH}/urRobotApp/op/adl
     export EPICS_DISPLAY_PATH=${ADL_DIR}
     export EPICS_DISPLAY_PATH=${ADL_DIR}:${CALC}/calcApp/op/adl
+    export EPICS_DISPLAY_PATH=$EPICS_DISPLAY_PATH:${AREA_DETECTOR}/ADCore/ADApp/op/adl/
     ${MEDM} -macro "P=${PREFIX}" -x "urRobot.adl" &
 else
     echo "Display manager must be either medm or caqtdm"
