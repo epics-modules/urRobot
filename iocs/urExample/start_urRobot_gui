@@ -37,7 +37,7 @@ elif [[ $DM == "medm" ]]; then
     export ADL_DIR=${URROBOT_PATH}/urRobotApp/op/adl
     export EPICS_DISPLAY_PATH=${ADL_DIR}
     export EPICS_DISPLAY_PATH=${ADL_DIR}:${CALC}/calcApp/op/adl
-    export EPICS_DISPLAY_PATH=${ADL_DIR}:${AREA_DETECTOR}/ADCore/ADApp/op/adl/
+    export EPICS_DISPLAY_PATH=$EPICS_DISPLAY_PATH:${AREA_DETECTOR}/ADCore/ADApp/op/adl/
     ${MEDM} -macro "P=${PREFIX}" -x "urRobot.adl" &
 else
     echo "Display manager must be either medm or caqtdm"
