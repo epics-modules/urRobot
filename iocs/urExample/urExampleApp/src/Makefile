@@ -27,6 +27,15 @@ DBD  += $(DBD_NAME).dbd
 
 $(DBD_NAME)_DBD += base.dbd
 
+ifdef ADCORE
+  -include $(ADCORE)/ADApp/commonDriverMakefile
+endif
+
+ifdef ADURL
+  $(DBD_NAME)_DBD += URLDriverSupport.dbd
+  $(PROD_NAME)_LIBS := URLDriver $($(PROD_NAME)_LIBS)
+endif
+
 ifdef ASYN
   $(DBD_NAME)_DBD += asyn.dbd
   $(DBD_NAME)_DBD += drvAsynSerialPort.dbd drvAsynIPPort.dbd drvVxi11.dbd devGpib.dbd

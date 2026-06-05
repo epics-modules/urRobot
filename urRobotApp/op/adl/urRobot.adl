@@ -151,12 +151,18 @@ rectangle {
 		height=25
 	}
 	display[0] {
+		label="Robotiq Gripper"
 		name="robotiq_gripper.adl"
 		args="P=$(P)"
 	}
+	display[1] {
+		label="Robotiq Wrist Camera"
+		name="robotiq_wrist_camera.adl"
+		args="P=$(P),R=wristcam:"
+	}
 	clr=0
 	bclr=17
-	label="-Gripper"
+	label="-Tool"
 }
 "related display" {
 	object {
