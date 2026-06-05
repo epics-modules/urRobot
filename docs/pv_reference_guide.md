@@ -225,6 +225,30 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 
 ***
 
+## rtde_control_jog.db
+
+***Inputs***
+
+| Record  | Type   | Description   |
+|-------------- | -------------- | -------------- |
+| Control:Jogging    | bi     | "Jogging" while jog is active, "Stopped" otherwise     |
+
+***Outputs***
+
+| Record  | Type   | Description   |
+|-------------- | -------------- | -------------- |
+| Control:JogStart    | bo     | Starts jogging with the current speed vector; resets watchdog timer     |
+| Control:JogStop    | bo     | Stops jogging     |
+| Control:JogAccel    | ao     | Jog acceleration (m/s/s, default 0.5)     |
+| Control:JogSpeedX    | ao     | Jog speed in X (mm/s)     |
+| Control:JogSpeedY    | ao     | Jog speed in Y (mm/s)     |
+| Control:JogSpeedZ    | ao     | Jog speed in Z (mm/s)     |
+| Control:JogSpeedRoll    | ao     | Jog speed in roll (deg/s)     |
+| Control:JogSpeedPitch    | ao     | Jog speed in pitch (deg/s)     |
+| Control:JogSpeedYaw    | ao     | Jog speed in yaw (deg/s)     |
+
+***
+
 ## rtde_io.db
 
 ***Outputs***
