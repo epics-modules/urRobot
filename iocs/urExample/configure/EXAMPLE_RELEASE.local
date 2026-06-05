@@ -1,0 +1,13 @@
+SUPPORT=/APSshare/epics/synApps_6_3/support
+EPICS_BASE=/APSshare/epics/base-7.0.8
+
+ASYN = $(SUPPORT)/asyn-R4-44-2
+CALC = $(SUPPORT)/calc-R3-7-5
+LUA = $(SUPPORT)/lua-R3-1/
+STD = $(SUPPORT)/std-R3-6-4
+BUSY = $(SUPPORT)/busy-R1-7-4
+MOTOR = $(SUPPORT)/motor-R7-3-1
+AREA_DETECTOR = $(SUPPORT)/areaDetector-R3-13
+ADCORE=$(AREA_DETECTOR)/ADCore
+ADSUPPORT=$(AREA_DETECTOR)/ADSupport
+ADURL = $(AREA_DETECTOR)/ADURL
