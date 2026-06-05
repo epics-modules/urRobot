@@ -31,7 +31,7 @@ record(ao, "$(P)Control:JogSpeedX") {
     field(OUT, "@asyn($(PORT),0,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "m/s")
+    field(EGU, "mm/s")
     field(PREC, 4)
 }
 record(ao, "$(P)Control:JogSpeedY") {
@@ -39,7 +39,7 @@ record(ao, "$(P)Control:JogSpeedY") {
     field(OUT, "@asyn($(PORT),1,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "m/s")
+    field(EGU, "mm/s")
     field(PREC, 4)
 }
 record(ao, "$(P)Control:JogSpeedZ") {
@@ -47,7 +47,7 @@ record(ao, "$(P)Control:JogSpeedZ") {
     field(OUT, "@asyn($(PORT),2,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "m/s")
+    field(EGU, "mm/s")
     field(PREC, 4)
 }
 record(ao, "$(P)Control:JogSpeedRoll") {
@@ -55,7 +55,7 @@ record(ao, "$(P)Control:JogSpeedRoll") {
     field(OUT, "@asyn($(PORT),3,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "rad/s")
+    field(EGU, "deg/s")
     field(PREC, 4)
 }
 record(ao, "$(P)Control:JogSpeedPitch") {
@@ -63,7 +63,7 @@ record(ao, "$(P)Control:JogSpeedPitch") {
     field(OUT, "@asyn($(PORT),4,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "rad/s")
+    field(EGU, "deg/s")
     field(PREC, 4)
 }
 record(ao, "$(P)Control:JogSpeedYaw") {
@@ -71,7 +71,7 @@ record(ao, "$(P)Control:JogSpeedYaw") {
     field(OUT, "@asyn($(PORT),5,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "rad/s")
+    field(EGU, "deg/s")
     field(PREC, 4)
 }
 

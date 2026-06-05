@@ -96,6 +96,44 @@ Once the safety event is cleared (e.g. the protective stop is unlocked via the t
 `$(P)Control:ReuploadControlScript` to reconnect the RTDE control interface before commanding
 further motion.
 
+### Jogging (Advanced)
+
+Jogging provides continuous velocity-based motion in Cartesian space. Unlike
+moveJ/moveL which move to a target position and stop, jogging moves the robot
+at a specified speed until explicitly stopped. This is useful for joystick or
+gamepad control.
+
+Jogging is an advanced feature that requires a specialized EPICS client. The
+client must repeatedly process `$(P)Control:JogStart` to keep the robot
+moving. An internal watchdog timer with a 1 second timeout will automatically
+stop the robot if `JogStart` is not processed in time. Standard MEDM/caQtDM
+screens are not well suited for this. An example client implementation could
+have buttons for jogging, where pressing and holding a button sets a speed
+vector and executes a caput to `JogStart` repeatedly, and `JogStop` is sent
+automatically on button release.
+
+The jog database (`rtde_control_jog.db`) is not loaded by `urRobot.iocsh` and
+must be loaded separately by the user:
+```
+dbLoadRecords("$(URROBOT)/db/rtde_control_jog.db", "P=$(PREFIX), PORT=rtde_ctrl")
+```
+
+#### Steps
+
+1. Set the desired speed vector by writing to the jog speed PVs
+   (`JogSpeedX`, `JogSpeedY`, `JogSpeedZ` in mm/s;
+   `JogSpeedRoll`, `JogSpeedPitch`, `JogSpeedYaw` in deg/s).
+2. Set the acceleration with `$(P)Control:JogAccel` (m/s/s, default 0.5).
+3. Process `$(P)Control:JogStart` to begin motion.
+4. **Continue processing `JogStart` periodically** to keep the robot moving.
+   If the speed PVs have changed since the last call, the new speeds are
+   sent to the robot.
+5. Process `$(P)Control:JogStop` to stop motion.
+
+Jog motion is in the robot base frame. The `$(P)Control:Jogging` PV indicates
+whether the robot is currently jogging.
+
+
 ## Robotiq Gripper
 
 Currently the Robotiq Hand-E gripper is the only supported gripper in this EPICS module, howevever other grippers
