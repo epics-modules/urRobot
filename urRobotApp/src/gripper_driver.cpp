@@ -26,10 +26,15 @@ bool URGripper::try_connect() {
     bool connected = false;
     try {
         if (robot_ready()) {
+            spdlog::info("Connecting to gripper...");
             gripper_->connect();
+            gripper_->getVar("STA");
             if (gripper_->isConnected()) {
                 spdlog::info("Connected to gripper");
                 connected = true;
+            } else {
+                spdlog::info("not connected");
+                connected = false;
             }
         } else {
             spdlog::error("Unable to connect to gripper. Robot must be powered on.");
@@ -103,29 +108,35 @@ void URGripper::poll() {
         lock();
 
         if (robot_ready() && gripper_->isConnected()) {
-            setIntegerParam(isConnectedIndex_, 1);
-            setIntegerParam(isActiveIndex_, gripper_->isActive());
-            setIntegerParam(isOpenIndex_, gripper_->isOpen());
-            setIntegerParam(isClosedIndex_, gripper_->isClosed());
-            setDoubleParam(currentPositionIndex_, gripper_->getCurrentPosition());
-            setDoubleParam(openPositionIndex_, gripper_->getOpenPosition());
-            setDoubleParam(closedPositionIndex_, gripper_->getClosedPosition());
+            try {
+                setIntegerParam(isConnectedIndex_, 1);
+                setIntegerParam(isActiveIndex_, gripper_->isActive());
+                setIntegerParam(isOpenIndex_, gripper_->isOpen());
+                setIntegerParam(isClosedIndex_, gripper_->isClosed());
+                setDoubleParam(currentPositionIndex_, gripper_->getCurrentPosition());
+                setDoubleParam(openPositionIndex_, gripper_->getOpenPosition());
+                setDoubleParam(closedPositionIndex_, gripper_->getClosedPosition());
 
-            ur_rtde::RobotiqGripper::eObjectStatus move_status = gripper_->objectDetectionStatus();
-            setIntegerParam(moveStatusIndex_, move_status);
-            switch (move_status) {
-            case ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_INNER_OBJECT:
-                setIntegerParam(isStoppedInnerIndex_, 1);
-                setIntegerParam(isStoppedOuterIndex_, 0);
-                break;
-            case ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_OUTER_OBJECT:
-                setIntegerParam(isStoppedInnerIndex_, 0);
-                setIntegerParam(isStoppedOuterIndex_, 1);
-                break;
-            default:
-                setIntegerParam(isStoppedInnerIndex_, 0);
-                setIntegerParam(isStoppedOuterIndex_, 0);
-                break;
+                ur_rtde::RobotiqGripper::eObjectStatus move_status = gripper_->objectDetectionStatus();
+                setIntegerParam(moveStatusIndex_, move_status);
+                switch (move_status) {
+                case ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_INNER_OBJECT:
+                    setIntegerParam(isStoppedInnerIndex_, 1);
+                    setIntegerParam(isStoppedOuterIndex_, 0);
+                    break;
+                case ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_OUTER_OBJECT:
+                    setIntegerParam(isStoppedInnerIndex_, 0);
+                    setIntegerParam(isStoppedOuterIndex_, 1);
+                    break;
+                default:
+                    setIntegerParam(isStoppedInnerIndex_, 0);
+                    setIntegerParam(isStoppedOuterIndex_, 0);
+                    break;
+                }
+            } catch (const std::exception& e) {
+                spdlog::error("Gripper poll error: {}", e.what());
+                gripper_->disconnect();
+                setIntegerParam(isConnectedIndex_, 0);
             }
         } else {
             gripper_->disconnect();
