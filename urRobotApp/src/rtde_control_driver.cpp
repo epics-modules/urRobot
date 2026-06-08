@@ -19,6 +19,20 @@ bool RTDEControl::try_connect() {
     bool connected = false;
     bool robot_running = false;
 
+    if (drv_receive_) {
+        int safety_bits = 1;
+        drv_receive_->lock();
+        drv_receive_->getIntegerParam(safetyStatusBitsParamId_, &safety_bits);
+        drv_receive_->unlock();
+        if (safety_bits != 1) {
+            spdlog::error("Cannot connect to control interface in current safety state. "
+                          "Clear safeguard stop, E-stop, etc. then try again.\n");
+            return false;
+        }
+    } else {
+        return false;
+    }
+
     char buffer[128];
     size_t nbytesTransferred;
     int eomReason;
@@ -31,8 +45,8 @@ bool RTDEControl::try_connect() {
     if (strcmp(buffer, "Robotmode: RUNNING") == 0) {
         robot_running = true;
     } else {
-        spdlog::error("Unable to connect to UR RTDE Control Interface: "
-                      "Ensure robot is on, in normal mode, and brakes released");
+        spdlog::error("Unable to connect to control interface in current mode. "
+                      "Ensure robot is on, in normal mode, and brakes released, then try again.\n");
         robot_running = false;
         connected = false;
     }
