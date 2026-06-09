@@ -53,7 +53,7 @@ IOCs using `urRobot` depend on these additional EPICS modules for full functiona
 - std (optional) for waypoints/paths 
 - busy (optional) for waypoints/paths
 - motor (optional) for soft motor support
-
+- areaDetector/ADURL (optional) for Robotiq wrist camera support
 
 **1\.** Add the path to the urRobot support in configure/RELEASE
 

@@ -26,7 +26,6 @@ bool URGripper::try_connect() {
     bool connected = false;
     try {
         if (robot_ready()) {
-            spdlog::info("Connecting to gripper...");
             gripper_->connect();
             gripper_->getVar("STA");
             if (gripper_->isConnected()) {
