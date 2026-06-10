@@ -4,7 +4,7 @@ TOP=../..
 
 include $(TOP)/configure/CONFIG
 
-USR_INCLUDES += -I../spdlog
+USR_INCLUDES += -I../spdlog/include
 
 # Define IOC library name
 LIBRARY_IOC += urRobot
