@@ -2,6 +2,7 @@
 TOP = .
 include $(TOP)/configure/CONFIG
 DIRS := $(DIRS) $(filter-out $(DIRS), configure)
+DIRS := $(DIRS) $(filter-out $(DIRS), urRobotSupport)
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard *App))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocBoot))
 
@@ -9,10 +10,8 @@ ifeq ($(BUILD_IOCS), YES)
  DIRS += $(wildcard iocs)
 endif
 
-define DIR_template
- $(1)_DEPEND_DIRS = configure
-endef
-$(foreach dir, $(filter-out configure,$(DIRS)),$(eval $(call DIR_template,$(dir))))
+urRobotSupport_DEPEND_DIRS = configure
+urRobotApp_DEPEND_DIRS = configure urRobotSupport
 
 iocBoot_DEPEND_DIRS += $(filter %App,$(DIRS))
 iocs_DEPEND_DIRS += $(filter %App,$(DIRS))

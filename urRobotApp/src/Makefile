@@ -4,15 +4,7 @@ TOP=../..
 
 include $(TOP)/configure/CONFIG
 
-# include ur_rtde library headers
-USR_INCLUDES += -I../ur_rtde
-USR_INCLUDES += -I../urcl
 USR_INCLUDES += -I../spdlog
-
-LIB_INSTALLS += ../os/rhel9/librtde.a
-BIN_INSTALLS += ../os/rhel9/librtde.so
-BIN_INSTALLS += ../os/rhel9/librtde.so.1.5
-BIN_INSTALLS += ../os/rhel9/librtde.so.1.5.7
 
 # Define IOC library name
 LIBRARY_IOC += urRobot

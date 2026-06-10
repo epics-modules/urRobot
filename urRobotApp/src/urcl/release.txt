@@ -1,3 +1,0 @@
-https://gitlab.com/sdurobotics/ur_rtde
-branch: master
-commit: cb521a5c
