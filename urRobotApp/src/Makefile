@@ -6,6 +6,12 @@ include $(TOP)/configure/CONFIG
 
 USR_INCLUDES += -I../spdlog/include
 
+# urRobot requires C++17 (std::optional)
+HAS_CXX17 := $(shell $(CXX) -std=c++17 -fsyntax-only -x c++ /dev/null 2>/dev/null && echo YES || echo NO)
+
+ifeq ($(HAS_CXX17),YES)
+USR_CXXFLAGS += -std=c++17
+
 # Define IOC library name
 LIBRARY_IOC += urRobot
 
@@ -38,6 +44,8 @@ urtest_SRCS += urtest.cpp
 urtest_LIBS += rtde
 urtest_SYS_LIBS += boost_system
 urtest_SYS_LIBS += boost_thread
+
+endif
 
 include $(TOP)/configure/RULES
 #----------------------------------------
