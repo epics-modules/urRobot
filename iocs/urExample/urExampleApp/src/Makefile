@@ -5,11 +5,19 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 #=============================
 
+# urRobot requires C++17 (std::optional)
+HAS_CXX17 := $(shell $(CXX) -std=c++17 -fsyntax-only -x c++ /dev/null 2>/dev/null && echo YES || echo NO)
+USR_CXXFLAGS += -std=c++17
+
+ifeq ($(HAS_CXX17),YES)
+
 # PROD_NAME is used by ADCORE to add libraries
 # DBD_PREFIX is used by ADCORE to add dbd files
 PROD_NAME = urExample
 DBD_PREFIX = iocurExample
 PROD_IOC = $(PROD_NAME)
+
+endif
 
 # Note that the order in which .dbd files and libraries are added to a list
 # variable is important.  For .dbd files, things must be defined before they
