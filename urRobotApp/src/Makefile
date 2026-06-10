@@ -39,6 +39,7 @@ calibrate_gripper_SRCS += calibrate_gripper.cpp
 calibrate_gripper_LIBS += rtde
 calibrate_gripper_SYS_LIBS += boost_system
 calibrate_gripper_SYS_LIBS += boost_thread
+calibrate_gripper_SYS_LIBS += pthread
 
 # Program for testing ur_rtde by itself without asyn
 TESTPROD += urtest
@@ -46,6 +47,7 @@ urtest_SRCS += urtest.cpp
 urtest_LIBS += rtde
 urtest_SYS_LIBS += boost_system
 urtest_SYS_LIBS += boost_thread
+urtest_SYS_LIBS += pthread
 
 endif
 
