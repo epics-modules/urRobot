@@ -37,6 +37,8 @@ urRobot_SYS_LIBS += boost_thread
 PROD += calibrate_gripper
 calibrate_gripper_SRCS += calibrate_gripper.cpp
 calibrate_gripper_LIBS += rtde
+calibrate_gripper_SYS_LIBS += boost_system
+calibrate_gripper_SYS_LIBS += boost_thread
 
 # Program for testing ur_rtde by itself without asyn
 TESTPROD += urtest
