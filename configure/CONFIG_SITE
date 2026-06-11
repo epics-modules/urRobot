@@ -19,7 +19,7 @@ CHECK_RELEASE = YES
 # Set this when you only want to compile this application
 #   for a subset of the cross-compiled target architectures
 #   that Base is built for.
-#CROSS_COMPILER_TARGET_ARCHS = vxWorks-68040
+CROSS_COMPILER_TARGET_ARCHS = 
 
 # To install files into a location other than $(TOP) define
 #   INSTALL_LOCATION here.
@@ -27,7 +27,7 @@ CHECK_RELEASE = YES
 
 # To build the IOC application set BUILD_IOCS to YES
 # Otherwise set it to NO
-BUILD_IOCS=YES
+BUILD_IOCS=NO
 
 # Set this when your IOC and the host use different paths
 #   to access the application. This will be needed to boot

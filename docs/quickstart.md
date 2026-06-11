@@ -19,25 +19,30 @@ nav_order: 2
 - Linux (x86-64) - tested on Red Hat Enterprise Linux (RHEL) 9. Other distributions may
 work but have not been tested
 
-
-**Library Dependencies**
+**Dependencies**
 
 - EPICS Base
 - asyn
-- [ur_rtde](https://gitlab.com/sdurobotics/ur_rtde) (included)
+- Boost
+- A C++17-capable C++ compiler (GCC 5+)
 
 This library has been tested with synApps 6-2-1 (EPICS base 7.0.4.1, asyn R4-42), and synApps 6-3
 (EPICS Base 7.0.8, asyn R4-44-2). Other versions may work but have not been sufficiently tested.
 
-The `ur_rtde` library comes pre-built for the supported operating systems.
-See `urRobotApp/src/ur_rtde/release.txt` for the current included version of the `ur_rtde` library.
-
-If you need to build the support for another operating system, build the `ur_rtde` library for your OS and replace the `ur_rtde` library files and headers in urRobotApp/src.
-Consult the `ur_rtde` library documentation on how to build it from source.
+The [ur_rtde](https://gitlab.com/sdurobotics/ur_rtde) and
+[spdlog](https://github.com/gabime/spdlog) libraries are included as git
+submodules and built automatically.
 
 **Build**
 
-1. Clone or download [https://github.com/epics-modules/urRobot](https://github.com/epics-modules/urRobot)
+1. Clone the repository with submodules:
+   ```
+   git clone --recursive https://github.com/epics-modules/urRobot
+   ```
+   Or if already cloned without submodules:
+   ```
+   git submodule update --init --recursive
+   ```
 2. Edit configure/RELEASE to correct the paths to `EPICS_BASE` and `ASYN`
 3. `make`
 

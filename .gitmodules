@@ -1,3 +1,9 @@
 [submodule "urRobotApp/op/pvtui-ur"]
 	path = urRobotApp/op/pvtui-ur
 	url = git@github.com:nmarks99/pvtui-ur.git
+[submodule "urRobotSupport/rtdeSrc/ur_rtde"]
+	path = urRobotSupport/rtdeSrc/ur_rtde
+	url = https://gitlab.com/sdurobotics/ur_rtde.git
+[submodule "urRobotApp/src/spdlog"]
+	path = urRobotApp/src/spdlog
+	url = https://github.com/gabime/spdlog.git
