@@ -103,6 +103,14 @@ jobs:
         sudo apt-get update
         sudo apt-get -y install ${{ matrix.cmp }}
       if: matrix.utoolchain
+    - name: Configure Boost for Windows
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $boostDir = (Get-ChildItem C:\local\boost_* -Directory | Select-Object -First 1).FullName
+        $boostDirUnix = $boostDir -replace '\\','/'
+        echo "USR_CPPFLAGS=-I$boostDirUnix" >> $env:GITHUB_ENV
+        echo "USR_LDFLAGS=-LIBPATH:$boostDirUnix/lib64-msvc-14.3" >> $env:GITHUB_ENV
     - name: Prepare and compile dependencies
       run: python .ci/cue.py prepare
     - name: Build main module
