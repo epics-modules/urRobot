@@ -22,9 +22,9 @@ on:
 env:
   SETUP_PATH: .github/workflows:.ci
   # For sequencer and asyn
-  APT: re2c libtirpc-dev libreadline-dev
-  CHOCO: re2c
-  BREW: re2c
+  APT: re2c libtirpc-dev libreadline-dev libboost-all-dev
+  CHOCO: re2c libboost-all-dev
+  BREW: re2c libboost-all-dev
 
 jobs:
   build-base:
