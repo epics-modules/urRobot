@@ -7,3 +7,6 @@
 [submodule "urRobotApp/src/spdlog"]
 	path = urRobotApp/src/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule ".ci"]
+	path = .ci
+	url = https://github.com/epics-base/ci-scripts
