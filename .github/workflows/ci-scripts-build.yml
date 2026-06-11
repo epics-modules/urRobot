@@ -24,7 +24,7 @@ env:
   # For sequencer and asyn
   APT: re2c libtirpc-dev libreadline-dev libboost-all-dev
   CHOCO: re2c libboost-all-dev
-  BREW: re2c libboost-all-dev
+  BREW: re2c boost
 
 jobs:
   build-base:
