@@ -51,7 +51,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "    global contact_step_back = 0" + NEW_LINE  + 
 "    global contact_thrd = 0" + NEW_LINE  + 
 "    global internal_cmd = 0" + NEW_LINE  + 
-"    " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "    def read_input_float_reg(register_index):" + NEW_LINE  + 
 "        return read_input_float_register(register_index + reg_offset_float)" + NEW_LINE  + 
 "    end" + NEW_LINE  + 
@@ -78,12 +78,12 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "    global async_op_id = 0 # is incremented each time a new async operation is started" + NEW_LINE  + 
 "" + NEW_LINE  + 
 "    # Write async progress register" + NEW_LINE  + 
-"    # This function provides extended progress information in an async progress " + NEW_LINE  + 
+"    # This function provides extended progress information in an async progress" + NEW_LINE  + 
 "    # status register. The following bits are used" + NEW_LINE  + 
 "    #" + NEW_LINE  + 
 "    # | Bit 31 | Bit 30 - 24 | Bit 23 | Bit 9 - 22     | Bit 15  | Bit 14 - 0 |" + NEW_LINE  + 
 "    # +--------+-------------+--------+----------------+---------+------------+" + NEW_LINE  + 
-"    # | rsv    | async_op_id | rsv    | async_wr_count | running | progress   | " + NEW_LINE  + 
+"    # | rsv    | async_op_id | rsv    | async_wr_count | running | progress   |" + NEW_LINE  + 
 "    #" + NEW_LINE  + 
 "    # running: 1 - async op. running, 0 - async op. finished" + NEW_LINE  + 
 "    # progress: progress of running async. operation" + NEW_LINE  + 
@@ -115,7 +115,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "            if value > 32767:" + NEW_LINE  + 
 "                value = 32767" + NEW_LINE  + 
 "            end" + NEW_LINE  + 
-"            reg_value = reg_value + value + 32768 # store the progress in the lower 16 bits            " + NEW_LINE  + 
+"            reg_value = reg_value + value + 32768 # store the progress in the lower 16 bits" + NEW_LINE  + 
 "        end" + NEW_LINE  + 
 "        textmsg("+QUOTATION+"async_wr_count: "+QUOTATION+", async_wr_count)" + NEW_LINE  + 
 "        textmsg("+QUOTATION+"async_op_id: "+QUOTATION+", async_op_id)" + NEW_LINE  + 
@@ -125,15 +125,15 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "      def signal_async_progress(value):" + NEW_LINE  + 
 "        write_async_progress_register(value)" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "      def signal_async_operation_started():" + NEW_LINE  + 
 "        write_async_progress_register(0) # 0 indicates operation started" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "      def signal_async_operation_finished():" + NEW_LINE  + 
 "        write_async_progress_register(-1) # negative values indicate operation finished" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "      def reset_async_progress():" + NEW_LINE  + 
 "        signal_async_operation_finished()" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
@@ -187,7 +187,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "            textmsg("+QUOTATION+"stopping async movement - killing move_thrd"+QUOTATION+")" + NEW_LINE  + 
 "            kill move_thrd" + NEW_LINE  + 
 "            move_thrd = 0" + NEW_LINE  + 
-"            # If the move thread is killed, it cannot trigger the " + NEW_LINE  + 
+"            # If the move thread is killed, it cannot trigger the" + NEW_LINE  + 
 "            # signal_async_operation_finished() signal - so we do it here" + NEW_LINE  + 
 "            signal_async_operation_finished()" + NEW_LINE  + 
 "        end" + NEW_LINE  + 
@@ -371,7 +371,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "    def get_pose_translation(pose):" + NEW_LINE  + 
 "      return p[pose[0], pose[1], pose[2], 0, 0, 0]" + NEW_LINE  + 
 "    end" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "    # Returns a pose that contains only the rotation part of a given pose" + NEW_LINE  + 
 "    def get_pose_rotation(pose):" + NEW_LINE  + 
 "      return p[0, 0, 0, pose[3], pose[4], pose[5]]" + NEW_LINE  + 
@@ -397,19 +397,19 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "    # examples :" + NEW_LINE  + 
 "    # speed_wrt_base([0.020, 0.020,0,0,0,0], plane_1)" + NEW_LINE  + 
 "    # speedl(get_speed_wrt_base([0,0,0.02,0,0,1.57], get_actual_tcp_pose()),a=1,t=0.5,aRot=4))" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "    #### input arguments" + NEW_LINE  + 
 "    # tool_speed : [Tx, Ty, Tz, Rx, Ry, Rz] spatial vector list - Txyz [m/s]), Rxyz [rad/s]" + NEW_LINE  + 
 "    # frame_wrt_base : pose" + NEW_LINE  + 
-"  " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "    #### output arguments" + NEW_LINE  + 
 "    # speed_wrt_base : [Tx, Ty, Tz, Rx, Ry, Rz] spatial vector list - Txyz [m/s]), Rxyz [rad/s]" + NEW_LINE  + 
-"    def get_speed_wrt_base(tool_speed, frame_wrt_base):    " + NEW_LINE  + 
+"    def get_speed_wrt_base(tool_speed, frame_wrt_base):" + NEW_LINE  + 
 "      # Translationnal speed vector calculus" + NEW_LINE  + 
 "      T_wrt_frame=p[tool_speed[0],tool_speed[1],tool_speed[2],0,0,0]" + NEW_LINE  + 
 "      T_wrt_base_raw= pose_trans (frame_wrt_base, T_wrt_frame)" + NEW_LINE  + 
 "      T_wrt_base=pose_sub(T_wrt_base_raw,frame_wrt_base)" + NEW_LINE  + 
-"    " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "      # Rotationnal speed vector calculus" + NEW_LINE  + 
 "      R_wrt_frame=p[tool_speed[3],tool_speed[4],tool_speed[5],0,0,0]" + NEW_LINE  + 
 "      R_wrt_frame_abs=norm([R_wrt_frame[0],R_wrt_frame[1],R_wrt_frame[2]])" + NEW_LINE  + 
@@ -419,13 +419,13 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "      else:" + NEW_LINE  + 
 "        R_wrt_base=p[0,0,0,0,0,0]" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
-"    " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "      # Concatenate T and R" + NEW_LINE  + 
 "      speed_wrt_base_list=[T_wrt_base[0],T_wrt_base[1],T_wrt_base[2],R_wrt_base[0],R_wrt_base[1],R_wrt_base[2]]" + NEW_LINE  + 
-"      return speed_wrt_base_list   " + NEW_LINE  + 
+"      return speed_wrt_base_list" + NEW_LINE  + 
 "    end" + NEW_LINE  + 
 "" + NEW_LINE  + 
-"    " + NEW_LINE  + 
+"" + NEW_LINE  + 
 "    # The jog thread provides jogging functionality similar to the one you" + NEW_LINE  + 
 "    # find in the teach pendant." + NEW_LINE  + 
 "    thread jog_speed_thread():" + NEW_LINE  + 
@@ -450,7 +450,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "        speed_pose = jog_speed_pose" + NEW_LINE  + 
 "        exit_critical" + NEW_LINE  + 
 "        speed_wrt_base = get_speed_wrt_base(speed_pose, frame_wrt_base)" + NEW_LINE  + 
-"        speedl(speed_wrt_base, jog_acc)" + NEW_LINE  + 
+"        speedl(speed_wrt_base, jog_acc, t=0.01)" + NEW_LINE  + 
 "      end" + NEW_LINE  + 
 "    end" + NEW_LINE  + 
 "" + NEW_LINE  + 
@@ -1000,10 +1000,9 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "              enable_external_ft_sensor(enable, sensor_mass, sensor_measuring_offset, sensor_cog)" + NEW_LINE  + 
 "              textmsg("+QUOTATION+"enable_external_ft_sensor done"+QUOTATION+")" + NEW_LINE  + 
 "        elif cmd == 58:" + NEW_LINE  + 
-"              textmsg("+QUOTATION+"get_actual_tool_flange_pose"+QUOTATION+")" + NEW_LINE  + 
+"              # get_actual_tool_flange_pose" + NEW_LINE  + 
 "              flange_pose = get_actual_tool_flange_pose()" + NEW_LINE  + 
 "              q_to_output_float_registers(0, flange_pose)" + NEW_LINE  + 
-"              textmsg("+QUOTATION+"get_actual_tool_flange_pose done"+QUOTATION+")" + NEW_LINE  + 
 "        elif cmd == 59:" + NEW_LINE  + 
 "              textmsg("+QUOTATION+"set_gravity"+QUOTATION+")" + NEW_LINE  + 
 "              gravity_direction = [0, 0, 0]" + NEW_LINE  + 
@@ -1036,7 +1035,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "$5.10|3.15        write_output_integer_reg(1, 0)" + NEW_LINE  + 
 "$5.10|3.15    end" + NEW_LINE  + 
 "              textmsg("+QUOTATION+"get_inverse_kin_has_solution_args done"+QUOTATION+")" + NEW_LINE  + 
-"            elif cmd == 62:" + NEW_LINE  + 
+"          elif cmd == 62:" + NEW_LINE  + 
 "              textmsg("+QUOTATION+"start_contact_detection"+QUOTATION+")" + NEW_LINE  + 
 "              enter_critical" + NEW_LINE  + 
 "              if contact_thrd != 0:" + NEW_LINE  + 
@@ -1066,8 +1065,188 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "              exit_critical" + NEW_LINE  + 
 "              write_output_integer_reg(1, step_back)" + NEW_LINE  + 
 "              textmsg("+QUOTATION+"read_contact_detection done"+QUOTATION+")" + NEW_LINE  + 
-"          elif cmd == 254: # internal command" + NEW_LINE  + 
-"              textmsg("+QUOTATION+"cmd == 254 - contact detected"+QUOTATION+") " + NEW_LINE  + 
+"          elif cmd == 65:" + NEW_LINE  + 
+"              textmsg("+QUOTATION+"set_target_payload"+QUOTATION+")" + NEW_LINE  + 
+"              mass = read_input_float_reg(0)" + NEW_LINE  + 
+"              cog_x = read_input_float_reg(1)" + NEW_LINE  + 
+"              cog_y = read_input_float_reg(2)" + NEW_LINE  + 
+"              cog_z = read_input_float_reg(3)" + NEW_LINE  + 
+"              cog = [cog_x, cog_y, cog_z]" + NEW_LINE  + 
+"              inertia = [0, 0, 0, 0, 0, 0]" + NEW_LINE  + 
+"              inertia[0] = read_input_float_reg(4)" + NEW_LINE  + 
+"              inertia[1] = read_input_float_reg(5)" + NEW_LINE  + 
+"              inertia[2] = read_input_float_reg(6)" + NEW_LINE  + 
+"              inertia[3] = read_input_float_reg(7)" + NEW_LINE  + 
+"              inertia[4] = read_input_float_reg(8)" + NEW_LINE  + 
+"              inertia[5] = read_input_float_reg(9)" + NEW_LINE  + 
+"$5.10         if cog_x == 0 and cog_y == 0 and cog_z == 0:" + NEW_LINE  + 
+"$5.10            set_target_payload(mass, get_target_payload_cog(), inertia)" + NEW_LINE  + 
+"$5.10         else:" + NEW_LINE  + 
+"$5.10            set_target_payload(mass, cog, inertia)" + NEW_LINE  + 
+"$5.10         end" + NEW_LINE  + 
+"$5.10         textmsg("+QUOTATION+"active payload:"+QUOTATION+")" + NEW_LINE  + 
+"$5.10         textmsg(get_target_payload())" + NEW_LINE  + 
+"$5.10         textmsg("+QUOTATION+"active payload inertia matrix"+QUOTATION+")" + NEW_LINE  + 
+"$5.10         textmsg(get_target_payload_inertia())" + NEW_LINE  + 
+"              textmsg("+QUOTATION+"set_target_payload done"+QUOTATION+")" + NEW_LINE  + 
+"        elif cmd == 66:" + NEW_LINE  + 
+"              # direct_torque" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"$5.23         torque = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]" + NEW_LINE  + 
+"$5.23         torque = q_from_input_float_registers(0)" + NEW_LINE  + 
+"$5.23         friction_comp = True" + NEW_LINE  + 
+"$5.23         friction_comp_val = read_input_integer_reg(1)" + NEW_LINE  + 
+"$5.23         if friction_comp_val == 1:" + NEW_LINE  + 
+"$5.23             friction_comp = True" + NEW_LINE  + 
+"$5.23         elif friction_comp_val == 0:" + NEW_LINE  + 
+"$5.23             friction_comp = False" + NEW_LINE  + 
+"$5.23         end" + NEW_LINE  + 
+"$5.23         direct_torque(torque, friction_comp)" + NEW_LINE  + 
+"        elif cmd == 67:" + NEW_LINE  + 
+"              # get_mass_matrix" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"$5.23         mass_matrix = get_mass_matrix()" + NEW_LINE  + 
+"$5.23         # Use the lower range 0-23 for the first 24 values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(0, mass_matrix[0, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(1, mass_matrix[1, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(2, mass_matrix[2, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(3, mass_matrix[3, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(4, mass_matrix[4, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(5, mass_matrix[5, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(6, mass_matrix[0, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(7, mass_matrix[1, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(8, mass_matrix[2, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(9, mass_matrix[3, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(10, mass_matrix[4, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(11, mass_matrix[5, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(12, mass_matrix[0, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(13, mass_matrix[1, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(14, mass_matrix[2, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(15, mass_matrix[3, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(16, mass_matrix[4, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(17, mass_matrix[5, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(18, mass_matrix[0, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(19, mass_matrix[1, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(20, mass_matrix[2, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(21, mass_matrix[3, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(22, mass_matrix[4, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(23, mass_matrix[5, 3])" + NEW_LINE  + 
+"$5.23         # Use 'upper part 36-47' of the upper range for the last values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(36, mass_matrix[0, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(37, mass_matrix[1, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(38, mass_matrix[2, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(39, mass_matrix[3, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(40, mass_matrix[4, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(41, mass_matrix[5, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(42, mass_matrix[0, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(43, mass_matrix[1, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(44, mass_matrix[2, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(45, mass_matrix[3, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(46, mass_matrix[4, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(47, mass_matrix[5, 5])" + NEW_LINE  + 
+"        elif cmd == 68:" + NEW_LINE  + 
+"              # get_coriolis_and_centrifugal_torques" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"" + NEW_LINE  + 
+"$5.23         coriolis_and_centrifugal_torques = get_coriolis_and_centrifugal_torques()" + NEW_LINE  + 
+"$5.23         # Write to registers 0-5" + NEW_LINE  + 
+"$5.23         write_output_float_reg(0, coriolis_and_centrifugal_torques[0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(1, coriolis_and_centrifugal_torques[1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(2, coriolis_and_centrifugal_torques[2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(3, coriolis_and_centrifugal_torques[3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(4, coriolis_and_centrifugal_torques[4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(5, coriolis_and_centrifugal_torques[5])" + NEW_LINE  + 
+"        elif cmd == 69:" + NEW_LINE  + 
+"              # get_target_joint_accelerations" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"$5.23         target_joint_accelerations = get_target_joint_accelerations()" + NEW_LINE  + 
+"$5.23         q_to_output_float_registers(0, target_joint_accelerations)" + NEW_LINE  + 
+"        elif cmd == 70:" + NEW_LINE  + 
+"              # get_jacobian" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"$5.23         jacobian = get_jacobian()" + NEW_LINE  + 
+"$5.23         # Use the lower range 0-23 for the first 24 values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(0, jacobian[0, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(1, jacobian[1, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(2, jacobian[2, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(3, jacobian[3, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(4, jacobian[4, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(5, jacobian[5, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(6, jacobian[0, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(7, jacobian[1, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(8, jacobian[2, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(9, jacobian[3, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(10, jacobian[4, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(11, jacobian[5, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(12, jacobian[0, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(13, jacobian[1, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(14, jacobian[2, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(15, jacobian[3, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(16, jacobian[4, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(17, jacobian[5, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(18, jacobian[0, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(19, jacobian[1, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(20, jacobian[2, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(21, jacobian[3, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(22, jacobian[4, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(23, jacobian[5, 3])" + NEW_LINE  + 
+"$5.23         # Use 'upper part 36-47' of the upper range for the last values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(36, jacobian[0, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(37, jacobian[1, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(38, jacobian[2, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(39, jacobian[3, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(40, jacobian[4, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(41, jacobian[5, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(42, jacobian[0, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(43, jacobian[1, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(44, jacobian[2, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(45, jacobian[3, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(46, jacobian[4, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(47, jacobian[5, 5])" + NEW_LINE  + 
+"        elif cmd == 71:" + NEW_LINE  + 
+"              # get_jacobian_time_derivative" + NEW_LINE  + 
+"              dummy_op = 1" + NEW_LINE  + 
+"$5.23         jacobian_time_derivative = get_jacobian_time_derivative()" + NEW_LINE  + 
+"$5.23         # Use the lower range 0-23 for the first 24 values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(0, jacobian_time_derivative[0, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(1, jacobian_time_derivative[1, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(2, jacobian_time_derivative[2, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(3, jacobian_time_derivative[3, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(4, jacobian_time_derivative[4, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(5, jacobian_time_derivative[5, 0])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(6, jacobian_time_derivative[0, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(7, jacobian_time_derivative[1, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(8, jacobian_time_derivative[2, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(9, jacobian_time_derivative[3, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(10, jacobian_time_derivative[4, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(11, jacobian_time_derivative[5, 1])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(12, jacobian_time_derivative[0, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(13, jacobian_time_derivative[1, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(14, jacobian_time_derivative[2, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(15, jacobian_time_derivative[3, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(16, jacobian_time_derivative[4, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(17, jacobian_time_derivative[5, 2])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(18, jacobian_time_derivative[0, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(19, jacobian_time_derivative[1, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(20, jacobian_time_derivative[2, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(21, jacobian_time_derivative[3, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(22, jacobian_time_derivative[4, 3])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(23, jacobian_time_derivative[5, 3])" + NEW_LINE  + 
+"$5.23         # Use 'upper part 36-47' of the upper range for the last values" + NEW_LINE  + 
+"$5.23         write_output_float_reg(36, jacobian_time_derivative[0, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(37, jacobian_time_derivative[1, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(38, jacobian_time_derivative[2, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(39, jacobian_time_derivative[3, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(40, jacobian_time_derivative[4, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(41, jacobian_time_derivative[5, 4])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(42, jacobian_time_derivative[0, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(43, jacobian_time_derivative[1, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(44, jacobian_time_derivative[2, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(45, jacobian_time_derivative[3, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(46, jacobian_time_derivative[4, 5])" + NEW_LINE  + 
+"$5.23         write_output_float_reg(47, jacobian_time_derivative[5, 5])" + NEW_LINE  + 
+"        elif cmd == 254: # internal command" + NEW_LINE  + 
+"              textmsg("+QUOTATION+"cmd == 254 - contact detected"+QUOTATION+")" + NEW_LINE  + 
 "$5.4          stop_async_move()" + NEW_LINE  + 
 "$5.4          # Get q for when the contact was first seen" + NEW_LINE  + 
 "$5.4          q = get_actual_joint_positions_history(contact_step_back)" + NEW_LINE  + 
@@ -1094,7 +1273,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "        ###################################" + NEW_LINE  + 
 "        # RTDE Control script - Main loop #" + NEW_LINE  + 
 "        ###################################" + NEW_LINE  + 
-"        textmsg("+QUOTATION+"RTDE Control Script Loaded (06.06.2023-13:52)"+QUOTATION+")" + NEW_LINE  + 
+"        textmsg("+QUOTATION+"RTDE Control Script Loaded (14.02.2024-12:23)"+QUOTATION+")" + NEW_LINE  + 
 "" + NEW_LINE  + 
 "        # Initialize gain and damping for force mode to a more stable default" + NEW_LINE  + 
 "$5.0    force_mode_set_gain_scaling(0.5)" + NEW_LINE  + 
@@ -1107,7 +1286,7 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "" + NEW_LINE  + 
 "        while keep_running:" + NEW_LINE  + 
 "            cmd = rtde_cmd()" + NEW_LINE  + 
-"            if cmd == 24 or cmd == 11 or cmd == 9 or cmd == 10 or cmd == 6 or cmd == 25 or cmd == 26 or cmd == 27 or cmd == 38 or cmd == 58:" + NEW_LINE  + 
+"            if cmd == 24 or cmd == 11 or cmd == 9 or cmd == 10 or cmd == 6 or cmd == 25 or cmd == 26 or cmd == 27 or cmd == 38 or cmd == 58 or cmd == 66 or cmd == 67 or cmd == 68 or cmd == 69 or cmd == 70 or cmd == 71:" + NEW_LINE  + 
 "                # for realtime commands simply process and signal ready." + NEW_LINE  + 
 "                keep_running = process_cmd(cmd)" + NEW_LINE  + 
 "                signal_ready()" + NEW_LINE  + 
@@ -1123,8 +1302,9 @@ const std::string NEW_LINE= "\n"; const std::string QUOTATION = "\""; std::strin
 "                    executing_cmd = True" + NEW_LINE  + 
 "                end" + NEW_LINE  + 
 "            end" + NEW_LINE  + 
-"" + NEW_LINE  + 
-"            sync()" + NEW_LINE  + 
+"            if cmd != 66:" + NEW_LINE  + 
+"              sync()" + NEW_LINE  + 
+"            end" + NEW_LINE  + 
 "        end" + NEW_LINE  + 
 "        textmsg("+QUOTATION+"RTDE Control Script Terminated"+QUOTATION+")" + NEW_LINE  + 
 "# NODE_CONTROL_LOOP_ENDS" + NEW_LINE  + 
