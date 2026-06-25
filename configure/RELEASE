@@ -1,16 +1,21 @@
-# RELEASE Location of external products
+#RELEASE Location of external products
 # Run "gnumake clean uninstall install" in the application
 # top directory each time this file is changed.
-
-##############################################################################
-
-# SUPPORT =
-# EPICS_BASE =
-# ASYN =
-
-# These lines allow developers to override these RELEASE settings
-# without having to modify this file directly.
--include $(TOP)/../RELEASE.local
--include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local
 -include $(TOP)/configure/RELEASE.local
 
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+#EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
+#-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)
+
+#Capfast users may need the following definitions
+#CAPFAST_TEMPLATES=
+#SCH2EDIF_PATH=
+
+# Check for valid macro definitions for module release directories
+# You can add tests here to make sure RELEASE.local defined valid
+# macros for all the module dependencies
+ifeq ($(wildcard $(EPICS_BASE)/include),)
+$(error Invalid EPICS_BASE: $(EPICS_BASE))
+endif

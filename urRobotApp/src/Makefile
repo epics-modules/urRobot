@@ -30,23 +30,39 @@ urRobot_SRCS += gripper_driver.cpp
 urRobot_LIBS += asyn
 urRobot_LIBS += rtde
 urRobot_LIBS += $(EPICS_BASE_IOC_LIBS)
-urRobot_SYS_LIBS += boost_system
-urRobot_SYS_LIBS += boost_thread
+
+ifeq ($(WITH_BOOST),YES)
+  ifeq ($(BOOST_EXTERNAL),NO)
+    PROD_SYS_LIBS += boost_system
+  else
+    ifdef BOOST_LIB
+      boost_system_DIR = $(BOOST_LIB)
+      PROD_LIBS     += boost_system
+          boost_system_DIR = $(BOOST_LIB)
+    else
+      PROD_SYS_LIBS += boost_system
+    endif
+  endif
+endif
+
+
+#urRobot_SYS_LIBS += boost_system
+#urRobot_SYS_LIBS += boost_thread
 
 # Tool for calibrating the Robotiq Gripper
 PROD += calibrate_gripper
 calibrate_gripper_SRCS += calibrate_gripper.cpp
 calibrate_gripper_LIBS += rtde
-calibrate_gripper_SYS_LIBS += boost_system
-calibrate_gripper_SYS_LIBS += boost_thread
+#calibrate_gripper_SYS_LIBS += boost_system
+#calibrate_gripper_SYS_LIBS += boost_thread
 calibrate_gripper_SYS_LIBS += pthread
 
 # Program for testing ur_rtde by itself without asyn
 TESTPROD += urtest
 urtest_SRCS += urtest.cpp
 urtest_LIBS += rtde
-urtest_SYS_LIBS += boost_system
-urtest_SYS_LIBS += boost_thread
+#urtest_SYS_LIBS += boost_system
+#urtest_SYS_LIBS += boost_thread
 urtest_SYS_LIBS += pthread
 
 endif
