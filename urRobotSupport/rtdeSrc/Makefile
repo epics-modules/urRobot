@@ -9,6 +9,11 @@ SRC_DIRS += ../generated
 USR_INCLUDES += -I../ur_rtde/include
 USR_INCLUDES += -I../generated
 
+# Boost headers (see WITH_BOOST / BOOST_* in configure/CONFIG_SITE)
+ifeq ($(WITH_BOOST),YES)
+USR_INCLUDES += -I$(BOOST_INCLUDE)
+endif
+
 USR_CXXFLAGS += -std=c++11
 
 LIBRARY = rtde
@@ -32,8 +37,23 @@ rtde_SRCS_Darwin += tcp_server.cpp
 rtde_SRCS_Darwin += log.cpp
 rtde_SRCS_Darwin += default_log_handler.cpp
 
-rtde_SYS_LIBS += boost_system
-rtde_SYS_LIBS += boost_thread
+# Boost libraries: link from BOOST_LIB when set (PSPKG package), else system
+ifeq ($(WITH_BOOST),YES)
+  ifneq ($(BOOST_EXTERNAL),NO)
+    ifdef BOOST_LIB
+      boost_system_DIR = $(BOOST_LIB)
+      boost_thread_DIR = $(BOOST_LIB)
+      rtde_LIBS += boost_system
+      rtde_LIBS += boost_thread
+    else
+      rtde_SYS_LIBS += boost_system
+      rtde_SYS_LIBS += boost_thread
+    endif
+  else
+    rtde_SYS_LIBS += boost_system
+    rtde_SYS_LIBS += boost_thread
+  endif
+endif
 
 INC += ur_rtde/dashboard_client.h
 INC += ur_rtde/dashboard_enums.h

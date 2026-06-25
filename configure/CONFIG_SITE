@@ -34,6 +34,10 @@ CHECK_RELEASE = YES
 
 WITH_BOOST = YES
 
+# PSPKG_ROOT is normally exported by the PCDS build environment. Provide a
+# fallback so the Boost paths still resolve if it is not set in the environment.
+PSPKG_ROOT ?= /cds/group/pcds/pkg_mgr
+
 BOOST_PACKAGE_NAME=boost
 BOOST_VERSION=1.64.0
 BOOST_TOP=$(PSPKG_ROOT)/release/$(BOOST_PACKAGE_NAME)/$(BOOST_VERSION)

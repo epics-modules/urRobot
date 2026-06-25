@@ -31,38 +31,41 @@ urRobot_LIBS += asyn
 urRobot_LIBS += rtde
 urRobot_LIBS += $(EPICS_BASE_IOC_LIBS)
 
+# Boost wiring (see WITH_BOOST / BOOST_* in configure/CONFIG_SITE).
+# When BOOST_LIB is set (e.g. a PSPKG package), link Boost from there via the
+# *_DIR mechanism; otherwise fall back to the system Boost libraries. The
+# resulting names are applied to the urRobot library and to each PROD below.
 ifeq ($(WITH_BOOST),YES)
-  ifeq ($(BOOST_EXTERNAL),NO)
-    PROD_SYS_LIBS += boost_system
-  else
+  USR_INCLUDES += -I$(BOOST_INCLUDE)
+  ifneq ($(BOOST_EXTERNAL),NO)
     ifdef BOOST_LIB
       boost_system_DIR = $(BOOST_LIB)
-      PROD_LIBS     += boost_system
-          boost_system_DIR = $(BOOST_LIB)
-    else
-      PROD_SYS_LIBS += boost_system
+      boost_thread_DIR = $(BOOST_LIB)
+      BOOST_TGT_LIBS = boost_system boost_thread
     endif
+  endif
+  ifndef BOOST_TGT_LIBS
+    BOOST_TGT_SYS_LIBS = boost_system boost_thread
   endif
 endif
 
-
-#urRobot_SYS_LIBS += boost_system
-#urRobot_SYS_LIBS += boost_thread
+urRobot_LIBS     += $(BOOST_TGT_LIBS)
+urRobot_SYS_LIBS += $(BOOST_TGT_SYS_LIBS)
 
 # Tool for calibrating the Robotiq Gripper
 PROD += calibrate_gripper
 calibrate_gripper_SRCS += calibrate_gripper.cpp
 calibrate_gripper_LIBS += rtde
-#calibrate_gripper_SYS_LIBS += boost_system
-#calibrate_gripper_SYS_LIBS += boost_thread
+calibrate_gripper_LIBS += $(BOOST_TGT_LIBS)
+calibrate_gripper_SYS_LIBS += $(BOOST_TGT_SYS_LIBS)
 calibrate_gripper_SYS_LIBS += pthread
 
 # Program for testing ur_rtde by itself without asyn
 TESTPROD += urtest
 urtest_SRCS += urtest.cpp
 urtest_LIBS += rtde
-#urtest_SYS_LIBS += boost_system
-#urtest_SYS_LIBS += boost_thread
+urtest_LIBS += $(BOOST_TGT_LIBS)
+urtest_SYS_LIBS += $(BOOST_TGT_SYS_LIBS)
 urtest_SYS_LIBS += pthread
 
 endif
