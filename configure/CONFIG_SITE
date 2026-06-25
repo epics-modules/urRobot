@@ -39,7 +39,9 @@ WITH_BOOST = YES
 PSPKG_ROOT ?= /cds/group/pcds/pkg_mgr
 
 BOOST_PACKAGE_NAME=boost
-BOOST_VERSION=1.64.0
+BOOST_VERSION=1.91.0
 BOOST_TOP=$(PSPKG_ROOT)/release/$(BOOST_PACKAGE_NAME)/$(BOOST_VERSION)
 BOOST_LIB=$(BOOST_TOP)/$(EPICS_HOST_ARCH)/lib
+# Point at the dir that CONTAINS boost/ (so <boost/variant.hpp> resolves).
+# Do NOT append /boost here.
 BOOST_INCLUDE=$(BOOST_TOP)/$(EPICS_HOST_ARCH)/include
