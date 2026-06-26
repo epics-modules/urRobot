@@ -70,7 +70,6 @@ INC += ur_rtde/rtde_receive_interface.h
 INC += ur_rtde/rtde_receive_interface_doc.h
 INC += ur_rtde/rtde_utility.h
 INC += ur_rtde/script_client.h
-INC += ur_rtde/thread_utility.h
 INC += urcl/default_log_handler.h
 INC += urcl/log.h
 INC += urcl/script_sender.h
