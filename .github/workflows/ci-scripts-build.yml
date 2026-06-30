@@ -1,0 +1,126 @@
+# .github/workflows/ci-scripts-build.yml for use with EPICS Base ci-scripts
+# (see: https://github.com/epics-base/ci-scripts)
+
+# This is YAML - indentation levels are crucial
+
+# Set the 'name:' properties to values that work for you (MYMODULE)
+
+name: URROBOT
+
+# Trigger on pushes and PRs to any branch
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'documentation/**'
+      - '**/*.html'
+      - '**/*.md'
+    branches:
+      - master
+  pull_request:
+
+env:
+  SETUP_PATH: .github/workflows:.ci
+  # For sequencer and asyn
+  APT: re2c libtirpc-dev libreadline-dev libboost-all-dev
+  CHOCO: re2c boost-msvc-14.3
+  BREW: re2c boost
+
+jobs:
+  build-base:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    # Set environment variables from matrix parameters
+    env:
+      CMP: ${{ matrix.cmp }}
+      BCFG: ${{ matrix.configuration }}
+      WINE: ${{ matrix.wine }}
+      RTEMS: ${{ matrix.rtems }}
+      RTEMS_TARGET: ${{ matrix.rtems_target }}
+      EXTRA: ${{ matrix.extra }}
+      TEST: ${{ matrix.test }}
+      SET: ${{ matrix.set }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Job names also name artifacts, character limitations apply
+        include:
+          - os: ubuntu-24.04
+            cmp: gcc
+            configuration: default
+            set: linux-stable
+            base: "7.0"
+            name: "Linux stable 7.0"
+
+          - os: ubuntu-24.04
+            cmp: gcc
+            configuration: default
+            set: linux-stable
+            base: "3.15"
+            name: "Linux stable 3.15"
+
+          - os: ubuntu-24.04
+            cmp: gcc
+            configuration: default
+            set: linux-master
+            base: "7.0"
+            name: "Linux master 7.0"
+
+          - os: ubuntu-24.04
+            cmp: gcc
+            configuration: default
+            set: linux-master
+            base: "3.15"
+            name: "Linux master 3.15"
+
+          - os: macos-latest
+            cmp: clang
+            configuration: default
+            set: macos
+            name: "MacOS master 7.0"
+
+          # - os: windows-2022
+            # cmp: vs2022
+            # configuration: static
+            # set: windows
+            # name: "Windows master 7.0"
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Automatic core dumper analysis
+      uses: mdavidsaver/ci-core-dumper@master
+    - name: "apt-get install"
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install qemu-system-x86 g++-mingw-w64-x86-64 gdb
+      if: runner.os == 'Linux'
+    - name: "apt-get install ${{ matrix.cmp }}"
+      run: |
+        sudo apt-get -y install software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get -y install ${{ matrix.cmp }}
+      if: matrix.utoolchain
+    - name: Prepare and compile dependencies
+      run: python .ci/cue.py prepare
+    - name: Configure Boost for Windows
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $boostDir = (Get-ChildItem C:\local\boost_* -Directory | Select-Object -First 1).FullName
+        $boostDirUnix = $boostDir -replace '\\','/'
+        Add-Content -Path configure/CONFIG_SITE.local -Value "USR_INCLUDES += -I$boostDirUnix"
+        Add-Content -Path configure/CONFIG_SITE.local -Value "USR_LDFLAGS += -LIBPATH:$boostDirUnix/lib64-msvc-14.3"
+    - name: Build main module
+      run: python .ci/cue.py build
+    - name: Run main module tests
+      run: python .ci/cue.py -T 15M test
+    - name: Upload tapfiles Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tapfiles ${{ matrix.name }}
+        path: '**/O.*/*.tap'
+    - name: Collect and show test results
+      run: python .ci/cue.py test-results

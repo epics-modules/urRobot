@@ -32,7 +32,6 @@ rtde_SRCS_Darwin += tcp_server.cpp
 rtde_SRCS_Darwin += log.cpp
 rtde_SRCS_Darwin += default_log_handler.cpp
 
-rtde_SYS_LIBS += boost_system
 rtde_SYS_LIBS += boost_thread
 
 INC += ur_rtde/dashboard_client.h
@@ -49,6 +48,7 @@ INC += ur_rtde/rtde_io_interface_doc.h
 INC += ur_rtde/rtde_receive_interface.h
 INC += ur_rtde/rtde_receive_interface_doc.h
 INC += ur_rtde/rtde_utility.h
+INC += ur_rtde/thread_utility.h
 INC += ur_rtde/script_client.h
 INC += urcl/default_log_handler.h
 INC += urcl/log.h
