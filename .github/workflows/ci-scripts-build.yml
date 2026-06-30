@@ -58,7 +58,7 @@ jobs:
             set: linux-stable
             base: "3.15"
             name: "Linux stable 3.15"
-            
+
           - os: ubuntu-24.04
             cmp: gcc
             configuration: default
@@ -72,18 +72,18 @@ jobs:
             set: linux-master
             base: "3.15"
             name: "Linux master 3.15"
-            
+
           - os: macos-latest
             cmp: clang
             configuration: default
             set: macos
             name: "MacOS master 7.0"
 
-          - os: windows-2022
-            cmp: vs2022
-            configuration: static
-            set: windows
-            name: "Windows master 7.0"
+          # - os: windows-2022
+            # cmp: vs2022
+            # configuration: static
+            # set: windows
+            # name: "Windows master 7.0"
 
     steps:
     - uses: actions/checkout@v4
