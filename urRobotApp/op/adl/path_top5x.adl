@@ -95,7 +95,7 @@ display {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N1):Go.PROC"
+		chan="$(P)Path$(N1):Go.VAL"
 		clr=14
 		bclr=51
 	}
@@ -110,7 +110,7 @@ display {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N2):Go.PROC"
+		chan="$(P)Path$(N2):Go.VAL"
 		clr=14
 		bclr=51
 	}
@@ -125,7 +125,7 @@ display {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N3):Go.PROC"
+		chan="$(P)Path$(N3):Go.VAL"
 		clr=14
 		bclr=51
 	}
@@ -140,7 +140,7 @@ display {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N4):Go.PROC"
+		chan="$(P)Path$(N4):Go.VAL"
 		clr=14
 		bclr=51
 	}
@@ -155,7 +155,7 @@ display {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N5):Go.PROC"
+		chan="$(P)Path$(N5):Go.VAL"
 		clr=14
 		bclr=51
 	}

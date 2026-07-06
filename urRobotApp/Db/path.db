@@ -3,9 +3,13 @@ record(stringout, "$(P)Path$(N)") {
     field(VAL, "$(DESC=Path $(N))")
 }
 
-record(luascript, "$(P)Path$(N):Go") {
-    field(DESC, "Executes path")
-    field(CODE, "@paths.lua path_go({prefix='$(P)',N=$(N),kmax=$(KMAX),port='$(CTRL_PORT)'})")
-    field(PREC, 0)
-    field(SYNC, "Async")
+record(bo, "$(P)Path$(N):Go") {
+    field(ZNAM, "Idle")
+    field(ONAM, "Go")
 }
+# record(luascript, "$(P)Path$(N):Go") {
+    # field(DESC, "Executes path")
+    # field(CODE, "@paths.lua path_go({prefix='$(P)',N=$(N),kmax=$(KMAX),port='$(CTRL_PORT)'})")
+    # field(PREC, 0)
+    # field(SYNC, "Async")
+# }
