@@ -4,8 +4,8 @@
 <widget class="QMainWindow" name="MainWindow">
     <property name="geometry">
         <rect>
-            <x>710</x>
-            <y>514</y>
+            <x>1287</x>
+            <y>409</y>
             <width>820</width>
             <height>635</height>
         </rect>
@@ -183,39 +183,6 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caChoice" name="caChoice_0">
-            <property name="geometry">
-                <rect>
-                    <x>50</x>
-                    <y>240</y>
-                    <width>80</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="channel">
-                <string>$(P)Control:AutoMoveJ</string>
-            </property>
-            <property name="foreground">
-                <color alpha="255">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="background">
-                <color alpha="255">
-                    <red>115</red>
-                    <green>223</green>
-                    <blue>255</blue>
-                </color>
-            </property>
-            <property name="stackingMode">
-                <enum>Column</enum>
-            </property>
-            <property name="colorMode">
-                <enum>caChoice::Static</enum>
-            </property>
-        </widget>
         <widget class="caGraphics" name="caRectangle_2">
             <property name="form">
                 <enum>caGraphics::Rectangle</enum>
@@ -291,7 +258,7 @@ caMenu{
         <widget class="caMessageButton" name="caMessageButton_0">
             <property name="geometry">
                 <rect>
-                    <x>145</x>
+                    <x>550</x>
                     <y>240</y>
                     <width>50</width>
                     <height>20</height>
@@ -340,7 +307,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J1TweakRev</string>
+                <string>$(P)Control:J1TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -430,7 +397,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J1TweakFwd</string>
+                <string>$(P)Control:J1TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -469,7 +436,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J1Cmd.VAL</string>
+                <string>$(P)Control:J1CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -750,42 +717,6 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Go:</string>
-            </property>
-            <property name="fontScaleMode">
-                <enum>ESimpleLabel::WidthAndHeight</enum>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>240</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-        </widget>
-        <widget class="caLabel" name="caLabel_1">
-            <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="foreground">
-                <color alpha="255">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="background">
-                <color alpha="0">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="text">
                 <string>Joint Move</string>
             </property>
             <property name="fontScaleMode">
@@ -795,15 +726,15 @@ caMenu{
                 <rect>
                     <x>20</x>
                     <y>205</y>
-                    <width>100</width>
-                    <height>20</height>
+                    <width>150</width>
+                    <height>25</height>
                 </rect>
             </property>
             <property name="alignment">
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_2">
+        <widget class="caLabel" name="caLabel_1">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -899,7 +830,7 @@ caMenu{
                 <enum>caSlider::Static</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_3">
+        <widget class="caLabel" name="caLabel_2">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -971,7 +902,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_4">
+        <widget class="caLabel" name="caLabel_3">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -1092,7 +1023,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J2TweakRev</string>
+                <string>$(P)Control:J2TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1182,7 +1113,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J2TweakFwd</string>
+                <string>$(P)Control:J2TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1221,7 +1152,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J2Cmd.VAL</string>
+                <string>$(P)Control:J2CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1519,7 +1450,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_5">
+        <widget class="caLabel" name="caLabel_4">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -1640,7 +1571,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J3TweakRev</string>
+                <string>$(P)Control:J3TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1730,7 +1661,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J3TweakFwd</string>
+                <string>$(P)Control:J3TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1769,7 +1700,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J3Cmd.VAL</string>
+                <string>$(P)Control:J3CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2067,7 +1998,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_6">
+        <widget class="caLabel" name="caLabel_5">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -2188,7 +2119,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J4TweakRev</string>
+                <string>$(P)Control:J4TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2278,7 +2209,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J4TweakFwd</string>
+                <string>$(P)Control:J4TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2317,7 +2248,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J4Cmd.VAL</string>
+                <string>$(P)Control:J4CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2615,7 +2546,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_7">
+        <widget class="caLabel" name="caLabel_6">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -2736,7 +2667,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J5TweakRev</string>
+                <string>$(P)Control:J5TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2826,7 +2757,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J5TweakFwd</string>
+                <string>$(P)Control:J5TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -2865,7 +2796,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J5Cmd.VAL</string>
+                <string>$(P)Control:J5CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3163,7 +3094,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_8">
+        <widget class="caLabel" name="caLabel_7">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -3284,7 +3215,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J6TweakRev</string>
+                <string>$(P)Control:J6TweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3374,7 +3305,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J6TweakFwd</string>
+                <string>$(P)Control:J6TweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3413,7 +3344,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:J6Cmd.VAL</string>
+                <string>$(P)Control:J6CmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3711,7 +3642,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_9">
+        <widget class="caLabel" name="caLabel_8">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -3745,39 +3676,6 @@ caMenu{
                     <width>100</width>
                     <height>15</height>
                 </rect>
-            </property>
-        </widget>
-        <widget class="caChoice" name="caChoice_1">
-            <property name="geometry">
-                <rect>
-                    <x>50</x>
-                    <y>460</y>
-                    <width>80</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="channel">
-                <string>$(P)Control:AutoMoveL</string>
-            </property>
-            <property name="foreground">
-                <color alpha="255">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="background">
-                <color alpha="255">
-                    <red>115</red>
-                    <green>223</green>
-                    <blue>255</blue>
-                </color>
-            </property>
-            <property name="stackingMode">
-                <enum>Column</enum>
-            </property>
-            <property name="colorMode">
-                <enum>caChoice::Static</enum>
             </property>
         </widget>
         <widget class="caGraphics" name="caRectangle_38">
@@ -3855,7 +3753,7 @@ caMenu{
         <widget class="caMessageButton" name="caMessageButton_13">
             <property name="geometry">
                 <rect>
-                    <x>140</x>
+                    <x>550</x>
                     <y>460</y>
                     <width>50</width>
                     <height>20</height>
@@ -3904,7 +3802,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseXTweakRev</string>
+                <string>$(P)Control:PoseXTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3994,7 +3892,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseXTweakFwd</string>
+                <string>$(P)Control:PoseXTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -4033,7 +3931,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseXCmd.VAL</string>
+                <string>$(P)Control:PoseXCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -4295,43 +4193,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_10">
-            <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="foreground">
-                <color alpha="255">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="background">
-                <color alpha="0">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="text">
-                <string>Go:</string>
-            </property>
-            <property name="fontScaleMode">
-                <enum>ESimpleLabel::WidthAndHeight</enum>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>460</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-        </widget>
-        <widget class="caLabel" name="caLabel_11">
+        <widget class="caLabel" name="caLabel_9">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4359,8 +4221,8 @@ caMenu{
                 <rect>
                     <x>20</x>
                     <y>425</y>
-                    <width>150</width>
-                    <height>20</height>
+                    <width>200</width>
+                    <height>25</height>
                 </rect>
             </property>
             <property name="alignment">
@@ -4443,7 +4305,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_12">
+        <widget class="caLabel" name="caLabel_10">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4564,7 +4426,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYTweakRev</string>
+                <string>$(P)Control:PoseYTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -4654,7 +4516,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYTweakFwd</string>
+                <string>$(P)Control:PoseYTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -4693,7 +4555,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYCmd.VAL</string>
+                <string>$(P)Control:PoseYCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -4991,7 +4853,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_13">
+        <widget class="caLabel" name="caLabel_11">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -5112,7 +4974,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseZTweakRev</string>
+                <string>$(P)Control:PoseZTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5202,7 +5064,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseZTweakFwd</string>
+                <string>$(P)Control:PoseZTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5241,7 +5103,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseZCmd.VAL</string>
+                <string>$(P)Control:PoseZCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5539,7 +5401,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_14">
+        <widget class="caLabel" name="caLabel_12">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -5660,7 +5522,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseRollTweakRev</string>
+                <string>$(P)Control:PoseRollTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5750,7 +5612,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseRollTweakFwd</string>
+                <string>$(P)Control:PoseRollTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5789,7 +5651,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseRollCmd.VAL</string>
+                <string>$(P)Control:PoseRollCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6087,7 +5949,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_15">
+        <widget class="caLabel" name="caLabel_13">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -6208,7 +6070,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PosePitchTweakRev</string>
+                <string>$(P)Control:PosePitchTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6298,7 +6160,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PosePitchTweakFwd</string>
+                <string>$(P)Control:PosePitchTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6337,7 +6199,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PosePitchCmd.VAL</string>
+                <string>$(P)Control:PosePitchCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6635,7 +6497,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_16">
+        <widget class="caLabel" name="caLabel_14">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -6756,7 +6618,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYawTweakRev</string>
+                <string>$(P)Control:PoseYawTweakRev.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6846,7 +6708,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYawTweakFwd</string>
+                <string>$(P)Control:PoseYawTweakFwd.PROC</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -6885,7 +6747,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:PoseYawCmd.VAL</string>
+                <string>$(P)Control:PoseYawCmdU.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -7183,7 +7045,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_17">
+        <widget class="caLabel" name="caLabel_15">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7375,7 +7237,7 @@ caMenu{
                 <enum>caMessageButton::Static</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_18">
+        <widget class="caLabel" name="caLabel_16">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7420,7 +7282,7 @@ caMenu{
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_19">
+        <widget class="caLabel" name="caLabel_17">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7468,7 +7330,7 @@ caMenu{
         <widget class="caMessageButton" name="caMessageButton_30">
             <property name="geometry">
                 <rect>
-                    <x>205</x>
+                    <x>495</x>
                     <y>240</y>
                     <width>50</width>
                     <height>20</height>
@@ -7507,7 +7369,7 @@ caMenu{
         <widget class="caMessageButton" name="caMessageButton_31">
             <property name="geometry">
                 <rect>
-                    <x>200</x>
+                    <x>495</x>
                     <y>460</y>
                     <width>50</width>
                     <height>20</height>
@@ -7543,7 +7405,7 @@ caMenu{
                 <enum>caMessageButton::Static</enum>
             </property>
         </widget>
-        <widget class="caChoice" name="caChoice_2">
+        <widget class="caChoice" name="caChoice_0">
             <property name="geometry">
                 <rect>
                     <x>210</x>
@@ -7576,7 +7438,7 @@ caMenu{
                 <enum>caChoice::Static</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_20">
+        <widget class="caLabel" name="caLabel_18">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7651,7 +7513,7 @@ caMenu{
                 <enum>caMessageButton::Static</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_21">
+        <widget class="caLabel" name="caLabel_19">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7696,7 +7558,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_22">
+        <widget class="caLabel" name="caLabel_20">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7741,7 +7603,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_23">
+        <widget class="caLabel" name="caLabel_21">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7786,7 +7648,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_24">
+        <widget class="caLabel" name="caLabel_22">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7831,7 +7693,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_25">
+        <widget class="caLabel" name="caLabel_23">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7876,7 +7738,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_26">
+        <widget class="caLabel" name="caLabel_24">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -7921,7 +7783,7 @@ caMenu{
                 <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_27">
+        <widget class="caLabel" name="caLabel_25">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8009,7 +7871,7 @@ caMenu{
                 <string>$(P)Control:Moving</string>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_28">
+        <widget class="caLabel" name="caLabel_26">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8147,7 +8009,7 @@ caMenu{
                 <enum>decimal</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_29">
+        <widget class="caLabel" name="caLabel_27">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8183,7 +8045,7 @@ caMenu{
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_30">
+        <widget class="caLabel" name="caLabel_28">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8321,7 +8183,7 @@ caMenu{
                 <enum>decimal</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_31">
+        <widget class="caLabel" name="caLabel_29">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8357,7 +8219,7 @@ caMenu{
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_32">
+        <widget class="caLabel" name="caLabel_30">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -8438,8 +8300,8 @@ caMenu{
         <widget class="caRelatedDisplay" name="caRelatedDisplay_1">
             <property name="geometry">
                 <rect>
-                    <x>550</x>
-                    <y>460</y>
+                    <x>705</x>
+                    <y>160</y>
                     <width>100</width>
                     <height>20</height>
                 </rect>
@@ -8477,6 +8339,690 @@ caMenu{
                 <string>false</string>
             </property>
         </widget>
+        <widget class="caTextEntry" name="caTextEntry_28">
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J1Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caLabel" name="caLabel_31">
+            <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="0">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>Target:</string>
+            </property>
+            <property name="fontScaleMode">
+                <enum>ESimpleLabel::WidthAndHeight</enum>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>25</x>
+                    <y>240</y>
+                    <width>70</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_29">
+            <property name="geometry">
+                <rect>
+                    <x>165</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J2Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_30">
+            <property name="geometry">
+                <rect>
+                    <x>230</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J3Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_31">
+            <property name="geometry">
+                <rect>
+                    <x>295</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J4Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_32">
+            <property name="geometry">
+                <rect>
+                    <x>360</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J5Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_33">
+            <property name="geometry">
+                <rect>
+                    <x>425</x>
+                    <y>240</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:J6Cmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caLabel" name="caLabel_32">
+            <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="0">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>Target:</string>
+            </property>
+            <property name="fontScaleMode">
+                <enum>ESimpleLabel::WidthAndHeight</enum>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>25</x>
+                    <y>460</y>
+                    <width>70</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_34">
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PoseXCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_35">
+            <property name="geometry">
+                <rect>
+                    <x>165</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PoseYCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_36">
+            <property name="geometry">
+                <rect>
+                    <x>230</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PoseZCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_37">
+            <property name="geometry">
+                <rect>
+                    <x>295</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PoseRollCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_38">
+            <property name="geometry">
+                <rect>
+                    <x>360</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PosePitchCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
+        <widget class="caTextEntry" name="caTextEntry_39">
+            <property name="geometry">
+                <rect>
+                    <x>425</x>
+                    <y>460</y>
+                    <width>60</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)Control:PoseYawCmd.VAL</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+        </widget>
         <zorder>caRectangle_0</zorder>
         <zorder>caRectangle_1</zorder>
         <zorder>caRectangle_2</zorder>
@@ -8487,88 +9033,88 @@ caMenu{
         <zorder>caLabel_0</zorder>
         <zorder>caLabel_1</zorder>
         <zorder>caLabel_2</zorder>
-        <zorder>caLabel_3</zorder>
         <zorder>caRectangle_7</zorder>
-        <zorder>caLabel_4</zorder>
+        <zorder>caLabel_3</zorder>
         <zorder>caRectangle_8</zorder>
         <zorder>caRectangle_9</zorder>
         <zorder>caRectangle_10</zorder>
         <zorder>caRectangle_11</zorder>
         <zorder>caRectangle_12</zorder>
         <zorder>caRectangle_13</zorder>
-        <zorder>caLabel_5</zorder>
+        <zorder>caLabel_4</zorder>
         <zorder>caRectangle_14</zorder>
         <zorder>caRectangle_15</zorder>
         <zorder>caRectangle_16</zorder>
         <zorder>caRectangle_17</zorder>
         <zorder>caRectangle_18</zorder>
         <zorder>caRectangle_19</zorder>
-        <zorder>caLabel_6</zorder>
+        <zorder>caLabel_5</zorder>
         <zorder>caRectangle_20</zorder>
         <zorder>caRectangle_21</zorder>
         <zorder>caRectangle_22</zorder>
         <zorder>caRectangle_23</zorder>
         <zorder>caRectangle_24</zorder>
         <zorder>caRectangle_25</zorder>
-        <zorder>caLabel_7</zorder>
+        <zorder>caLabel_6</zorder>
         <zorder>caRectangle_26</zorder>
         <zorder>caRectangle_27</zorder>
         <zorder>caRectangle_28</zorder>
         <zorder>caRectangle_29</zorder>
         <zorder>caRectangle_30</zorder>
         <zorder>caRectangle_31</zorder>
-        <zorder>caLabel_8</zorder>
+        <zorder>caLabel_7</zorder>
         <zorder>caRectangle_32</zorder>
         <zorder>caRectangle_33</zorder>
         <zorder>caRectangle_34</zorder>
         <zorder>caRectangle_35</zorder>
         <zorder>caRectangle_36</zorder>
         <zorder>caRectangle_37</zorder>
-        <zorder>caLabel_9</zorder>
+        <zorder>caLabel_8</zorder>
         <zorder>caRectangle_38</zorder>
         <zorder>caRectangle_39</zorder>
         <zorder>caRectangle_40</zorder>
         <zorder>caRectangle_41</zorder>
         <zorder>caRectangle_42</zorder>
-        <zorder>caLabel_10</zorder>
-        <zorder>caLabel_11</zorder>
+        <zorder>caLabel_9</zorder>
         <zorder>caRectangle_43</zorder>
         <zorder>caRectangle_44</zorder>
-        <zorder>caLabel_12</zorder>
+        <zorder>caLabel_10</zorder>
         <zorder>caRectangle_45</zorder>
         <zorder>caRectangle_46</zorder>
         <zorder>caRectangle_47</zorder>
         <zorder>caRectangle_48</zorder>
         <zorder>caRectangle_49</zorder>
         <zorder>caRectangle_50</zorder>
-        <zorder>caLabel_13</zorder>
+        <zorder>caLabel_11</zorder>
         <zorder>caRectangle_51</zorder>
         <zorder>caRectangle_52</zorder>
         <zorder>caRectangle_53</zorder>
         <zorder>caRectangle_54</zorder>
         <zorder>caRectangle_55</zorder>
         <zorder>caRectangle_56</zorder>
-        <zorder>caLabel_14</zorder>
+        <zorder>caLabel_12</zorder>
         <zorder>caRectangle_57</zorder>
         <zorder>caRectangle_58</zorder>
         <zorder>caRectangle_59</zorder>
         <zorder>caRectangle_60</zorder>
         <zorder>caRectangle_61</zorder>
         <zorder>caRectangle_62</zorder>
-        <zorder>caLabel_15</zorder>
+        <zorder>caLabel_13</zorder>
         <zorder>caRectangle_63</zorder>
         <zorder>caRectangle_64</zorder>
         <zorder>caRectangle_65</zorder>
         <zorder>caRectangle_66</zorder>
         <zorder>caRectangle_67</zorder>
         <zorder>caRectangle_68</zorder>
-        <zorder>caLabel_16</zorder>
+        <zorder>caLabel_14</zorder>
         <zorder>caRectangle_69</zorder>
         <zorder>caRectangle_70</zorder>
         <zorder>caRectangle_71</zorder>
         <zorder>caRectangle_72</zorder>
         <zorder>caRectangle_73</zorder>
         <zorder>caRectangle_74</zorder>
+        <zorder>caLabel_15</zorder>
+        <zorder>caLabel_16</zorder>
         <zorder>caLabel_17</zorder>
         <zorder>caLabel_18</zorder>
         <zorder>caLabel_19</zorder>
@@ -8578,15 +9124,14 @@ caMenu{
         <zorder>caLabel_23</zorder>
         <zorder>caLabel_24</zorder>
         <zorder>caLabel_25</zorder>
+        <zorder>caRectangle_75</zorder>
         <zorder>caLabel_26</zorder>
         <zorder>caLabel_27</zorder>
-        <zorder>caRectangle_75</zorder>
         <zorder>caLabel_28</zorder>
         <zorder>caLabel_29</zorder>
         <zorder>caLabel_30</zorder>
         <zorder>caLabel_31</zorder>
         <zorder>caLabel_32</zorder>
-        <zorder>caChoice_0</zorder>
         <zorder>caMessageButton_0</zorder>
         <zorder>caMessageButton_1</zorder>
         <zorder>caTextEntry_0</zorder>
@@ -8625,7 +9170,6 @@ caMenu{
         <zorder>caTextEntry_11</zorder>
         <zorder>caLineEdit_10</zorder>
         <zorder>caLineEdit_11</zorder>
-        <zorder>caChoice_1</zorder>
         <zorder>caMessageButton_13</zorder>
         <zorder>caMessageButton_14</zorder>
         <zorder>caTextEntry_12</zorder>
@@ -8669,7 +9213,7 @@ caMenu{
         <zorder>caMessageButton_29</zorder>
         <zorder>caMessageButton_30</zorder>
         <zorder>caMessageButton_31</zorder>
-        <zorder>caChoice_2</zorder>
+        <zorder>caChoice_0</zorder>
         <zorder>caMessageButton_32</zorder>
         <zorder>caTextEntry_24</zorder>
         <zorder>caTextEntry_25</zorder>
@@ -8677,6 +9221,18 @@ caMenu{
         <zorder>caTextEntry_27</zorder>
         <zorder>caRelatedDisplay_0</zorder>
         <zorder>caRelatedDisplay_1</zorder>
+        <zorder>caTextEntry_28</zorder>
+        <zorder>caTextEntry_29</zorder>
+        <zorder>caTextEntry_30</zorder>
+        <zorder>caTextEntry_31</zorder>
+        <zorder>caTextEntry_32</zorder>
+        <zorder>caTextEntry_33</zorder>
+        <zorder>caTextEntry_34</zorder>
+        <zorder>caTextEntry_35</zorder>
+        <zorder>caTextEntry_36</zorder>
+        <zorder>caTextEntry_37</zorder>
+        <zorder>caTextEntry_38</zorder>
+        <zorder>caTextEntry_39</zorder>
     </widget>
 </widget>
 </ui>
