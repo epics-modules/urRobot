@@ -157,61 +157,71 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:JointAcceleration    | ao     | Acceleration for moveJ (deg/s/s)     |
 | Control:JointBlend    | ao     | Blend radius for moveJ (mm)     |
 | Control:stopJ    | bo     | Stops an in-progress asynchronous moveJ     |
-| Control:AutoMoveJ    | bo     | If 1, moveJ runs automatically when any JxCmd changes     |
-| Control:J1Cmd    | ao     | Commanded angle for joint 1 (deg)     |
+| Control:J1Cmd    | ao     | Commanded angle for joint 1 (deg). Does not trigger motion.     |
+| Control:J1CmdU    | ao     | Sets J1 target and executes moveJ     |
 | Control:J1TweakVal    | ao     | Joint 1 tweak step size     |
-| Control:J1TweakFwd    | bo     | Tweak joint 1 forward by J1TweakVal     |
-| Control:J1TweakRev    | bo     | Tweak joint 1 backward by J1TweakVal     |
-| Control:J2Cmd    | ao     | Commanded angle for joint 2 (deg)     |
+| Control:J1TweakFwd    | calcout     | Tweak joint 1 forward by J1TweakVal (writes to J1CmdU)     |
+| Control:J1TweakRev    | calcout     | Tweak joint 1 backward by J1TweakVal (writes to J1CmdU)     |
+| Control:J2Cmd    | ao     | Commanded angle for joint 2 (deg). Does not trigger motion.     |
+| Control:J2CmdU    | ao     | Sets J2 target and executes moveJ     |
 | Control:J2TweakVal    | ao     | Joint 2 tweak step size     |
-| Control:J2TweakFwd    | bo     | Tweak joint 2 forward by J2TweakVal     |
-| Control:J2TweakRev    | bo     | Tweak joint 2 backward by J2TweakVal     |
-| Control:J3Cmd    | ao     | Commanded angle for joint 3 (deg)     |
+| Control:J2TweakFwd    | calcout     | Tweak joint 2 forward by J2TweakVal (writes to J2CmdU)     |
+| Control:J2TweakRev    | calcout     | Tweak joint 2 backward by J2TweakVal (writes to J2CmdU)     |
+| Control:J3Cmd    | ao     | Commanded angle for joint 3 (deg). Does not trigger motion.     |
+| Control:J3CmdU    | ao     | Sets J3 target and executes moveJ     |
 | Control:J3TweakVal    | ao     | Joint 3 tweak step size     |
-| Control:J3TweakFwd    | bo     | Tweak joint 3 forward by J3TweakVal     |
-| Control:J3TweakRev    | bo     | Tweak joint 3 backward by J3TweakVal     |
-| Control:J4Cmd    | ao     | Commanded angle for joint 4 (deg)     |
+| Control:J3TweakFwd    | calcout     | Tweak joint 3 forward by J3TweakVal (writes to J3CmdU)     |
+| Control:J3TweakRev    | calcout     | Tweak joint 3 backward by J3TweakVal (writes to J3CmdU)     |
+| Control:J4Cmd    | ao     | Commanded angle for joint 4 (deg). Does not trigger motion.     |
+| Control:J4CmdU    | ao     | Sets J4 target and executes moveJ     |
 | Control:J4TweakVal    | ao     | Joint 4 tweak step size     |
-| Control:J4TweakFwd    | bo     | Tweak joint 4 forward by J4TweakVal     |
-| Control:J4TweakRev    | bo     | Tweak joint 4 backward by J4TweakVal     |
-| Control:J5Cmd    | ao     | Commanded angle for joint 5 (deg)     |
+| Control:J4TweakFwd    | calcout     | Tweak joint 4 forward by J4TweakVal (writes to J4CmdU)     |
+| Control:J4TweakRev    | calcout     | Tweak joint 4 backward by J4TweakVal (writes to J4CmdU)     |
+| Control:J5Cmd    | ao     | Commanded angle for joint 5 (deg). Does not trigger motion.     |
+| Control:J5CmdU    | ao     | Sets J5 target and executes moveJ     |
 | Control:J5TweakVal    | ao     | Joint 5 tweak step size     |
-| Control:J5TweakFwd    | bo     | Tweak joint 5 forward by J5TweakVal     |
-| Control:J5TweakRev    | bo     | Tweak joint 5 backward by J5TweakVal     |
-| Control:J6Cmd    | ao     | Commanded angle for joint 6 (deg)     |
+| Control:J5TweakFwd    | calcout     | Tweak joint 5 forward by J5TweakVal (writes to J5CmdU)     |
+| Control:J5TweakRev    | calcout     | Tweak joint 5 backward by J5TweakVal (writes to J5CmdU)     |
+| Control:J6Cmd    | ao     | Commanded angle for joint 6 (deg). Does not trigger motion.     |
+| Control:J6CmdU    | ao     | Sets J6 target and executes moveJ     |
 | Control:J6TweakVal    | ao     | Joint 6 tweak step size     |
-| Control:J6TweakFwd    | bo     | Tweak joint 6 forward by J6TweakVal     |
-| Control:J6TweakRev    | bo     | Tweak joint 6 backward by J6TweakVal     |
+| Control:J6TweakFwd    | calcout     | Tweak joint 6 forward by J6TweakVal (writes to J6CmdU)     |
+| Control:J6TweakRev    | calcout     | Tweak joint 6 backward by J6TweakVal (writes to J6CmdU)     |
 | Control:moveL    | bo     | Executes moveL to the commanded TCP pose     |
 | Control:LinearSpeed    | ao     | Speed for moveL (mm/s)     |
 | Control:LinearAcceleration    | ao     | Acceleration for moveL (mm/s/s)     |
 | Control:LinearBlend    | ao     | Blend radius for moveL (mm)     |
 | Control:stopL    | bo     | Stops an in-progress asynchronous moveL     |
-| Control:AutoMoveL    | bo     | If 1, moveL runs automatically when any PoseCmd changes     |
-| Control:PoseXCmd    | ao     | Commanded TCP X (mm)     |
+| Control:PoseXCmd    | ao     | Commanded TCP X (mm). Does not trigger motion.     |
+| Control:PoseXCmdU    | ao     | Sets X target and executes moveL     |
 | Control:PoseXTweakVal    | ao     | X tweak step size     |
-| Control:PoseXTweakFwd    | bo     | Tweak TCP X forward     |
-| Control:PoseXTweakRev    | bo     | Tweak TCP X backward     |
-| Control:PoseYCmd    | ao     | Commanded TCP Y (mm)     |
+| Control:PoseXTweakFwd    | calcout     | Tweak TCP X forward (writes to PoseXCmdU)     |
+| Control:PoseXTweakRev    | calcout     | Tweak TCP X backward (writes to PoseXCmdU)     |
+| Control:PoseYCmd    | ao     | Commanded TCP Y (mm). Does not trigger motion.     |
+| Control:PoseYCmdU    | ao     | Sets Y target and executes moveL     |
 | Control:PoseYTweakVal    | ao     | Y tweak step size     |
-| Control:PoseYTweakFwd    | bo     | Tweak TCP Y forward     |
-| Control:PoseYTweakRev    | bo     | Tweak TCP Y backward     |
-| Control:PoseZCmd    | ao     | Commanded TCP Z (mm)     |
+| Control:PoseYTweakFwd    | calcout     | Tweak TCP Y forward (writes to PoseYCmdU)     |
+| Control:PoseYTweakRev    | calcout     | Tweak TCP Y backward (writes to PoseYCmdU)     |
+| Control:PoseZCmd    | ao     | Commanded TCP Z (mm). Does not trigger motion.     |
+| Control:PoseZCmdU    | ao     | Sets Z target and executes moveL     |
 | Control:PoseZTweakVal    | ao     | Z tweak step size     |
-| Control:PoseZTweakFwd    | bo     | Tweak TCP Z forward     |
-| Control:PoseZTweakRev    | bo     | Tweak TCP Z backward     |
-| Control:PoseRollCmd    | ao     | Commanded TCP roll (deg)     |
+| Control:PoseZTweakFwd    | calcout     | Tweak TCP Z forward (writes to PoseZCmdU)     |
+| Control:PoseZTweakRev    | calcout     | Tweak TCP Z backward (writes to PoseZCmdU)     |
+| Control:PoseRollCmd    | ao     | Commanded TCP roll (deg). Does not trigger motion.     |
+| Control:PoseRollCmdU    | ao     | Sets roll target and executes moveL     |
 | Control:PoseRollTweakVal    | ao     | Roll tweak step size     |
-| Control:PoseRollTweakFwd    | bo     | Tweak TCP roll forward     |
-| Control:PoseRollTweakRev    | bo     | Tweak TCP roll backward     |
-| Control:PosePitchCmd    | ao     | Commanded TCP pitch (deg)     |
+| Control:PoseRollTweakFwd    | calcout     | Tweak TCP roll forward (writes to PoseRollCmdU)     |
+| Control:PoseRollTweakRev    | calcout     | Tweak TCP roll backward (writes to PoseRollCmdU)     |
+| Control:PosePitchCmd    | ao     | Commanded TCP pitch (deg). Does not trigger motion.     |
+| Control:PosePitchCmdU    | ao     | Sets pitch target and executes moveL     |
 | Control:PosePitchTweakVal    | ao     | Pitch tweak step size     |
-| Control:PosePitchTweakFwd    | bo     | Tweak TCP pitch forward     |
-| Control:PosePitchTweakRev    | bo     | Tweak TCP pitch backward     |
-| Control:PoseYawCmd    | ao     | Commanded TCP yaw (deg)     |
+| Control:PosePitchTweakFwd    | calcout     | Tweak TCP pitch forward (writes to PosePitchCmdU)     |
+| Control:PosePitchTweakRev    | calcout     | Tweak TCP pitch backward (writes to PosePitchCmdU)     |
+| Control:PoseYawCmd    | ao     | Commanded TCP yaw (deg). Does not trigger motion.     |
+| Control:PoseYawCmdU    | ao     | Sets yaw target and executes moveL     |
 | Control:PoseYawTweakVal    | ao     | Yaw tweak step size     |
-| Control:PoseYawTweakFwd    | bo     | Tweak TCP yaw forward     |
-| Control:PoseYawTweakRev    | bo     | Tweak TCP yaw backward     |
+| Control:PoseYawTweakFwd    | calcout     | Tweak TCP yaw forward (writes to PoseYawCmdU)     |
+| Control:PoseYawTweakRev    | calcout     | Tweak TCP yaw backward (writes to PoseYawCmdU)     |
 | Control:TCPOffset_X    | ao     | TCP offset X (mm)     |
 | Control:TCPOffset_Y    | ao     | TCP offset Y (mm)     |
 | Control:TCPOffset_Z    | ao     | TCP offset Z (mm)     |

@@ -166,21 +166,6 @@ record(calcout, "$(P)Control:auto_sync_steady")
     field(OUT, "$(P)Control:sync_both_cmd.PROC")
 }
 
-record(calcout, "$(P)Control:auto_sync_automovej")
-{
-    field(INPA, "$(P)Control:AutoMoveJ.VAL CP NMS")
-    field(CALC, "A")
-    field(OOPT, "Transition To Non-zero")
-    field(OUT, "$(P)Control:sync_joint_cmd.PROC")
-}
-
-record(calcout, "$(P)Control:auto_sync_automovel")
-{
-    field(INPA, "$(P)Control:AutoMoveL.VAL CP NMS")
-    field(CALC, "A")
-    field(OOPT, "Transition To Non-zero")
-    field(OUT, "$(P)Control:sync_pose_cmd.PROC")
-}
 
 record(calcout, "$(P)Control:startup_sync_cmds")
 {
@@ -196,7 +181,7 @@ record(fanout, "$(P)Control:sync_both_cmd")
     field(LNK1, "$(P)Control:sync_pose_cmd")
 }
 
-record(calcout, "$(P)Control:reset_after_async_move")
+record(calcout, "$(P)Control:sync_after_async_move")
 {
     field(INPA, "$(P)Control:AsyncMoveDone CP")
     field(CALC, "A")
@@ -264,55 +249,39 @@ record(bo, "$(P)Control:stopJ")
     field(FLNK, "$(P)Control:sync_both_cmd.PROC")
 }
 
-record(bo, "$(P)Control:AutoMoveJ")
-{
-    field(DESC, "If 1, moveJ runs when JxCmd changes")
-    field(ZNAM, "No")
-    field(ONAM, "Yes")
-    field(VAL, 0)
-}
-
-record(calcout, "$(P)Control:auto_moveJ_calc")
-{
-    field(INPA, "$(P)Control:AutoMoveJ")
-    field(CALC, "A")
-    field(DISV, 1)
-    field(OOPT, "When Non-zero")
-    field(OUT, "$(P)Control:moveJ.PROC")
-}
 
 record(sseq, "$(P)Control:sync_joint_cmd")
 {
     field(PINI, 0)
 
-    field(LNK1, "$(P)Control:auto_moveJ_calc.DISA CA")
+    field(LNK1, "$(P)Control:moveJ.DISA CA")
     field(STR1, "1")
 
     field(DOL2, "$(P)Receive:Joint1")
-    field(LNK2, "$(P)Control:J1Cmd CA")
+    field(LNK2, "$(P)Control:J1CmdU CA")
     field(WAIT2, "After1")
 
     field(DOL3, "$(P)Receive:Joint2")
-    field(LNK3, "$(P)Control:J2Cmd CA")
+    field(LNK3, "$(P)Control:J2CmdU CA")
     field(WAIT3, "After1")
 
     field(DOL4, "$(P)Receive:Joint3")
-    field(LNK4, "$(P)Control:J3Cmd CA")
+    field(LNK4, "$(P)Control:J3CmdU CA")
     field(WAIT4, "After1")
 
     field(DOL5, "$(P)Receive:Joint4")
-    field(LNK5, "$(P)Control:J4Cmd CA")
+    field(LNK5, "$(P)Control:J4CmdU CA")
     field(WAIT5, "After1")
 
     field(DOL6, "$(P)Receive:Joint5")
-    field(LNK6, "$(P)Control:J5Cmd CA")
+    field(LNK6, "$(P)Control:J5CmdU CA")
     field(WAIT6, "After1")
 
     field(DOL7, "$(P)Receive:Joint6")
-    field(LNK7, "$(P)Control:J6Cmd CA")
+    field(LNK7, "$(P)Control:J6CmdU CA")
     field(WAIT7, "After1")
 
-    field(LNK8, "$(P)Control:auto_moveJ_calc.DISA CA")
+    field(LNK8, "$(P)Control:moveJ.DISA CA")
     field(STR8, "0")
     field(WAIT8, "After7")
 }
@@ -327,37 +296,35 @@ record(ao, "$(P)Control:J1Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J1CmdU")
+{
+    field(DESC, "Sets J1 target and executes moveJ")
+    field(OUT,  "$(P)Control:J1Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J1TweakVal")
 {
     field(DESC, "Joint 1 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J1TweakFwd")
+record(calcout, "$(P)Control:J1TweakFwd")
 {
-    field(DESC, "Tweak joint 1 forward")
-    field(FLNK, "$(P)Control:J1TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J1TweakRev")
-{
-    field(DESC, "Tweak joint 1 backward")
-    field(FLNK, "$(P)Control:J1TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J1TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J1Cmd")
+    field(INPA, "$(P)Control:J1CmdU.VAL")
     field(INPB, "$(P)Control:J1TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J1Cmd PP")
+    field(OUT, "$(P)Control:J1CmdU PP")
 }
-record(calcout, "$(P)Control:J1TweakCalcRev")
+record(calcout, "$(P)Control:J1TweakRev")
 {
-    field(INPA, "$(P)Control:J1Cmd")
+    field(INPA, "$(P)Control:J1CmdU.VAL")
     field(INPB, "$(P)Control:J1TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J1Cmd PP")
+    field(OUT, "$(P)Control:J1CmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -370,37 +337,35 @@ record(ao, "$(P)Control:J2Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J2CmdU")
+{
+    field(DESC, "Sets J2 target and executes moveJ")
+    field(OUT,  "$(P)Control:J2Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J2TweakVal")
 {
     field(DESC, "Joint 2 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J2TweakFwd")
+record(calcout, "$(P)Control:J2TweakFwd")
 {
-    field(DESC, "Tweak joint 2 forward")
-    field(FLNK, "$(P)Control:J2TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J2TweakRev")
-{
-    field(DESC, "Tweak joint 2 backward")
-    field(FLNK, "$(P)Control:J2TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J2TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J2Cmd")
+    field(INPA, "$(P)Control:J2CmdU.VAL")
     field(INPB, "$(P)Control:J2TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J2Cmd PP")
+    field(OUT, "$(P)Control:J2CmdU PP")
 }
-record(calcout, "$(P)Control:J2TweakCalcRev")
+record(calcout, "$(P)Control:J2TweakRev")
 {
-    field(INPA, "$(P)Control:J2Cmd")
+    field(INPA, "$(P)Control:J2CmdU.VAL")
     field(INPB, "$(P)Control:J2TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J2Cmd PP")
+    field(OUT, "$(P)Control:J2CmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -413,37 +378,35 @@ record(ao, "$(P)Control:J3Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J3CmdU")
+{
+    field(DESC, "Sets J3 target and executes moveJ")
+    field(OUT,  "$(P)Control:J3Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J3TweakVal")
 {
     field(DESC, "Joint 3 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J3TweakFwd")
+record(calcout, "$(P)Control:J3TweakFwd")
 {
-    field(DESC, "Tweak joint 3 forward")
-    field(FLNK, "$(P)Control:J3TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J3TweakRev")
-{
-    field(DESC, "Tweak joint 3 backward")
-    field(FLNK, "$(P)Control:J3TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J3TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J3Cmd")
+    field(INPA, "$(P)Control:J3CmdU.VAL")
     field(INPB, "$(P)Control:J3TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J3Cmd PP")
+    field(OUT, "$(P)Control:J3CmdU PP")
 }
-record(calcout, "$(P)Control:J3TweakCalcRev")
+record(calcout, "$(P)Control:J3TweakRev")
 {
-    field(INPA, "$(P)Control:J3Cmd")
+    field(INPA, "$(P)Control:J3CmdU.VAL")
     field(INPB, "$(P)Control:J3TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J3Cmd PP")
+    field(OUT, "$(P)Control:J3CmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -456,37 +419,35 @@ record(ao, "$(P)Control:J4Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J4CmdU")
+{
+    field(DESC, "Sets J4 target and executes moveJ")
+    field(OUT,  "$(P)Control:J4Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J4TweakVal")
 {
     field(DESC, "Joint 4 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J4TweakFwd")
+record(calcout, "$(P)Control:J4TweakFwd")
 {
-    field(DESC, "Tweak joint 4 forward")
-    field(FLNK, "$(P)Control:J4TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J4TweakRev")
-{
-    field(DESC, "Tweak joint 4 backward")
-    field(FLNK, "$(P)Control:J4TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J4TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J4Cmd")
+    field(INPA, "$(P)Control:J4CmdU.VAL")
     field(INPB, "$(P)Control:J4TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J4Cmd PP")
+    field(OUT, "$(P)Control:J4CmdU PP")
 }
-record(calcout, "$(P)Control:J4TweakCalcRev")
+record(calcout, "$(P)Control:J4TweakRev")
 {
-    field(INPA, "$(P)Control:J4Cmd")
+    field(INPA, "$(P)Control:J4CmdU.VAL")
     field(INPB, "$(P)Control:J4TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J4Cmd PP")
+    field(OUT, "$(P)Control:J4CmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -499,37 +460,35 @@ record(ao, "$(P)Control:J5Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J5CmdU")
+{
+    field(DESC, "Sets J5 target and executes moveJ")
+    field(OUT,  "$(P)Control:J5Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J5TweakVal")
 {
     field(DESC, "Joint 5 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J5TweakFwd")
+record(calcout, "$(P)Control:J5TweakFwd")
 {
-    field(DESC, "Tweak joint 5 forward")
-    field(FLNK, "$(P)Control:J5TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J5TweakRev")
-{
-    field(DESC, "Tweak joint 5 backward")
-    field(FLNK, "$(P)Control:J5TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J5TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J5Cmd")
+    field(INPA, "$(P)Control:J5CmdU.VAL")
     field(INPB, "$(P)Control:J5TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J5Cmd PP")
+    field(OUT, "$(P)Control:J5CmdU PP")
 }
-record(calcout, "$(P)Control:J5TweakCalcRev")
+record(calcout, "$(P)Control:J5TweakRev")
 {
-    field(INPA, "$(P)Control:J5Cmd")
+    field(INPA, "$(P)Control:J5CmdU.VAL")
     field(INPB, "$(P)Control:J5TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J5Cmd PP")
+    field(OUT, "$(P)Control:J5CmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -542,37 +501,35 @@ record(ao, "$(P)Control:J6Cmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveJ_calc.PROC")
+}
+record(ao, "$(P)Control:J6CmdU")
+{
+    field(DESC, "Sets J6 target and executes moveJ")
+    field(OUT,  "$(P)Control:J6Cmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveJ.PROC")
 }
 record(ao, "$(P)Control:J6TweakVal")
 {
     field(DESC, "Joint 6 tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
 }
-record(bo, "$(P)Control:J6TweakFwd")
+record(calcout, "$(P)Control:J6TweakFwd")
 {
-    field(DESC, "Tweak joint 6 forward")
-    field(FLNK, "$(P)Control:J6TweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:J6TweakRev")
-{
-    field(DESC, "Tweak joint 6 backward")
-    field(FLNK, "$(P)Control:J6TweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:J6TweakCalcFwd")
-{
-    field(INPA, "$(P)Control:J6Cmd")
+    field(INPA, "$(P)Control:J6CmdU.VAL")
     field(INPB, "$(P)Control:J6TweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:J6Cmd PP")
+    field(OUT, "$(P)Control:J6CmdU PP")
 }
-record(calcout, "$(P)Control:J6TweakCalcRev")
+record(calcout, "$(P)Control:J6TweakRev")
 {
-    field(INPA, "$(P)Control:J6Cmd")
+    field(INPA, "$(P)Control:J6CmdU.VAL")
     field(INPB, "$(P)Control:J6TweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:J6Cmd PP")
+    field(OUT, "$(P)Control:J6CmdU PP")
 }
 
 #======================
@@ -624,55 +581,38 @@ record(bo, "$(P)Control:stopL")
     field(FLNK, "$(P)Control:sync_both_cmd.PROC")
 }
 
-record(bo, "$(P)Control:AutoMoveL")
-{
-    field(DESC, "If 1, moveL runs when Cmd changes")
-    field(ZNAM, "No")
-    field(ONAM, "Yes")
-    field(VAL, 0)
-}
-
-record(calcout, "$(P)Control:auto_moveL_calc")
-{
-    field(INPA, "$(P)Control:AutoMoveL")
-    field(CALC, "A")
-    field(DISV, 1)
-    field(OOPT, "When Non-zero")
-    field(OUT, "$(P)Control:moveL.PROC")
-}
-
 record(sseq, "$(P)Control:sync_pose_cmd")
 {
     field(PINI, 0)
 
-    field(LNK1, "$(P)Control:auto_moveL_calc.DISA CA")
+    field(LNK1, "$(P)Control:moveL.DISA CA")
     field(STR1, "1")
 
     field(DOL2, "$(P)Receive:PoseX")
-    field(LNK2, "$(P)Control:PoseXCmd CA")
+    field(LNK2, "$(P)Control:PoseXCmdU CA")
     field(WAIT2, "After1")
 
     field(DOL3, "$(P)Receive:PoseY")
-    field(LNK3, "$(P)Control:PoseYCmd CA")
+    field(LNK3, "$(P)Control:PoseYCmdU CA")
     field(WAIT3, "After1")
 
     field(DOL4, "$(P)Receive:PoseZ")
-    field(LNK4, "$(P)Control:PoseZCmd CA")
+    field(LNK4, "$(P)Control:PoseZCmdU CA")
     field(WAIT4, "After1")
 
     field(DOL5, "$(P)Receive:PoseRoll")
-    field(LNK5, "$(P)Control:PoseRollCmd CA")
+    field(LNK5, "$(P)Control:PoseRollCmdU CA")
     field(WAIT5, "After1")
 
     field(DOL6, "$(P)Receive:PosePitch")
-    field(LNK6, "$(P)Control:PosePitchCmd CA")
+    field(LNK6, "$(P)Control:PosePitchCmdU CA")
     field(WAIT6, "After1")
 
     field(DOL7, "$(P)Receive:PoseYaw")
-    field(LNK7, "$(P)Control:PoseYawCmd CA")
+    field(LNK7, "$(P)Control:PoseYawCmdU CA")
     field(WAIT7, "After1")
 
-    field(LNK8, "$(P)Control:auto_moveL_calc.DISA CA")
+    field(LNK8, "$(P)Control:moveL.DISA CA")
     field(STR8, "0")
     field(WAIT8, "After7")
 }
@@ -681,45 +621,43 @@ record(sseq, "$(P)Control:sync_pose_cmd")
 
 record(ao, "$(P)Control:PoseXCmd")
 {
-    field(DESC, "X")
+    field(DESC, "Commanded TCP X")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))POSE_CMD")
     field(EGU, "mm")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PoseXCmdU")
+{
+    field(DESC, "Sets X target and executes moveL")
+    field(OUT,  "$(P)Control:PoseXCmd.VAL PP")
+    field(EGU, "mm")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PoseXTweakVal")
 {
     field(DESC, "X TCP pose tweak step size")
+    field(VAL, 1)
     field(EGU, "mm")
     field(PREC, 4)
     field(DRVH, "100.0")
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PoseXTweakFwd")
+record(calcout, "$(P)Control:PoseXTweakFwd")
 {
-    field(DESC, "Tweak X TCP pose forward")
-    field(FLNK, "$(P)Control:PoseXTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PoseXTweakRev")
-{
-    field(DESC, "Tweak X TCP pose backward")
-    field(FLNK, "$(P)Control:PoseXTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PoseXTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PoseXCmd")
+    field(INPA, "$(P)Control:PoseXCmdU.VAL")
     field(INPB, "$(P)Control:PoseXTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseXCmd PP")
+    field(OUT, "$(P)Control:PoseXCmdU PP")
 }
-record(calcout, "$(P)Control:PoseXTweakCalcRev")
+record(calcout, "$(P)Control:PoseXTweakRev")
 {
-    field(INPA, "$(P)Control:PoseXCmd")
+    field(INPA, "$(P)Control:PoseXCmdU.VAL")
     field(INPB, "$(P)Control:PoseXTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseXCmd PP")
+    field(OUT, "$(P)Control:PoseXCmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -732,39 +670,37 @@ record(ao, "$(P)Control:PoseYCmd")
     field(EGU, "mm")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PoseYCmdU")
+{
+    field(DESC, "Sets Y target and executes moveL")
+    field(OUT,  "$(P)Control:PoseYCmd.VAL PP")
+    field(EGU, "mm")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PoseYTweakVal")
 {
     field(DESC, "Y TCP pose tweak step size")
+    field(VAL, 1)
     field(EGU, "mm")
     field(PREC, 4)
     field(DRVH, "100")
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PoseYTweakFwd")
+record(calcout, "$(P)Control:PoseYTweakFwd")
 {
-    field(DESC, "Tweak Y TCP pose forward")
-    field(FLNK, "$(P)Control:PoseYTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PoseYTweakRev")
-{
-    field(DESC, "Tweak Y TCP pose backward")
-    field(FLNK, "$(P)Control:PoseYTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PoseYTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PoseYCmd")
+    field(INPA, "$(P)Control:PoseYCmdU.VAL")
     field(INPB, "$(P)Control:PoseYTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseYCmd PP")
+    field(OUT, "$(P)Control:PoseYCmdU PP")
 }
-record(calcout, "$(P)Control:PoseYTweakCalcRev")
+record(calcout, "$(P)Control:PoseYTweakRev")
 {
-    field(INPA, "$(P)Control:PoseYCmd")
+    field(INPA, "$(P)Control:PoseYCmdU.VAL")
     field(INPB, "$(P)Control:PoseYTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseYCmd PP")
+    field(OUT, "$(P)Control:PoseYCmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -778,39 +714,37 @@ record(ao, "$(P)Control:PoseZCmd")
     field(EGU, "mm")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PoseZCmdU")
+{
+    field(DESC, "Sets Z target and executes moveL")
+    field(OUT,  "$(P)Control:PoseZCmd.VAL PP")
+    field(EGU, "mm")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PoseZTweakVal")
 {
     field(DESC, "TCP Z tweak step size")
+    field(VAL, 1)
     field(EGU, "mm")
     field(PREC, 4)
     field(DRVH, "100")
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PoseZTweakFwd")
+record(calcout, "$(P)Control:PoseZTweakFwd")
 {
-    field(DESC, "Tweak TCP Z forward")
-    field(FLNK, "$(P)Control:PoseZTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PoseZTweakRev")
-{
-    field(DESC, "Tweak TCP Z backward")
-    field(FLNK, "$(P)Control:PoseZTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PoseZTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PoseZCmd")
+    field(INPA, "$(P)Control:PoseZCmdU.VAL")
     field(INPB, "$(P)Control:PoseZTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseZCmd PP")
+    field(OUT, "$(P)Control:PoseZCmdU PP")
 }
-record(calcout, "$(P)Control:PoseZTweakCalcRev")
+record(calcout, "$(P)Control:PoseZTweakRev")
 {
-    field(INPA, "$(P)Control:PoseZCmd")
+    field(INPA, "$(P)Control:PoseZCmdU.VAL")
     field(INPB, "$(P)Control:PoseZTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseZCmd PP")
+    field(OUT, "$(P)Control:PoseZCmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -823,38 +757,36 @@ record(ao, "$(P)Control:PoseRollCmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PoseRollCmdU")
+{
+    field(DESC, "Sets roll target and executes moveL")
+    field(OUT,  "$(P)Control:PoseRollCmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PoseRollTweakVal")
 {
     field(DESC, "TCP roll tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PoseRollTweakFwd")
+record(calcout, "$(P)Control:PoseRollTweakFwd")
 {
-    field(DESC, "Tweak TCP roll forward")
-    field(FLNK, "$(P)Control:PoseRollTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PoseRollTweakRev")
-{
-    field(DESC, "Tweak TCP roll backward")
-    field(FLNK, "$(P)Control:PoseRollTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PoseRollTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PoseRollCmd")
+    field(INPA, "$(P)Control:PoseRollCmdU.VAL")
     field(INPB, "$(P)Control:PoseRollTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseRollCmd PP")
+    field(OUT, "$(P)Control:PoseRollCmdU PP")
 }
-record(calcout, "$(P)Control:PoseRollTweakCalcRev")
+record(calcout, "$(P)Control:PoseRollTweakRev")
 {
-    field(INPA, "$(P)Control:PoseRollCmd")
+    field(INPA, "$(P)Control:PoseRollCmdU.VAL")
     field(INPB, "$(P)Control:PoseRollTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseRollCmd PP")
+    field(OUT, "$(P)Control:PoseRollCmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -867,38 +799,36 @@ record(ao, "$(P)Control:PosePitchCmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PosePitchCmdU")
+{
+    field(DESC, "Sets pitch target and executes moveL")
+    field(OUT,  "$(P)Control:PosePitchCmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PosePitchTweakVal")
 {
     field(DESC, "TCP pitch tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PosePitchTweakFwd")
+record(calcout, "$(P)Control:PosePitchTweakFwd")
 {
-    field(DESC, "Tweak TCP pitch forward")
-    field(FLNK, "$(P)Control:PosePitchTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PosePitchTweakRev")
-{
-    field(DESC, "Tweak TCP pitch backward")
-    field(FLNK, "$(P)Control:PosePitchTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PosePitchTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PosePitchCmd")
+    field(INPA, "$(P)Control:PosePitchCmdU.VAL")
     field(INPB, "$(P)Control:PosePitchTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PosePitchCmd PP")
+    field(OUT, "$(P)Control:PosePitchCmdU PP")
 }
-record(calcout, "$(P)Control:PosePitchTweakCalcRev")
+record(calcout, "$(P)Control:PosePitchTweakRev")
 {
-    field(INPA, "$(P)Control:PosePitchCmd")
+    field(INPA, "$(P)Control:PosePitchCmdU.VAL")
     field(INPB, "$(P)Control:PosePitchTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PosePitchCmd PP")
+    field(OUT, "$(P)Control:PosePitchCmdU PP")
 }
 
 # -----------------------------------------------------------
@@ -911,38 +841,36 @@ record(ao, "$(P)Control:PoseYawCmd")
     field(EGU, "deg")
     field(PINI, 1)
     field(PREC, 4)
-    field(FLNK, "$(P)Control:auto_moveL_calc.PROC")
+}
+record(ao, "$(P)Control:PoseYawCmdU")
+{
+    field(DESC, "Sets yaw target and executes moveL")
+    field(OUT,  "$(P)Control:PoseYawCmd.VAL PP")
+    field(EGU, "deg")
+    field(PREC, 4)
+    field(FLNK, "$(P)Control:moveL.PROC")
 }
 record(ao, "$(P)Control:PoseYawTweakVal")
 {
     field(DESC, "TCP yaw tweak step size")
+    field(VAL, 1)
     field(EGU, "deg")
     field(PREC, 4)
     field(DRVL, "0.0")
 }
-record(bo, "$(P)Control:PoseYawTweakFwd")
+record(calcout, "$(P)Control:PoseYawTweakFwd")
 {
-    field(DESC, "Tweak TCP yaw forward")
-    field(FLNK, "$(P)Control:PoseYawTweakCalcFwd.PROC")
-}
-record(bo, "$(P)Control:PoseYawTweakRev")
-{
-    field(DESC, "Tweak TCP yaw backward")
-    field(FLNK, "$(P)Control:PoseYawTweakCalcRev.PROC")
-}
-record(calcout, "$(P)Control:PoseYawTweakCalcFwd")
-{
-    field(INPA, "$(P)Control:PoseYawCmd")
+    field(INPA, "$(P)Control:PoseYawCmdU.VAL")
     field(INPB, "$(P)Control:PoseYawTweakVal")
     field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseYawCmd PP")
+    field(OUT, "$(P)Control:PoseYawCmdU PP")
 }
-record(calcout, "$(P)Control:PoseYawTweakCalcRev")
+record(calcout, "$(P)Control:PoseYawTweakRev")
 {
-    field(INPA, "$(P)Control:PoseYawCmd")
+    field(INPA, "$(P)Control:PoseYawCmdU.VAL")
     field(INPB, "$(P)Control:PoseYawTweakVal")
     field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseYawCmd PP")
+    field(OUT, "$(P)Control:PoseYawCmdU PP")
 }
 
 record(ao, "$(P)Control:TCPOffset_X")
