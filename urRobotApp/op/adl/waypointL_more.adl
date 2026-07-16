@@ -241,7 +241,7 @@ oval {
 		height=20
 	}
 	control {
-		chan="$(P)WaypointL:$(N):Roll"
+		chan="$(P)WaypointL:$(N):Rx"
 		clr=14
 		bclr=51
 	}
@@ -256,7 +256,7 @@ oval {
 		height=20
 	}
 	control {
-		chan="$(P)WaypointL:$(N):Pitch"
+		chan="$(P)WaypointL:$(N):Ry"
 		clr=14
 		bclr=51
 	}
@@ -271,7 +271,7 @@ oval {
 		height=20
 	}
 	control {
-		chan="$(P)WaypointL:$(N):Yaw"
+		chan="$(P)WaypointL:$(N):Rz"
 		clr=14
 		bclr=51
 	}
@@ -340,7 +340,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Roll"
+	textix="Rx"
 	align="horiz. centered"
 }
 text {
@@ -353,7 +353,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pitch"
+	textix="Ry"
 	align="horiz. centered"
 }
 text {
@@ -366,7 +366,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Yaw"
+	textix="Rz"
 	align="horiz. centered"
 }
 text {
@@ -549,7 +549,7 @@ text {
 		height=15
 	}
 	monitor {
-		chan="$(P)WaypointL:$(N):Roll.EGU"
+		chan="$(P)WaypointL:$(N):Rx.EGU"
 		clr=14
 		bclr=3
 	}

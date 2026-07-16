@@ -91,7 +91,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:ActualJointVelocities    | waveform     | Actual joint velocities     |
 | Receive:ActualJointCurrents    | waveform     | Actual joint currents     |
 | Receive:JointControlCurrents    | waveform     | Joint control currents     |
-| Receive:ActualTCPPose    | waveform     | Actual TCP pose (x,y,z,r,p,y)     |
+| Receive:ActualTCPPose    | waveform     | Actual TCP pose (x,y,z,rx,ry,rz)     |
 | Receive:ActualTCPSpeed    | waveform     | Actual TCP speed     |
 | Receive:ActualTCPForce    | waveform     | Actual TCP force     |
 | Receive:Joint1    | ai     | Joint 1 position (deg)  |
@@ -103,9 +103,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:PoseX    | ai     | TCP X position (mm)  |
 | Receive:PoseY    | ai     | TCP Y position (mm)  |
 | Receive:PoseZ    | ai     | TCP Z position (mm)  |
-| Receive:PoseRoll    | ai     | TCP roll (deg)  |
-| Receive:PosePitch    | ai     | TCP pitch (deg)  |
-| Receive:PoseYaw    | ai     | TCP yaw (deg)  |
+| Receive:PoseRx    | ai     | TCP rotation vector X component (rad)  |
+| Receive:PoseRy    | ai     | TCP rotation vector Y component (rad)  |
+| Receive:PoseRz    | ai     | TCP rotation vector Z component (rad)  |
 | Receive:JointModes    | waveform     | Joint control modes     |
 | Receive:ActualToolAccelerometer    | waveform     | Tool accelerometer (X,Y,Z)     |
 | Receive:TargetJointPositions    | waveform     | Target joint positions     |
@@ -113,7 +113,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:TargetJointAccelerations    | waveform     | Target joint accelerations     |
 | Receive:TargetJointCurrents    | waveform     | Target joint currents     |
 | Receive:TargetJointMoments    | waveform     | Target joint moments     |
-| Receive:TargetTCPPose    | waveform     | Target TCP pose (x,y,z,r,p,y)     |
+| Receive:TargetTCPPose    | waveform     | Target TCP pose (x,y,z,rx,ry,rz)     |
 | Receive:TargetTCPSpeed    | waveform     | Target TCP speed     |
 | Receive:JointTemperatures    | waveform     | Joint temperatures in celsius     |
 | Receive:ActualJointVoltages    | waveform     | Actual joint voltages     |
@@ -157,67 +157,65 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:JointAcceleration    | ao     | Acceleration for moveJ (deg/s/s)     |
 | Control:JointBlend    | ao     | Blend radius for moveJ (mm)     |
 | Control:stopJ    | bo     | Stops an in-progress asynchronous moveJ     |
-| Control:AutoMoveJ    | bo     | If 1, moveJ runs automatically when any JxCmd changes     |
-| Control:J1Cmd    | ao     | Commanded angle for joint 1 (deg)     |
+| Control:J1Cmd    | ao     | Commanded angle for joint 1 (deg). Does not trigger motion.     |
+| Control:J1CmdU    | ao     | Sets J1 target and executes moveJ     |
 | Control:J1TweakVal    | ao     | Joint 1 tweak step size     |
-| Control:J1TweakFwd    | bo     | Tweak joint 1 forward by J1TweakVal     |
-| Control:J1TweakRev    | bo     | Tweak joint 1 backward by J1TweakVal     |
-| Control:J2Cmd    | ao     | Commanded angle for joint 2 (deg)     |
+| Control:J1TweakFwd    | calcout     | Tweak joint 1 forward by J1TweakVal (writes to J1CmdU)     |
+| Control:J1TweakRev    | calcout     | Tweak joint 1 backward by J1TweakVal (writes to J1CmdU)     |
+| Control:J2Cmd    | ao     | Commanded angle for joint 2 (deg). Does not trigger motion.     |
+| Control:J2CmdU    | ao     | Sets J2 target and executes moveJ     |
 | Control:J2TweakVal    | ao     | Joint 2 tweak step size     |
-| Control:J2TweakFwd    | bo     | Tweak joint 2 forward by J2TweakVal     |
-| Control:J2TweakRev    | bo     | Tweak joint 2 backward by J2TweakVal     |
-| Control:J3Cmd    | ao     | Commanded angle for joint 3 (deg)     |
+| Control:J2TweakFwd    | calcout     | Tweak joint 2 forward by J2TweakVal (writes to J2CmdU)     |
+| Control:J2TweakRev    | calcout     | Tweak joint 2 backward by J2TweakVal (writes to J2CmdU)     |
+| Control:J3Cmd    | ao     | Commanded angle for joint 3 (deg). Does not trigger motion.     |
+| Control:J3CmdU    | ao     | Sets J3 target and executes moveJ     |
 | Control:J3TweakVal    | ao     | Joint 3 tweak step size     |
-| Control:J3TweakFwd    | bo     | Tweak joint 3 forward by J3TweakVal     |
-| Control:J3TweakRev    | bo     | Tweak joint 3 backward by J3TweakVal     |
-| Control:J4Cmd    | ao     | Commanded angle for joint 4 (deg)     |
+| Control:J3TweakFwd    | calcout     | Tweak joint 3 forward by J3TweakVal (writes to J3CmdU)     |
+| Control:J3TweakRev    | calcout     | Tweak joint 3 backward by J3TweakVal (writes to J3CmdU)     |
+| Control:J4Cmd    | ao     | Commanded angle for joint 4 (deg). Does not trigger motion.     |
+| Control:J4CmdU    | ao     | Sets J4 target and executes moveJ     |
 | Control:J4TweakVal    | ao     | Joint 4 tweak step size     |
-| Control:J4TweakFwd    | bo     | Tweak joint 4 forward by J4TweakVal     |
-| Control:J4TweakRev    | bo     | Tweak joint 4 backward by J4TweakVal     |
-| Control:J5Cmd    | ao     | Commanded angle for joint 5 (deg)     |
+| Control:J4TweakFwd    | calcout     | Tweak joint 4 forward by J4TweakVal (writes to J4CmdU)     |
+| Control:J4TweakRev    | calcout     | Tweak joint 4 backward by J4TweakVal (writes to J4CmdU)     |
+| Control:J5Cmd    | ao     | Commanded angle for joint 5 (deg). Does not trigger motion.     |
+| Control:J5CmdU    | ao     | Sets J5 target and executes moveJ     |
 | Control:J5TweakVal    | ao     | Joint 5 tweak step size     |
-| Control:J5TweakFwd    | bo     | Tweak joint 5 forward by J5TweakVal     |
-| Control:J5TweakRev    | bo     | Tweak joint 5 backward by J5TweakVal     |
-| Control:J6Cmd    | ao     | Commanded angle for joint 6 (deg)     |
+| Control:J5TweakFwd    | calcout     | Tweak joint 5 forward by J5TweakVal (writes to J5CmdU)     |
+| Control:J5TweakRev    | calcout     | Tweak joint 5 backward by J5TweakVal (writes to J5CmdU)     |
+| Control:J6Cmd    | ao     | Commanded angle for joint 6 (deg). Does not trigger motion.     |
+| Control:J6CmdU    | ao     | Sets J6 target and executes moveJ     |
 | Control:J6TweakVal    | ao     | Joint 6 tweak step size     |
-| Control:J6TweakFwd    | bo     | Tweak joint 6 forward by J6TweakVal     |
-| Control:J6TweakRev    | bo     | Tweak joint 6 backward by J6TweakVal     |
+| Control:J6TweakFwd    | calcout     | Tweak joint 6 forward by J6TweakVal (writes to J6CmdU)     |
+| Control:J6TweakRev    | calcout     | Tweak joint 6 backward by J6TweakVal (writes to J6CmdU)     |
 | Control:moveL    | bo     | Executes moveL to the commanded TCP pose     |
 | Control:LinearSpeed    | ao     | Speed for moveL (mm/s)     |
 | Control:LinearAcceleration    | ao     | Acceleration for moveL (mm/s/s)     |
 | Control:LinearBlend    | ao     | Blend radius for moveL (mm)     |
 | Control:stopL    | bo     | Stops an in-progress asynchronous moveL     |
-| Control:AutoMoveL    | bo     | If 1, moveL runs automatically when any PoseCmd changes     |
-| Control:PoseXCmd    | ao     | Commanded TCP X (mm)     |
+| Control:PoseXCmd    | ao     | Commanded TCP X (mm). Does not trigger motion.     |
+| Control:PoseXCmdU    | ao     | Sets X target and executes moveL     |
 | Control:PoseXTweakVal    | ao     | X tweak step size     |
-| Control:PoseXTweakFwd    | bo     | Tweak TCP X forward     |
-| Control:PoseXTweakRev    | bo     | Tweak TCP X backward     |
-| Control:PoseYCmd    | ao     | Commanded TCP Y (mm)     |
+| Control:PoseXTweakFwd    | calcout     | Tweak TCP X forward (writes to PoseXCmdU)     |
+| Control:PoseXTweakRev    | calcout     | Tweak TCP X backward (writes to PoseXCmdU)     |
+| Control:PoseYCmd    | ao     | Commanded TCP Y (mm). Does not trigger motion.     |
+| Control:PoseYCmdU    | ao     | Sets Y target and executes moveL     |
 | Control:PoseYTweakVal    | ao     | Y tweak step size     |
-| Control:PoseYTweakFwd    | bo     | Tweak TCP Y forward     |
-| Control:PoseYTweakRev    | bo     | Tweak TCP Y backward     |
-| Control:PoseZCmd    | ao     | Commanded TCP Z (mm)     |
+| Control:PoseYTweakFwd    | calcout     | Tweak TCP Y forward (writes to PoseYCmdU)     |
+| Control:PoseYTweakRev    | calcout     | Tweak TCP Y backward (writes to PoseYCmdU)     |
+| Control:PoseZCmd    | ao     | Commanded TCP Z (mm). Does not trigger motion.     |
+| Control:PoseZCmdU    | ao     | Sets Z target and executes moveL     |
 | Control:PoseZTweakVal    | ao     | Z tweak step size     |
-| Control:PoseZTweakFwd    | bo     | Tweak TCP Z forward     |
-| Control:PoseZTweakRev    | bo     | Tweak TCP Z backward     |
-| Control:PoseRollCmd    | ao     | Commanded TCP roll (deg)     |
-| Control:PoseRollTweakVal    | ao     | Roll tweak step size     |
-| Control:PoseRollTweakFwd    | bo     | Tweak TCP roll forward     |
-| Control:PoseRollTweakRev    | bo     | Tweak TCP roll backward     |
-| Control:PosePitchCmd    | ao     | Commanded TCP pitch (deg)     |
-| Control:PosePitchTweakVal    | ao     | Pitch tweak step size     |
-| Control:PosePitchTweakFwd    | bo     | Tweak TCP pitch forward     |
-| Control:PosePitchTweakRev    | bo     | Tweak TCP pitch backward     |
-| Control:PoseYawCmd    | ao     | Commanded TCP yaw (deg)     |
-| Control:PoseYawTweakVal    | ao     | Yaw tweak step size     |
-| Control:PoseYawTweakFwd    | bo     | Tweak TCP yaw forward     |
-| Control:PoseYawTweakRev    | bo     | Tweak TCP yaw backward     |
+| Control:PoseZTweakFwd    | calcout     | Tweak TCP Z forward (writes to PoseZCmdU)     |
+| Control:PoseZTweakRev    | calcout     | Tweak TCP Z backward (writes to PoseZCmdU)     |
+| Control:PoseRxCmd    | ao     | Commanded TCP Rx (rad). Does not trigger motion.     |
+| Control:PoseRyCmd    | ao     | Commanded TCP Ry (rad). Does not trigger motion.     |
+| Control:PoseRzCmd    | ao     | Commanded TCP Rz (rad). Does not trigger motion.     |
 | Control:TCPOffset_X    | ao     | TCP offset X (mm)     |
 | Control:TCPOffset_Y    | ao     | TCP offset Y (mm)     |
 | Control:TCPOffset_Z    | ao     | TCP offset Z (mm)     |
-| Control:TCPOffset_Roll    | ao     | TCP offset roll (rad)     |
-| Control:TCPOffset_Pitch    | ao     | TCP offset pitch (rad)     |
-| Control:TCPOffset_Yaw    | ao     | TCP offset yaw (rad)     |
+| Control:TCPOffset_Rx    | ao     | TCP offset Rx (rad)     |
+| Control:TCPOffset_Ry    | ao     | TCP offset Ry (rad)     |
+| Control:TCPOffset_Rz    | ao     | TCP offset Rz (rad)     |
 | Control:CustomScriptFile    | lso     | Path to a URScript file to run on the controller     |
 | Control:CustomInlineScript    | lso     | Inline URScript string; executes immediately on write     |
 | Control:RunCustomScriptFile    | bo     | Uploads and runs the script file set in CustomScriptFile     |
@@ -243,9 +241,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:JogSpeedX    | ao     | Jog speed in X (mm/s)     |
 | Control:JogSpeedY    | ao     | Jog speed in Y (mm/s)     |
 | Control:JogSpeedZ    | ao     | Jog speed in Z (mm/s)     |
-| Control:JogSpeedRoll    | ao     | Jog speed in roll (deg/s)     |
-| Control:JogSpeedPitch    | ao     | Jog speed in pitch (deg/s)     |
-| Control:JogSpeedYaw    | ao     | Jog speed in yaw (deg/s)     |
+| Control:JogSpeedRx    | ao     | Jog speed in Rx (rad/s)     |
+| Control:JogSpeedRy    | ao     | Jog speed in Ry (rad/s)     |
+| Control:JogSpeedRz    | ao     | Jog speed in Rz (rad/s)     |
 
 ***
 
@@ -361,9 +359,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | WaypointL:$(N):X    | ao     | X position of waypoint (mm)     |
 | WaypointL:$(N):Y    | ao     | Y position of waypoint (mm)     |
 | WaypointL:$(N):Z    | ao     | Z position of waypoint (mm)     |
-| WaypointL:$(N):Roll    | ao     | Roll angle of waypoint (deg)    |
-| WaypointL:$(N):Pitch    | ao     | Pitch angle of waypoint (deg)   |
-| WaypointL:$(N):Yaw    | ao     | Yaw angle of waypoint (deg)    |
+| WaypointL:$(N):Rx    | ao     | Rotation vector X component of waypoint (rad)    |
+| WaypointL:$(N):Ry    | ao     | Rotation vector Y component of waypoint (rad)   |
+| WaypointL:$(N):Rz    | ao     | Rotation vector Z component of waypoint (rad)    |
 | WaypointL:$(N):ActionOpt    | longout     | Selects the waypoint action (0 = none, N = ActionSseqN) |
 | WaypointL:$(N):Speed    | ao     | Speed when moving to waypoint (mm/s)     |
 | WaypointL:$(N):Acceleration    | ao     | Acceleration when moving to waypoint (mm/s/s)     |

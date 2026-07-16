@@ -50,28 +50,28 @@ record(ao, "$(P)Control:JogSpeedZ") {
     field(EGU, "mm/s")
     field(PREC, 4)
 }
-record(ao, "$(P)Control:JogSpeedRoll") {
+record(ao, "$(P)Control:JogSpeedRx") {
     field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(PORT),3,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "deg/s")
+    field(EGU, "rad/s")
     field(PREC, 4)
 }
-record(ao, "$(P)Control:JogSpeedPitch") {
+record(ao, "$(P)Control:JogSpeedRy") {
     field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(PORT),4,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "deg/s")
+    field(EGU, "rad/s")
     field(PREC, 4)
 }
-record(ao, "$(P)Control:JogSpeedYaw") {
+record(ao, "$(P)Control:JogSpeedRz") {
     field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(PORT),5,$(TIMEOUT=1))JOG_SPEED")
     field(PINI, "YES")
     field(VAL, 0.0)
-    field(EGU, "deg/s")
+    field(EGU, "rad/s")
     field(PREC, 4)
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-05-28 09:38:58 by nmarks-->
+<!--Saved on 2026-07-16 16:44:14 by nmarks-->
 <display version="2.0.0">
   <name>urRobot</name>
   <x>943</x>
@@ -94,9 +94,18 @@
       <action type="open_display">
         <file>robotiq_gripper.opi</file>
         <target>tab</target>
+        <description>Robotiq Gripper</description>
+      </action>
+      <action type="open_display">
+        <file>robotiq_wrist_camera.opi</file>
+        <macros>
+          <R>wristcam:</R>
+        </macros>
+        <target>tab</target>
+        <description>Robotiq Wrist Camera</description>
       </action>
     </actions>
-    <text>Gripper</text>
+    <text>Tool</text>
     <x>10</x>
     <y>125</y>
     <height>25</height>
@@ -110,7 +119,7 @@
     </background_color>
   </widget>
   <widget type="action_button" version="3.0.0">
-    <name>related display #21</name>
+    <name>related display #22</name>
     <actions>
       <action type="open_display">
         <file>waypoint10x.opi</file>
@@ -184,7 +193,7 @@
     </background_color>
   </widget>
   <widget type="action_button" version="3.0.0">
-    <name>related display #26</name>
+    <name>related display #27</name>
     <actions>
       <action type="open_display">
         <file>waypoint10x.opi</file>
@@ -258,7 +267,7 @@
     </background_color>
   </widget>
   <widget type="action_button" version="3.0.0">
-    <name>related display #31</name>
+    <name>related display #32</name>
     <actions>
       <action type="open_display">
         <file>ur_rtde_control.opi</file>
@@ -279,7 +288,7 @@
     </background_color>
   </widget>
   <widget type="label" version="2.0.0">
-    <name>text #34</name>
+    <name>text #35</name>
     <text>UR Robot</text>
     <x>5</x>
     <y>5</y>
@@ -294,7 +303,7 @@
     <auto_size>true</auto_size>
   </widget>
   <widget type="action_button" version="3.0.0">
-    <name>related display #37</name>
+    <name>related display #38</name>
     <actions>
       <action type="open_display">
         <file>path_top10x.opi</file>
@@ -328,7 +337,7 @@
     </background_color>
   </widget>
   <widget type="label" version="2.0.0">
-    <name>text #40</name>
+    <name>text #41</name>
     <text>$(P)</text>
     <x>120</x>
     <y>5</y>

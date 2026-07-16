@@ -312,7 +312,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:TCPOffset_Roll.VAL</string>
+                <string>$(P)Control:TCPOffset_Rx.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -363,7 +363,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:TCPOffset_Pitch.VAL</string>
+                <string>$(P)Control:TCPOffset_Ry.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -414,7 +414,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:TCPOffset_Yaw.VAL</string>
+                <string>$(P)Control:TCPOffset_Rz.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -579,7 +579,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Roll</string>
+                <string>Rx</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -615,7 +615,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Pitch</string>
+                <string>Ry</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -651,7 +651,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Yaw</string>
+                <string>Rz</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>

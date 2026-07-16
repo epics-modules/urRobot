@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-05-28 09:38:59 by nmarks-->
+<!--Saved on 2026-07-16 16:44:15 by nmarks-->
 <display version="2.0.0">
   <name>ur_rtde_receive</name>
   <x>1219</x>
@@ -522,7 +522,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #107</name>
-    <pv_name>$(P)Receive:PoseRoll</pv_name>
+    <pv_name>$(P)Receive:PoseRx</pv_name>
     <x>400</x>
     <y>574</y>
     <width>125</width>
@@ -545,7 +545,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #111</name>
-    <pv_name>$(P)Receive:PosePitch</pv_name>
+    <pv_name>$(P)Receive:PoseRy</pv_name>
     <x>400</x>
     <y>609</y>
     <width>125</width>
@@ -568,7 +568,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #115</name>
-    <pv_name>$(P)Receive:PoseYaw</pv_name>
+    <pv_name>$(P)Receive:PoseRz</pv_name>
     <x>400</x>
     <y>644</y>
     <width>125</width>
@@ -630,7 +630,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #128</name>
-    <text>Roll:</text>
+    <text>Rx:</text>
     <x>310</x>
     <y>575</y>
     <width>80</width>
@@ -643,7 +643,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #131</name>
-    <text>Pitch:</text>
+    <text>Ry:</text>
     <x>310</x>
     <y>610</y>
     <width>80</width>
@@ -656,7 +656,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #134</name>
-    <text>Yaw:</text>
+    <text>Rz:</text>
     <x>340</x>
     <y>645</y>
     <width>50</width>
@@ -1249,7 +1249,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #246</name>
-    <pv_name>$(P)Receive:PoseRoll.EGU</pv_name>
+    <pv_name>$(P)Receive:PoseRx.EGU</pv_name>
     <x>530</x>
     <y>580</y>
     <width>40</width>
@@ -1271,7 +1271,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #250</name>
-    <pv_name>$(P)Receive:PosePitch.EGU</pv_name>
+    <pv_name>$(P)Receive:PoseRy.EGU</pv_name>
     <x>530</x>
     <y>615</y>
     <width>40</width>
@@ -1293,7 +1293,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #254</name>
-    <pv_name>$(P)Receive:PoseYaw.EGU</pv_name>
+    <pv_name>$(P)Receive:PoseRz.EGU</pv_name>
     <x>530</x>
     <y>650</y>
     <width>40</width>

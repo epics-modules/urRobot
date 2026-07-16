@@ -69,17 +69,28 @@ It also has a button to enable/disable teach (freedrive) mode.
 
 <img src="./assets/GUIs/ui/urRobot_control.png" alt="ui-control" width="600">
 
-Although the default control GUI may look similar to typical EPICS motor screens, the robot's joint are *not* true EPICS motors.
-The x, y, z, roll, pitch, and yaw motors are virtual axes and moving them will move one or more joint motors. The joint motors
+Although the default control GUI may look similar to typical EPICS motor screens, the robot's joints are *not* true EPICS motors.
+The x, y, z, rx, ry, and rz axes are virtual axes and moving them will move one or more joint motors. The joint motors
 themselves are independent of each other, however motion of any joint motor will affect the position of the tool. To reconcile
-this and reduce the likelyhood of accidentally commanding motion you didn't indend, every time motion completes, the command values
+this and reduce the likelihood of accidentally commanding motion you didn't intend, every time motion completes, the command values
 are automatically set to the current readback values, similar to an EPICS motor record.
-The "Go" toggles (which write to the `$(P)Control:AutoMoveJ` or `$(P)Control:AutoMoveL` PVs) are similar to the Go/Move
-options in the EPICS motor record. For example, to move Joint 1 to -75deg, if "Go" is set to "No" (`$(P)Control:AutoMoveJ`=0),
-then you must set Joint 1 to -75deg and click "Move" (`$(P)Control:moveJ`). If "Go" is set to "Yes" (`$(P)Control:AutoMoveJ`=1),
-the robot will begin moving as soon as the commanded values change, so typing -75 in the box for Joint 1 and clicking enter will
-start the robot moving. The same goes for the Cartesian moves. Note that the "Move" buttons tell the robot to move to the current
-joint or cartesian configuration defined by all 6 of the respective target values (J1Cmd, J2cmd... or PoseXCmd, PoseYCmd...).
+
+There are two sets of command PVs for each axis:
+
+- **`J*Cmd` / `Pose*Cmd`** (e.g. `$(P)Control:J1Cmd`, `$(P)Control:PoseXCmd`) are target-only setpoints.
+  Writing to these records updates the target position in the driver but does *not* trigger motion.
+  To actually move the robot, you must separately process `$(P)Control:moveJ` (for joints) or
+  `$(P)Control:moveL` (for Cartesian). This is the intended workflow for scripts, where you want to
+  set all target values first and then trigger a single coordinated move.
+
+- **`J*CmdU` / `Pose*CmdU`** (e.g. `$(P)Control:J1CmdU`, `$(P)Control:PoseXCmdU`) are convenience
+  records intended for GUI use. Writing to a `*CmdU` record sets the corresponding `*Cmd` target
+  *and* automatically triggers `moveJ` or `moveL`. The tweak buttons (forward/reverse) on the GUI
+  also operate through the `*CmdU` records, so tweaking from the GUI triggers motion immediately.
+
+Note that the "Move" buttons tell the robot to move to the current
+joint or Cartesian configuration defined by all 6 of the respective target values (J1Cmd, J2Cmd, ...
+or PoseXCmd, PoseYCmd, ...).
 
 
 ### Safety Event Handling
@@ -122,7 +133,7 @@ dbLoadRecords("$(URROBOT)/db/rtde_control_jog.db", "P=$(PREFIX), PORT=rtde_ctrl"
 
 1. Set the desired speed vector by writing to the jog speed PVs
    (`JogSpeedX`, `JogSpeedY`, `JogSpeedZ` in mm/s;
-   `JogSpeedRoll`, `JogSpeedPitch`, `JogSpeedYaw` in deg/s).
+    `JogSpeedRx`, `JogSpeedRy`, `JogSpeedRz` in rad/s).
 2. Set the acceleration with `$(P)Control:JogAccel` (m/s/s, default 0.5).
 3. Process `$(P)Control:JogStart` to begin motion.
 4. **Continue processing `JogStart` periodically** to keep the robot moving.
@@ -413,14 +424,11 @@ from epics import caget, caput
 # IOC prefix
 PREFIX = "MyIOC:"
 
-# disable AutoMoveJ so we need to trigger move PV to start the move
-caput(f"{PREFIX}Control:AutoMoveJ.VAL", 0)
-
 # Get the current joint angles
 angles = caget(f"{PREFIX}Receive:ActualJointPositions.VAL")
 
-# Move all joints +1.0deg
-angles += 1.0;
+# Set all joint targets to current + 1.0 deg
+angles += 1.0
 for i in range(len(angles)):
     caput(f"{PREFIX}Control:J{i+1}Cmd.VAL", angles[i])
 

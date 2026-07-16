@@ -1401,7 +1401,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PoseRoll</string>
+                <string>$(P)Receive:PoseRx</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1455,7 +1455,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PosePitch</string>
+                <string>$(P)Receive:PoseRy</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1509,7 +1509,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PoseYaw</string>
+                <string>$(P)Receive:PoseRz</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1677,7 +1677,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Roll:</string>
+                <string>Rx:</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -1713,7 +1713,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Pitch:</string>
+                <string>Ry:</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -1749,7 +1749,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Yaw:</string>
+                <string>Rz:</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -3165,7 +3165,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PoseRoll.EGU</string>
+                <string>$(P)Receive:PoseRx.EGU</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3219,7 +3219,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PosePitch.EGU</string>
+                <string>$(P)Receive:PoseRy.EGU</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -3273,7 +3273,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Receive:PoseYaw.EGU</string>
+                <string>$(P)Receive:PoseRz.EGU</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
