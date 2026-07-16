@@ -208,20 +208,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:PoseZTweakFwd    | calcout     | Tweak TCP Z forward (writes to PoseZCmdU)     |
 | Control:PoseZTweakRev    | calcout     | Tweak TCP Z backward (writes to PoseZCmdU)     |
 | Control:PoseRxCmd    | ao     | Commanded TCP Rx (rad). Does not trigger motion.     |
-| Control:PoseRxCmdU    | ao     | Sets Rx target and executes moveL     |
-| Control:PoseRxTweakVal    | ao     | Rx tweak step size     |
-| Control:PoseRxTweakFwd    | calcout     | Tweak TCP Rx forward (writes to PoseRxCmdU)     |
-| Control:PoseRxTweakRev    | calcout     | Tweak TCP Rx backward (writes to PoseRxCmdU)     |
 | Control:PoseRyCmd    | ao     | Commanded TCP Ry (rad). Does not trigger motion.     |
-| Control:PoseRyCmdU    | ao     | Sets Ry target and executes moveL     |
-| Control:PoseRyTweakVal    | ao     | Ry tweak step size     |
-| Control:PoseRyTweakFwd    | calcout     | Tweak TCP Ry forward (writes to PoseRyCmdU)     |
-| Control:PoseRyTweakRev    | calcout     | Tweak TCP Ry backward (writes to PoseRyCmdU)     |
 | Control:PoseRzCmd    | ao     | Commanded TCP Rz (rad). Does not trigger motion.     |
-| Control:PoseRzCmdU    | ao     | Sets Rz target and executes moveL     |
-| Control:PoseRzTweakVal    | ao     | Rz tweak step size     |
-| Control:PoseRzTweakFwd    | calcout     | Tweak TCP Rz forward (writes to PoseRzCmdU)     |
-| Control:PoseRzTweakRev    | calcout     | Tweak TCP Rz backward (writes to PoseRzCmdU)     |
 | Control:TCPOffset_X    | ao     | TCP offset X (mm)     |
 | Control:TCPOffset_Y    | ao     | TCP offset Y (mm)     |
 | Control:TCPOffset_Z    | ao     | TCP offset Z (mm)     |

@@ -601,15 +601,15 @@ record(sseq, "$(P)Control:sync_pose_cmd")
     field(WAIT4, "After1")
 
     field(DOL5, "$(P)Receive:PoseRx")
-    field(LNK5, "$(P)Control:PoseRxCmdU CA")
+    field(LNK5, "$(P)Control:PoseRxCmd CA")
     field(WAIT5, "After1")
 
     field(DOL6, "$(P)Receive:PoseRy")
-    field(LNK6, "$(P)Control:PoseRyCmdU CA")
+    field(LNK6, "$(P)Control:PoseRyCmd CA")
     field(WAIT6, "After1")
 
     field(DOL7, "$(P)Receive:PoseRz")
-    field(LNK7, "$(P)Control:PoseRzCmdU CA")
+    field(LNK7, "$(P)Control:PoseRzCmd CA")
     field(WAIT7, "After1")
 
     field(LNK8, "$(P)Control:moveL.DISA CA")
@@ -758,37 +758,6 @@ record(ao, "$(P)Control:PoseRxCmd")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PoseRxCmdU")
-{
-    field(DESC, "Sets rx target and executes moveL")
-    field(OUT,  "$(P)Control:PoseRxCmd.VAL PP")
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PoseRxTweakVal")
-{
-    field(DESC, "TCP rx tweak step size")
-    field(VAL, 0.02)
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PoseRxTweakFwd")
-{
-    field(INPA, "$(P)Control:PoseRxCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRxTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseRxCmdU PP")
-}
-record(calcout, "$(P)Control:PoseRxTweakRev")
-{
-    field(INPA, "$(P)Control:PoseRxCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRxTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseRxCmdU PP")
-}
-
 # -----------------------------------------------------------
 
 record(ao, "$(P)Control:PoseRyCmd")
@@ -800,37 +769,6 @@ record(ao, "$(P)Control:PoseRyCmd")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PoseRyCmdU")
-{
-    field(DESC, "Sets ry target and executes moveL")
-    field(OUT,  "$(P)Control:PoseRyCmd.VAL PP")
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PoseRyTweakVal")
-{
-    field(DESC, "TCP ry tweak step size")
-    field(VAL, 0.02)
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PoseRyTweakFwd")
-{
-    field(INPA, "$(P)Control:PoseRyCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRyTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseRyCmdU PP")
-}
-record(calcout, "$(P)Control:PoseRyTweakRev")
-{
-    field(INPA, "$(P)Control:PoseRyCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRyTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseRyCmdU PP")
-}
-
 # -----------------------------------------------------------
 
 record(ao, "$(P)Control:PoseRzCmd")
@@ -842,36 +780,7 @@ record(ao, "$(P)Control:PoseRzCmd")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PoseRzCmdU")
-{
-    field(DESC, "Sets rz target and executes moveL")
-    field(OUT,  "$(P)Control:PoseRzCmd.VAL PP")
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PoseRzTweakVal")
-{
-    field(DESC, "TCP rz tweak step size")
-    field(VAL, 0.02)
-    field(EGU, "rad")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PoseRzTweakFwd")
-{
-    field(INPA, "$(P)Control:PoseRzCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRzTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseRzCmdU PP")
-}
-record(calcout, "$(P)Control:PoseRzTweakRev")
-{
-    field(INPA, "$(P)Control:PoseRzCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRzTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseRzCmdU PP")
-}
+# -----------------------------------------------------------
 
 record(ao, "$(P)Control:TCPOffset_X")
 {

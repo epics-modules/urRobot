@@ -8,9 +8,6 @@ $(P)Control:J6TweakVal
 $(P)Control:PoseXTweakVal.VAL
 $(P)Control:PoseYTweakVal.VAL
 $(P)Control:PoseZTweakVal.VAL
-$(P)Control:PoseRxTweakVal.VAL
-$(P)Control:PoseRyTweakVal.VAL
-$(P)Control:PoseRzTweakVal.VAL
 
 $(P)Control:TCPOffset_X.VAL
 $(P)Control:TCPOffset_Y.VAL
