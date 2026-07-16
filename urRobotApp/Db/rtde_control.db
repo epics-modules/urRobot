@@ -600,16 +600,16 @@ record(sseq, "$(P)Control:sync_pose_cmd")
     field(LNK4, "$(P)Control:PoseZCmdU CA")
     field(WAIT4, "After1")
 
-    field(DOL5, "$(P)Receive:PoseRoll")
-    field(LNK5, "$(P)Control:PoseRollCmdU CA")
+    field(DOL5, "$(P)Receive:PoseRx")
+    field(LNK5, "$(P)Control:PoseRxCmd CA")
     field(WAIT5, "After1")
 
-    field(DOL6, "$(P)Receive:PosePitch")
-    field(LNK6, "$(P)Control:PosePitchCmdU CA")
+    field(DOL6, "$(P)Receive:PoseRy")
+    field(LNK6, "$(P)Control:PoseRyCmd CA")
     field(WAIT6, "After1")
 
-    field(DOL7, "$(P)Receive:PoseYaw")
-    field(LNK7, "$(P)Control:PoseYawCmdU CA")
+    field(DOL7, "$(P)Receive:PoseRz")
+    field(LNK7, "$(P)Control:PoseRzCmd CA")
     field(WAIT7, "After1")
 
     field(LNK8, "$(P)Control:moveL.DISA CA")
@@ -749,129 +749,38 @@ record(calcout, "$(P)Control:PoseZTweakRev")
 
 # -----------------------------------------------------------
 
-record(ao, "$(P)Control:PoseRollCmd")
+record(ao, "$(P)Control:PoseRxCmd")
 {
-    field(DESC, "Commanded TCP roll")
+    field(DESC, "Commanded TCP rx")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),3,$(TIMEOUT=1))POSE_CMD")
-    field(EGU, "deg")
+    field(EGU, "rad")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PoseRollCmdU")
-{
-    field(DESC, "Sets roll target and executes moveL")
-    field(OUT,  "$(P)Control:PoseRollCmd.VAL PP")
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PoseRollTweakVal")
-{
-    field(DESC, "TCP roll tweak step size")
-    field(VAL, 1)
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PoseRollTweakFwd")
-{
-    field(INPA, "$(P)Control:PoseRollCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRollTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseRollCmdU PP")
-}
-record(calcout, "$(P)Control:PoseRollTweakRev")
-{
-    field(INPA, "$(P)Control:PoseRollCmdU.VAL")
-    field(INPB, "$(P)Control:PoseRollTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseRollCmdU PP")
-}
-
 # -----------------------------------------------------------
 
-record(ao, "$(P)Control:PosePitchCmd")
+record(ao, "$(P)Control:PoseRyCmd")
 {
-    field(DESC, "Commanded TCP pitch")
+    field(DESC, "Commanded TCP ry")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),4,$(TIMEOUT=1))POSE_CMD")
-    field(EGU, "deg")
+    field(EGU, "rad")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PosePitchCmdU")
-{
-    field(DESC, "Sets pitch target and executes moveL")
-    field(OUT,  "$(P)Control:PosePitchCmd.VAL PP")
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PosePitchTweakVal")
-{
-    field(DESC, "TCP pitch tweak step size")
-    field(VAL, 1)
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PosePitchTweakFwd")
-{
-    field(INPA, "$(P)Control:PosePitchCmdU.VAL")
-    field(INPB, "$(P)Control:PosePitchTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PosePitchCmdU PP")
-}
-record(calcout, "$(P)Control:PosePitchTweakRev")
-{
-    field(INPA, "$(P)Control:PosePitchCmdU.VAL")
-    field(INPB, "$(P)Control:PosePitchTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PosePitchCmdU PP")
-}
-
 # -----------------------------------------------------------
 
-record(ao, "$(P)Control:PoseYawCmd")
+record(ao, "$(P)Control:PoseRzCmd")
 {
-    field(DESC, "Commanded TCP yaw")
+    field(DESC, "Commanded TCP rz")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),5,$(TIMEOUT=1))POSE_CMD")
-    field(EGU, "deg")
+    field(EGU, "rad")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:PoseYawCmdU")
-{
-    field(DESC, "Sets yaw target and executes moveL")
-    field(OUT,  "$(P)Control:PoseYawCmd.VAL PP")
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
-}
-record(ao, "$(P)Control:PoseYawTweakVal")
-{
-    field(DESC, "TCP yaw tweak step size")
-    field(VAL, 1)
-    field(EGU, "deg")
-    field(PREC, 4)
-    field(DRVL, "0.0")
-}
-record(calcout, "$(P)Control:PoseYawTweakFwd")
-{
-    field(INPA, "$(P)Control:PoseYawCmdU.VAL")
-    field(INPB, "$(P)Control:PoseYawTweakVal")
-    field(CALC, "A + B")
-    field(OUT, "$(P)Control:PoseYawCmdU PP")
-}
-record(calcout, "$(P)Control:PoseYawTweakRev")
-{
-    field(INPA, "$(P)Control:PoseYawCmdU.VAL")
-    field(INPB, "$(P)Control:PoseYawTweakVal")
-    field(CALC, "A - B")
-    field(OUT, "$(P)Control:PoseYawCmdU PP")
-}
+# -----------------------------------------------------------
 
 record(ao, "$(P)Control:TCPOffset_X")
 {
@@ -900,27 +809,27 @@ record(ao, "$(P)Control:TCPOffset_Z")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:TCPOffset_Roll")
+record(ao, "$(P)Control:TCPOffset_Rx")
 {
-    field(DESC, "Roll TCP offset")
+    field(DESC, "Rx TCP offset")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),3,$(TIMEOUT=1))TCP_OFFSET")
     field(EGU, "rad")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:TCPOffset_Pitch")
+record(ao, "$(P)Control:TCPOffset_Ry")
 {
-    field(DESC, "Pitch TCP offset")
+    field(DESC, "Ry TCP offset")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),4,$(TIMEOUT=1))TCP_OFFSET")
     field(EGU, "rad")
     field(PINI, 1)
     field(PREC, 4)
 }
-record(ao, "$(P)Control:TCPOffset_Yaw")
+record(ao, "$(P)Control:TCPOffset_Rz")
 {
-    field(DESC, "Yaw TCP offset")
+    field(DESC, "Rz TCP offset")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),5,$(TIMEOUT=1))TCP_OFFSET")
     field(EGU, "rad")

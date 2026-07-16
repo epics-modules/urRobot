@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-05-28 09:38:59 by nmarks-->
+<!--Saved on 2026-07-16 16:44:15 by nmarks-->
 <display version="2.0.0">
   <name>waypointL_more</name>
   <x>390</x>
@@ -200,7 +200,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #42</name>
-    <pv_name>$(P)WaypointL:$(N):Roll</pv_name>
+    <pv_name>$(P)WaypointL:$(N):Rx</pv_name>
     <x>10</x>
     <y>115</y>
     <width>60</width>
@@ -218,7 +218,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #46</name>
-    <pv_name>$(P)WaypointL:$(N):Pitch</pv_name>
+    <pv_name>$(P)WaypointL:$(N):Ry</pv_name>
     <x>75</x>
     <y>115</y>
     <width>60</width>
@@ -236,7 +236,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #50</name>
-    <pv_name>$(P)WaypointL:$(N):Yaw</pv_name>
+    <pv_name>$(P)WaypointL:$(N):Rz</pv_name>
     <x>141</x>
     <y>115</y>
     <width>60</width>
@@ -305,7 +305,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #66</name>
-    <text>Roll</text>
+    <text>Rx</text>
     <x>10</x>
     <y>100</y>
     <width>60</width>
@@ -318,7 +318,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #69</name>
-    <text>Pitch</text>
+    <text>Ry</text>
     <x>75</x>
     <y>100</y>
     <width>60</width>
@@ -331,7 +331,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #72</name>
-    <text>Yaw</text>
+    <text>Rz</text>
     <x>140</x>
     <y>100</y>
     <width>60</width>
@@ -544,7 +544,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>text update #119</name>
-    <pv_name>$(P)WaypointL:$(N):Roll.EGU</pv_name>
+    <pv_name>$(P)WaypointL:$(N):Rx.EGU</pv_name>
     <x>205</x>
     <y>120</y>
     <width>30</width>

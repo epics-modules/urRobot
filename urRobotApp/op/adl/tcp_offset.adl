@@ -153,7 +153,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:TCPOffset_Roll.VAL"
+		chan="$(P)Control:TCPOffset_Rx.VAL"
 		clr=14
 		bclr=51
 	}
@@ -168,7 +168,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:TCPOffset_Pitch.VAL"
+		chan="$(P)Control:TCPOffset_Ry.VAL"
 		clr=14
 		bclr=51
 	}
@@ -183,7 +183,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:TCPOffset_Yaw.VAL"
+		chan="$(P)Control:TCPOffset_Rz.VAL"
 		clr=14
 		bclr=51
 	}
@@ -243,7 +243,7 @@ text {
 		clr=14
 		fill="outline"
 	}
-	textix="Roll"
+	textix="Rx"
 	align="horiz. centered"
 }
 text {
@@ -257,7 +257,7 @@ text {
 		clr=14
 		fill="outline"
 	}
-	textix="Pitch"
+	textix="Ry"
 	align="horiz. centered"
 }
 text {
@@ -271,7 +271,7 @@ text {
 		clr=14
 		fill="outline"
 	}
-	textix="Yaw"
+	textix="Rz"
 	align="horiz. centered"
 }
 text {

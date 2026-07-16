@@ -508,7 +508,7 @@ text {
 		height=25
 	}
 	monitor {
-		chan="$(P)Receive:PoseRoll"
+		chan="$(P)Receive:PoseRx"
 		clr=54
 		bclr=4
 	}
@@ -524,7 +524,7 @@ text {
 		height=25
 	}
 	monitor {
-		chan="$(P)Receive:PosePitch"
+		chan="$(P)Receive:PoseRy"
 		clr=54
 		bclr=4
 	}
@@ -540,7 +540,7 @@ text {
 		height=25
 	}
 	monitor {
-		chan="$(P)Receive:PoseYaw"
+		chan="$(P)Receive:PoseRz"
 		clr=54
 		bclr=4
 	}
@@ -597,7 +597,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Roll:"
+	textix="Rx:"
 	align="horiz. right"
 }
 text {
@@ -610,7 +610,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pitch:"
+	textix="Ry:"
 	align="horiz. right"
 }
 text {
@@ -623,7 +623,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
-	textix="Yaw:"
+	textix="Rz:"
 	align="horiz. right"
 }
 text {
@@ -1083,7 +1083,7 @@ text {
 		height=20
 	}
 	monitor {
-		chan="$(P)Receive:PoseRoll.EGU"
+		chan="$(P)Receive:PoseRx.EGU"
 		clr=54
 		bclr=4
 	}
@@ -1099,7 +1099,7 @@ text {
 		height=20
 	}
 	monitor {
-		chan="$(P)Receive:PosePitch.EGU"
+		chan="$(P)Receive:PoseRy.EGU"
 		clr=54
 		bclr=4
 	}
@@ -1115,7 +1115,7 @@ text {
 		height=20
 	}
 	monitor {
-		chan="$(P)Receive:PoseYaw.EGU"
+		chan="$(P)Receive:PoseRz.EGU"
 		clr=54
 		bclr=4
 	}

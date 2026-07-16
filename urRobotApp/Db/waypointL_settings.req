@@ -2,9 +2,9 @@ $(P)WaypointL:$(N).VAL
 $(P)WaypointL:$(N):X.VAL
 $(P)WaypointL:$(N):Y.VAL
 $(P)WaypointL:$(N):Z.VAL
-$(P)WaypointL:$(N):Roll.VAL
-$(P)WaypointL:$(N):Pitch.VAL
-$(P)WaypointL:$(N):Yaw.VAL
+$(P)WaypointL:$(N):Rx.VAL
+$(P)WaypointL:$(N):Ry.VAL
+$(P)WaypointL:$(N):Rz.VAL
 $(P)WaypointL:$(N):Speed.VAL
 $(P)WaypointL:$(N):Acceleration.VAL
 $(P)WaypointL:$(N):Blend.VAL

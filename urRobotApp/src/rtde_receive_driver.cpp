@@ -159,7 +159,6 @@ void RTDEReceive::poll() {
             }
             for (size_t i = 3; i < 6; i++) {
                 auto& val = vec_f64[i];
-                val *= 180 / M_PI; // rad->deg
                 setDoubleParam(i, actualTCPPoseIndex_, val);
             }
             doCallbacksFloat64Array(vec_f64.data(), NUM_JOINTS, actualTCPPoseArrIndex_, 0);

@@ -346,13 +346,12 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         const double val = value * M_PI / 180.0;
         this->cmd_joints_.at(addr) = val;
     } else if (function == poseCmdIndex_) {
-        // convert commanded x,y,z to meters and roll, pitch, yaw to radians
-        const double val = (addr >= 3) ? (value * M_PI / 180.0) : (value / 1000.0);
+        const double val = (addr >= 3) ? value : (value / 1000.0);
         this->cmd_pose_.at(addr) = val;
     }
 
     else if (function == tcpOffsetIndex_) {
-        // convert commanded x,y,z from mm to meters. Assume roll, pitch, yaw is radians
+        // convert commanded x,y,z from mm to meters. Assume rx, ry, rz is radians
         const double val = (addr >= 3) ? value : (value / 1000.0);
         this->tcp_offset_.at(addr) = val;
         spdlog::debug("Setting TCP offset to [{:.4f}] m,rad", fmt::join(tcp_offset_, ","));
@@ -386,8 +385,7 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     }
 
     else if (function == jogSpeedIndex_) {
-        // convert commanded x,y,z to meters and roll, pitch, yaw to radians
-        const double val = (addr >= 3) ? (value * M_PI / 180.0) : (value / 1000.0);
+        const double val = (addr >= 3) ? value : (value / 1000.0);
         spdlog::debug("Setting jog speed[{}] to {:.4f}", addr, val);
         jog_speeds_[addr] = val;
         new_jog_ = true;

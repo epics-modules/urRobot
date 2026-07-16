@@ -79,7 +79,7 @@ class RTDEReceive : public asynPortDriver {
     int targetJointMomentsIndex_;
 
     /// Actual TCP state (float64 arrays; pose is 6 elements, accel is 3)
-    int actualTCPPoseArrIndex_; ///< x,y,z in mm, roll,pitch,yaw in deg (converted)
+    int actualTCPPoseArrIndex_; ///< x,y,z in mm, rx,ry,rz in rad
     int actualTCPPoseIndex_;
     int actualTCPSpeedIndex_;
     int actualTCPForceIndex_;
