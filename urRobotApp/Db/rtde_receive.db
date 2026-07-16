@@ -173,6 +173,7 @@ record(ai, "$(P)Receive:Joint1")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),0,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -181,6 +182,7 @@ record(ai, "$(P)Receive:Joint2")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),1,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -189,6 +191,7 @@ record(ai, "$(P)Receive:Joint3")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),2,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -197,6 +200,7 @@ record(ai, "$(P)Receive:Joint4")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),3,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -205,6 +209,7 @@ record(ai, "$(P)Receive:Joint5")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),4,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -213,6 +218,7 @@ record(ai, "$(P)Receive:Joint6")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),5,$(TIMEOUT=1))ACTUAL_JOINT_POS")
     field(PREC, 4)
+    field(PREC, "deg")
     field(SCAN, "I/O Intr")
 }
 
@@ -261,6 +267,7 @@ record(ai, "$(P)Receive:PoseX")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),0,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(PREC, "mm")
     field(SCAN, "I/O Intr")
 }
 record(ai, "$(P)Receive:PoseY")
@@ -268,6 +275,7 @@ record(ai, "$(P)Receive:PoseY")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),1,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(PREC, "mm")
     field(SCAN, "I/O Intr")
 }
 record(ai, "$(P)Receive:PoseZ")
@@ -275,27 +283,31 @@ record(ai, "$(P)Receive:PoseZ")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),2,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(PREC, "mm")
     field(SCAN, "I/O Intr")
 }
-record(ai, "$(P)Receive:PoseRoll")
+record(ai, "$(P)Receive:PoseRx")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),3,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(EGU, "rad")
     field(SCAN, "I/O Intr")
 }
-record(ai, "$(P)Receive:PosePitch")
+record(ai, "$(P)Receive:PoseRy")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),4,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(EGU, "rad")
     field(SCAN, "I/O Intr")
 }
-record(ai, "$(P)Receive:PoseYaw")
+record(ai, "$(P)Receive:PoseRz")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),5,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
+    field(EGU, "rad")
     field(SCAN, "I/O Intr")
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-05-28 09:38:58 by nmarks-->
+<!--Saved on 2026-07-16 16:44:14 by nmarks-->
 <display version="2.0.0">
   <name>tcp_offset</name>
   <x>212</x>
@@ -80,7 +80,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #21</name>
-    <pv_name>$(P)Control:TCPOffset_Roll.VAL</pv_name>
+    <pv_name>$(P)Control:TCPOffset_Rx.VAL</pv_name>
     <x>360</x>
     <y>20</y>
     <width>75</width>
@@ -98,7 +98,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #25</name>
-    <pv_name>$(P)Control:TCPOffset_Pitch.VAL</pv_name>
+    <pv_name>$(P)Control:TCPOffset_Ry.VAL</pv_name>
     <x>440</x>
     <y>20</y>
     <width>75</width>
@@ -116,7 +116,7 @@
   </widget>
   <widget type="textentry" version="3.0.0">
     <name>text entry #29</name>
-    <pv_name>$(P)Control:TCPOffset_Yaw.VAL</pv_name>
+    <pv_name>$(P)Control:TCPOffset_Rz.VAL</pv_name>
     <x>520</x>
     <y>20</y>
     <width>75</width>
@@ -173,7 +173,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #42</name>
-    <text>Roll</text>
+    <text>Rx</text>
     <x>360</x>
     <y>5</y>
     <width>75</width>
@@ -186,7 +186,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #45</name>
-    <text>Pitch</text>
+    <text>Ry</text>
     <x>440</x>
     <y>5</y>
     <width>75</width>
@@ -199,7 +199,7 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>text #48</name>
-    <text>Yaw</text>
+    <text>Rz</text>
     <x>520</x>
     <y>5</y>
     <width>75</width>

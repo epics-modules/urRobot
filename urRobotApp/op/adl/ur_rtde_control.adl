@@ -5,8 +5,8 @@ file {
 }
 display {
 	object {
-		x=1287
-		y=409
+		x=1277
+		y=401
 		width=820
 		height=635
 	}
@@ -1263,7 +1263,7 @@ text {
 }
 rectangle {
 	object {
-		x=26
+		x=216
 		y=557
 		width=116
 		height=31
@@ -1275,7 +1275,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=26
+		x=216
 		y=588
 		width=116
 		height=25
@@ -1302,7 +1302,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=28
+		x=218
 		y=590
 		width=25
 		height=20
@@ -1317,7 +1317,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=54
+		x=244
 		y=590
 		width=60
 		height=20
@@ -1332,7 +1332,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=115
+		x=305
 		y=590
 		width=25
 		height=20
@@ -1347,7 +1347,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=35
+		x=225
 		y=560
 		width=98
 		height=25
@@ -1362,7 +1362,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=26
+		x=216
 		y=523
 		width=116
 		height=12
@@ -1378,7 +1378,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=26
+		x=216
 		y=511
 		width=116
 		height=12
@@ -1390,7 +1390,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=26
+		x=216
 		y=533
 		width=116
 		height=26
@@ -1403,7 +1403,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=37
+		x=227
 		y=536
 		width=94
 		height=17
@@ -1419,7 +1419,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=25
+		x=215
 		y=490
 		width=118
 		height=125
@@ -1458,7 +1458,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=27
+		x=217
 		y=492
 		width=114
 		height=19
@@ -1470,7 +1470,7 @@ rectangle {
 }
 text {
 	object {
-		x=35
+		x=225
 		y=495
 		width=100
 		height=15
@@ -1484,7 +1484,7 @@ text {
 }
 rectangle {
 	object {
-		x=156
+		x=346
 		y=557
 		width=116
 		height=31
@@ -1496,7 +1496,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=156
+		x=346
 		y=588
 		width=116
 		height=25
@@ -1508,7 +1508,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=158
+		x=348
 		y=590
 		width=25
 		height=20
@@ -1523,7 +1523,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=184
+		x=374
 		y=590
 		width=60
 		height=20
@@ -1538,7 +1538,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=245
+		x=435
 		y=590
 		width=25
 		height=20
@@ -1553,7 +1553,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=165
+		x=355
 		y=560
 		width=98
 		height=25
@@ -1568,7 +1568,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=156
+		x=346
 		y=523
 		width=116
 		height=12
@@ -1584,7 +1584,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=156
+		x=346
 		y=511
 		width=116
 		height=12
@@ -1596,7 +1596,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=156
+		x=346
 		y=533
 		width=116
 		height=26
@@ -1609,7 +1609,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=167
+		x=357
 		y=536
 		width=94
 		height=17
@@ -1625,7 +1625,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=155
+		x=345
 		y=490
 		width=118
 		height=125
@@ -1638,7 +1638,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=157
+		x=347
 		y=492
 		width=114
 		height=19
@@ -1650,7 +1650,7 @@ rectangle {
 }
 text {
 	object {
-		x=165
+		x=355
 		y=495
 		width=100
 		height=15
@@ -1664,7 +1664,7 @@ text {
 }
 rectangle {
 	object {
-		x=286
+		x=476
 		y=557
 		width=116
 		height=31
@@ -1676,7 +1676,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=286
+		x=476
 		y=588
 		width=116
 		height=25
@@ -1688,7 +1688,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=288
+		x=478
 		y=590
 		width=25
 		height=20
@@ -1703,7 +1703,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=314
+		x=504
 		y=590
 		width=60
 		height=20
@@ -1718,7 +1718,7 @@ rectangle {
 }
 "message button" {
 	object {
-		x=375
+		x=565
 		y=590
 		width=25
 		height=20
@@ -1733,7 +1733,7 @@ rectangle {
 }
 "text entry" {
 	object {
-		x=295
+		x=485
 		y=560
 		width=98
 		height=25
@@ -1748,7 +1748,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=286
+		x=476
 		y=523
 		width=116
 		height=12
@@ -1764,7 +1764,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=286
+		x=476
 		y=511
 		width=116
 		height=12
@@ -1776,7 +1776,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=286
+		x=476
 		y=533
 		width=116
 		height=26
@@ -1789,7 +1789,7 @@ rectangle {
 }
 "text update" {
 	object {
-		x=297
+		x=487
 		y=536
 		width=94
 		height=17
@@ -1805,7 +1805,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=285
+		x=475
 		y=490
 		width=118
 		height=125
@@ -1818,7 +1818,7 @@ rectangle {
 }
 rectangle {
 	object {
-		x=287
+		x=477
 		y=492
 		width=114
 		height=19
@@ -1830,7 +1830,7 @@ rectangle {
 }
 text {
 	object {
-		x=295
+		x=485
 		y=495
 		width=100
 		height=15
@@ -1840,546 +1840,6 @@ text {
 		fill="outline"
 	}
 	textix="Z"
-	align="horiz. centered"
-}
-rectangle {
-	object {
-		x=416
-		y=557
-		width=116
-		height=31
-	}
-	"basic attribute" {
-		clr=14
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=416
-		y=588
-		width=116
-		height=25
-	}
-	"basic attribute" {
-		clr=14
-		width=3
-	}
-}
-"message button" {
-	object {
-		x=418
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseRollTweakRev.PROC"
-		clr=14
-		bclr=51
-	}
-	label="<"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=444
-		y=590
-		width=60
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseRollTweakVal"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"message button" {
-	object {
-		x=505
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseRollTweakFwd.PROC"
-		clr=14
-		bclr=51
-	}
-	label=">"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=425
-		y=560
-		width=98
-		height=25
-	}
-	control {
-		chan="$(P)Control:PoseRollCmdU.VAL"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"text update" {
-	object {
-		x=416
-		y=523
-		width=116
-		height=12
-	}
-	monitor {
-		chan="$(P)Control:PoseRollCmd.EGU"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=416
-		y=511
-		width=116
-		height=12
-	}
-	"basic attribute" {
-		clr=54
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=416
-		y=533
-		width=116
-		height=26
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-"text update" {
-	object {
-		x=427
-		y=536
-		width=94
-		height=17
-	}
-	monitor {
-		chan="$(P)Receive:PoseRoll.VAL"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=415
-		y=490
-		width=118
-		height=125
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=417
-		y=492
-		width=114
-		height=19
-	}
-	"basic attribute" {
-		clr=0
-		width=2
-	}
-}
-text {
-	object {
-		x=425
-		y=495
-		width=100
-		height=15
-	}
-	"basic attribute" {
-		clr=54
-		fill="outline"
-	}
-	textix="Roll"
-	align="horiz. centered"
-}
-rectangle {
-	object {
-		x=546
-		y=557
-		width=116
-		height=31
-	}
-	"basic attribute" {
-		clr=14
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=546
-		y=588
-		width=116
-		height=25
-	}
-	"basic attribute" {
-		clr=14
-		width=3
-	}
-}
-"message button" {
-	object {
-		x=548
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PosePitchTweakRev.PROC"
-		clr=14
-		bclr=51
-	}
-	label="<"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=574
-		y=590
-		width=60
-		height=20
-	}
-	control {
-		chan="$(P)Control:PosePitchTweakVal"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"message button" {
-	object {
-		x=635
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PosePitchTweakFwd.PROC"
-		clr=14
-		bclr=51
-	}
-	label=">"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=555
-		y=560
-		width=98
-		height=25
-	}
-	control {
-		chan="$(P)Control:PosePitchCmdU.VAL"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"text update" {
-	object {
-		x=546
-		y=523
-		width=116
-		height=12
-	}
-	monitor {
-		chan="$(P)Control:PosePitchCmd.EGU"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=546
-		y=511
-		width=116
-		height=12
-	}
-	"basic attribute" {
-		clr=54
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=546
-		y=533
-		width=116
-		height=26
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-"text update" {
-	object {
-		x=557
-		y=536
-		width=94
-		height=17
-	}
-	monitor {
-		chan="$(P)Receive:PosePitch.VAL"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=545
-		y=490
-		width=118
-		height=125
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=547
-		y=492
-		width=114
-		height=19
-	}
-	"basic attribute" {
-		clr=0
-		width=2
-	}
-}
-text {
-	object {
-		x=555
-		y=495
-		width=100
-		height=15
-	}
-	"basic attribute" {
-		clr=54
-		fill="outline"
-	}
-	textix="Pitch"
-	align="horiz. centered"
-}
-rectangle {
-	object {
-		x=676
-		y=557
-		width=116
-		height=31
-	}
-	"basic attribute" {
-		clr=14
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=676
-		y=588
-		width=116
-		height=25
-	}
-	"basic attribute" {
-		clr=14
-		width=3
-	}
-}
-"message button" {
-	object {
-		x=678
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseYawTweakRev.PROC"
-		clr=14
-		bclr=51
-	}
-	label="<"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=704
-		y=590
-		width=60
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseYawTweakVal"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"message button" {
-	object {
-		x=765
-		y=590
-		width=25
-		height=20
-	}
-	control {
-		chan="$(P)Control:PoseYawTweakFwd.PROC"
-		clr=14
-		bclr=51
-	}
-	label=">"
-	press_msg="1"
-}
-"text entry" {
-	object {
-		x=685
-		y=560
-		width=98
-		height=25
-	}
-	control {
-		chan="$(P)Control:PoseYawCmdU.VAL"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-"text update" {
-	object {
-		x=676
-		y=523
-		width=116
-		height=12
-	}
-	monitor {
-		chan="$(P)Control:PoseYawCmd.EGU"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=676
-		y=511
-		width=116
-		height=12
-	}
-	"basic attribute" {
-		clr=54
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=676
-		y=533
-		width=116
-		height=26
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-"text update" {
-	object {
-		x=687
-		y=536
-		width=94
-		height=17
-	}
-	monitor {
-		chan="$(P)Receive:PoseYaw.VAL"
-		clr=54
-		bclr=3
-	}
-	align="horiz. centered"
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=675
-		y=490
-		width=118
-		height=125
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=2
-	}
-}
-rectangle {
-	object {
-		x=677
-		y=492
-		width=114
-		height=19
-	}
-	"basic attribute" {
-		clr=0
-		width=2
-	}
-}
-text {
-	object {
-		x=685
-		y=495
-		width=100
-		height=15
-	}
-	"basic attribute" {
-		clr=54
-		fill="outline"
-	}
-	textix="Yaw"
 	align="horiz. centered"
 }
 "message button" {
@@ -3014,7 +2474,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:PoseRollCmd.VAL"
+		chan="$(P)Control:PoseRxCmd.VAL"
 		clr=14
 		bclr=51
 	}
@@ -3029,7 +2489,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:PosePitchCmd.VAL"
+		chan="$(P)Control:PoseRyCmd.VAL"
 		clr=14
 		bclr=51
 	}
@@ -3044,7 +2504,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:PoseYawCmd.VAL"
+		chan="$(P)Control:PoseRzCmd.VAL"
 		clr=14
 		bclr=51
 	}

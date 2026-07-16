@@ -91,7 +91,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:ActualJointVelocities    | waveform     | Actual joint velocities     |
 | Receive:ActualJointCurrents    | waveform     | Actual joint currents     |
 | Receive:JointControlCurrents    | waveform     | Joint control currents     |
-| Receive:ActualTCPPose    | waveform     | Actual TCP pose (x,y,z,r,p,y)     |
+| Receive:ActualTCPPose    | waveform     | Actual TCP pose (x,y,z,rx,ry,rz)     |
 | Receive:ActualTCPSpeed    | waveform     | Actual TCP speed     |
 | Receive:ActualTCPForce    | waveform     | Actual TCP force     |
 | Receive:Joint1    | ai     | Joint 1 position (deg)  |
@@ -103,9 +103,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:PoseX    | ai     | TCP X position (mm)  |
 | Receive:PoseY    | ai     | TCP Y position (mm)  |
 | Receive:PoseZ    | ai     | TCP Z position (mm)  |
-| Receive:PoseRoll    | ai     | TCP roll (deg)  |
-| Receive:PosePitch    | ai     | TCP pitch (deg)  |
-| Receive:PoseYaw    | ai     | TCP yaw (deg)  |
+| Receive:PoseRx    | ai     | TCP rotation vector X component (rad)  |
+| Receive:PoseRy    | ai     | TCP rotation vector Y component (rad)  |
+| Receive:PoseRz    | ai     | TCP rotation vector Z component (rad)  |
 | Receive:JointModes    | waveform     | Joint control modes     |
 | Receive:ActualToolAccelerometer    | waveform     | Tool accelerometer (X,Y,Z)     |
 | Receive:TargetJointPositions    | waveform     | Target joint positions     |
@@ -113,7 +113,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Receive:TargetJointAccelerations    | waveform     | Target joint accelerations     |
 | Receive:TargetJointCurrents    | waveform     | Target joint currents     |
 | Receive:TargetJointMoments    | waveform     | Target joint moments     |
-| Receive:TargetTCPPose    | waveform     | Target TCP pose (x,y,z,r,p,y)     |
+| Receive:TargetTCPPose    | waveform     | Target TCP pose (x,y,z,rx,ry,rz)     |
 | Receive:TargetTCPSpeed    | waveform     | Target TCP speed     |
 | Receive:JointTemperatures    | waveform     | Joint temperatures in celsius     |
 | Receive:ActualJointVoltages    | waveform     | Actual joint voltages     |
@@ -207,27 +207,27 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:PoseZTweakVal    | ao     | Z tweak step size     |
 | Control:PoseZTweakFwd    | calcout     | Tweak TCP Z forward (writes to PoseZCmdU)     |
 | Control:PoseZTweakRev    | calcout     | Tweak TCP Z backward (writes to PoseZCmdU)     |
-| Control:PoseRollCmd    | ao     | Commanded TCP roll (deg). Does not trigger motion.     |
-| Control:PoseRollCmdU    | ao     | Sets roll target and executes moveL     |
-| Control:PoseRollTweakVal    | ao     | Roll tweak step size     |
-| Control:PoseRollTweakFwd    | calcout     | Tweak TCP roll forward (writes to PoseRollCmdU)     |
-| Control:PoseRollTweakRev    | calcout     | Tweak TCP roll backward (writes to PoseRollCmdU)     |
-| Control:PosePitchCmd    | ao     | Commanded TCP pitch (deg). Does not trigger motion.     |
-| Control:PosePitchCmdU    | ao     | Sets pitch target and executes moveL     |
-| Control:PosePitchTweakVal    | ao     | Pitch tweak step size     |
-| Control:PosePitchTweakFwd    | calcout     | Tweak TCP pitch forward (writes to PosePitchCmdU)     |
-| Control:PosePitchTweakRev    | calcout     | Tweak TCP pitch backward (writes to PosePitchCmdU)     |
-| Control:PoseYawCmd    | ao     | Commanded TCP yaw (deg). Does not trigger motion.     |
-| Control:PoseYawCmdU    | ao     | Sets yaw target and executes moveL     |
-| Control:PoseYawTweakVal    | ao     | Yaw tweak step size     |
-| Control:PoseYawTweakFwd    | calcout     | Tweak TCP yaw forward (writes to PoseYawCmdU)     |
-| Control:PoseYawTweakRev    | calcout     | Tweak TCP yaw backward (writes to PoseYawCmdU)     |
+| Control:PoseRxCmd    | ao     | Commanded TCP Rx (rad). Does not trigger motion.     |
+| Control:PoseRxCmdU    | ao     | Sets Rx target and executes moveL     |
+| Control:PoseRxTweakVal    | ao     | Rx tweak step size     |
+| Control:PoseRxTweakFwd    | calcout     | Tweak TCP Rx forward (writes to PoseRxCmdU)     |
+| Control:PoseRxTweakRev    | calcout     | Tweak TCP Rx backward (writes to PoseRxCmdU)     |
+| Control:PoseRyCmd    | ao     | Commanded TCP Ry (rad). Does not trigger motion.     |
+| Control:PoseRyCmdU    | ao     | Sets Ry target and executes moveL     |
+| Control:PoseRyTweakVal    | ao     | Ry tweak step size     |
+| Control:PoseRyTweakFwd    | calcout     | Tweak TCP Ry forward (writes to PoseRyCmdU)     |
+| Control:PoseRyTweakRev    | calcout     | Tweak TCP Ry backward (writes to PoseRyCmdU)     |
+| Control:PoseRzCmd    | ao     | Commanded TCP Rz (rad). Does not trigger motion.     |
+| Control:PoseRzCmdU    | ao     | Sets Rz target and executes moveL     |
+| Control:PoseRzTweakVal    | ao     | Rz tweak step size     |
+| Control:PoseRzTweakFwd    | calcout     | Tweak TCP Rz forward (writes to PoseRzCmdU)     |
+| Control:PoseRzTweakRev    | calcout     | Tweak TCP Rz backward (writes to PoseRzCmdU)     |
 | Control:TCPOffset_X    | ao     | TCP offset X (mm)     |
 | Control:TCPOffset_Y    | ao     | TCP offset Y (mm)     |
 | Control:TCPOffset_Z    | ao     | TCP offset Z (mm)     |
-| Control:TCPOffset_Roll    | ao     | TCP offset roll (rad)     |
-| Control:TCPOffset_Pitch    | ao     | TCP offset pitch (rad)     |
-| Control:TCPOffset_Yaw    | ao     | TCP offset yaw (rad)     |
+| Control:TCPOffset_Rx    | ao     | TCP offset Rx (rad)     |
+| Control:TCPOffset_Ry    | ao     | TCP offset Ry (rad)     |
+| Control:TCPOffset_Rz    | ao     | TCP offset Rz (rad)     |
 | Control:CustomScriptFile    | lso     | Path to a URScript file to run on the controller     |
 | Control:CustomInlineScript    | lso     | Inline URScript string; executes immediately on write     |
 | Control:RunCustomScriptFile    | bo     | Uploads and runs the script file set in CustomScriptFile     |
@@ -253,9 +253,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:JogSpeedX    | ao     | Jog speed in X (mm/s)     |
 | Control:JogSpeedY    | ao     | Jog speed in Y (mm/s)     |
 | Control:JogSpeedZ    | ao     | Jog speed in Z (mm/s)     |
-| Control:JogSpeedRoll    | ao     | Jog speed in roll (deg/s)     |
-| Control:JogSpeedPitch    | ao     | Jog speed in pitch (deg/s)     |
-| Control:JogSpeedYaw    | ao     | Jog speed in yaw (deg/s)     |
+| Control:JogSpeedRx    | ao     | Jog speed in Rx (rad/s)     |
+| Control:JogSpeedRy    | ao     | Jog speed in Ry (rad/s)     |
+| Control:JogSpeedRz    | ao     | Jog speed in Rz (rad/s)     |
 
 ***
 
@@ -371,9 +371,9 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | WaypointL:$(N):X    | ao     | X position of waypoint (mm)     |
 | WaypointL:$(N):Y    | ao     | Y position of waypoint (mm)     |
 | WaypointL:$(N):Z    | ao     | Z position of waypoint (mm)     |
-| WaypointL:$(N):Roll    | ao     | Roll angle of waypoint (deg)    |
-| WaypointL:$(N):Pitch    | ao     | Pitch angle of waypoint (deg)   |
-| WaypointL:$(N):Yaw    | ao     | Yaw angle of waypoint (deg)    |
+| WaypointL:$(N):Rx    | ao     | Rotation vector X component of waypoint (rad)    |
+| WaypointL:$(N):Ry    | ao     | Rotation vector Y component of waypoint (rad)   |
+| WaypointL:$(N):Rz    | ao     | Rotation vector Z component of waypoint (rad)    |
 | WaypointL:$(N):ActionOpt    | longout     | Selects the waypoint action (0 = none, N = ActionSseqN) |
 | WaypointL:$(N):Speed    | ao     | Speed when moving to waypoint (mm/s)     |
 | WaypointL:$(N):Acceleration    | ao     | Acceleration when moving to waypoint (mm/s/s)     |

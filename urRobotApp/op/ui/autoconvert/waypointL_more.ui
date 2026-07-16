@@ -552,7 +552,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)WaypointL:$(N):Roll</string>
+                <string>$(P)WaypointL:$(N):Rx</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -603,7 +603,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)WaypointL:$(N):Pitch</string>
+                <string>$(P)WaypointL:$(N):Ry</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -654,7 +654,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)WaypointL:$(N):Yaw</string>
+                <string>$(P)WaypointL:$(N):Rz</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -855,7 +855,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Roll</string>
+                <string>Rx</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -891,7 +891,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Pitch</string>
+                <string>Ry</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -927,7 +927,7 @@ caMenu{
                 </color>
             </property>
             <property name="text">
-                <string>Yaw</string>
+                <string>Rz</string>
             </property>
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
@@ -1521,7 +1521,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)WaypointL:$(N):Roll.EGU</string>
+                <string>$(P)WaypointL:$(N):Rx.EGU</string>
             </property>
             <property name="foreground">
                 <color alpha="255">

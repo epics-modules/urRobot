@@ -8,16 +8,16 @@ $(P)Control:J6TweakVal
 $(P)Control:PoseXTweakVal.VAL
 $(P)Control:PoseYTweakVal.VAL
 $(P)Control:PoseZTweakVal.VAL
-$(P)Control:PoseRollTweakVal.VAL
-$(P)Control:PosePitchTweakVal.VAL
-$(P)Control:PoseYawTweakVal.VAL
+$(P)Control:PoseRxTweakVal.VAL
+$(P)Control:PoseRyTweakVal.VAL
+$(P)Control:PoseRzTweakVal.VAL
 
 $(P)Control:TCPOffset_X.VAL
 $(P)Control:TCPOffset_Y.VAL
 $(P)Control:TCPOffset_Z.VAL
-$(P)Control:TCPOffset_Roll.VAL
-$(P)Control:TCPOffset_Pitch.VAL
-$(P)Control:TCPOffset_Yaw.VAL
+$(P)Control:TCPOffset_Rx.VAL
+$(P)Control:TCPOffset_Ry.VAL
+$(P)Control:TCPOffset_Rz.VAL
 
 $(P)Control:JointSpeed.VAL
 $(P)Control:JointAcceleration.VAL

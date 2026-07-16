@@ -55,10 +55,10 @@ local function cartesian_waypoint_reached(prefix, num)
         epics.get(string.format("%sReceive:PoseY", prefix)),
         epics.get(string.format("%sReceive:PoseZ", prefix)),
     }
-    local actual_rpy = {
-        epics.get(string.format("%sReceive:PoseRoll", prefix)),
-        epics.get(string.format("%sReceive:PosePitch", prefix)),
-        epics.get(string.format("%sReceive:PoseYaw", prefix)),
+    local actual_rotvec = {
+        epics.get(string.format("%sReceive:PoseRx", prefix)),
+        epics.get(string.format("%sReceive:PoseRy", prefix)),
+        epics.get(string.format("%sReceive:PoseRz", prefix)),
     }
     local waypoint_base = string.format("%sWaypointL:%d", prefix, num)
     local waypoint_xyz = {
@@ -66,13 +66,13 @@ local function cartesian_waypoint_reached(prefix, num)
         epics.get(string.format("%s:Y", waypoint_base)),
         epics.get(string.format("%s:Z", waypoint_base)),
     }
-    local waypoint_rpy = {
-        epics.get(string.format("%s:Roll", waypoint_base)),
-        epics.get(string.format("%s:Pitch", waypoint_base)),
-        epics.get(string.format("%s:Yaw", waypoint_base)),
+    local waypoint_rotvec = {
+        epics.get(string.format("%s:Rx", waypoint_base)),
+        epics.get(string.format("%s:Ry", waypoint_base)),
+        epics.get(string.format("%s:Rz", waypoint_base)),
     }
     local reached_xyz = table.almost_equal(waypoint_xyz, actual_xyz, 1.0)
-    local reached_rpy = table.almost_equal(waypoint_rpy, actual_rpy, 0.1)
+    local reached_rpy = table.almost_equal(waypoint_rotvec, actual_rotvec, 0.1)
     return (reached_xyz and reached_rpy) and 1 or 0
 end
 

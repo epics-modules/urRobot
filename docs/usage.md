@@ -70,7 +70,7 @@ It also has a button to enable/disable teach (freedrive) mode.
 <img src="./assets/GUIs/ui/urRobot_control.png" alt="ui-control" width="600">
 
 Although the default control GUI may look similar to typical EPICS motor screens, the robot's joints are *not* true EPICS motors.
-The x, y, z, roll, pitch, and yaw motors are virtual axes and moving them will move one or more joint motors. The joint motors
+The x, y, z, rx, ry, and rz axes are virtual axes and moving them will move one or more joint motors. The joint motors
 themselves are independent of each other, however motion of any joint motor will affect the position of the tool. To reconcile
 this and reduce the likelihood of accidentally commanding motion you didn't intend, every time motion completes, the command values
 are automatically set to the current readback values, similar to an EPICS motor record.
@@ -133,7 +133,7 @@ dbLoadRecords("$(URROBOT)/db/rtde_control_jog.db", "P=$(PREFIX), PORT=rtde_ctrl"
 
 1. Set the desired speed vector by writing to the jog speed PVs
    (`JogSpeedX`, `JogSpeedY`, `JogSpeedZ` in mm/s;
-   `JogSpeedRoll`, `JogSpeedPitch`, `JogSpeedYaw` in deg/s).
+    `JogSpeedRx`, `JogSpeedRy`, `JogSpeedRz` in rad/s).
 2. Set the acceleration with `$(P)Control:JogAccel` (m/s/s, default 0.5).
 3. Process `$(P)Control:JogStart` to begin motion.
 4. **Continue processing `JogStart` periodically** to keep the robot moving.

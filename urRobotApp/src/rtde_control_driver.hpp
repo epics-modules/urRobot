@@ -54,10 +54,10 @@ class RTDEControl : public asynPortDriver {
     /// Commanded joint angles (radians)
     std::vector<double> cmd_joints_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-    /// Commanded end-effector pose: x,y,z (meters), roll,pitch,yaw (radians)
+    /// Commanded end-effector pose: x,y,z (meters), rx,ry,rz (radians)
     std::vector<double> cmd_pose_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-    /// TCP pose offset: x,y,z (meters), roll,pitch,yaw (radians)
+    /// TCP pose offset: x,y,z (meters), rx,ry,rz (radians)
     std::vector<double> tcp_offset_ = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     /// Jog speed vector: Translation speed (m/s), rotational speed (rad/s)
