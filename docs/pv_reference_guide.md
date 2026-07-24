@@ -152,7 +152,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:TeachMode   | bo     | Enables (1) / disables (0) teach (freedrive) mode |
 | Control:TriggerProtectiveStop   | bo     | Triggers a protective stop |
 | Control:Stop    | dfanout     | Stops any in-progress motion (moveJ or moveL) and aborts any running path |
-| Control:moveJ    | bo     | Executes moveJ to the commanded joint angles J1Cmd–J6Cmd     |
+| Control:moveJ    | busy     | Executes moveJ to the commanded joint angles J1Cmd–J6Cmd     |
 | Control:JointSpeed    | ao     | Speed for moveJ (deg/s)     |
 | Control:JointAcceleration    | ao     | Acceleration for moveJ (deg/s/s)     |
 | Control:JointBlend    | ao     | Blend radius for moveJ (mm)     |
@@ -187,7 +187,7 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:J6TweakVal    | ao     | Joint 6 tweak step size     |
 | Control:J6TweakFwd    | calcout     | Tweak joint 6 forward by J6TweakVal (writes to J6CmdU)     |
 | Control:J6TweakRev    | calcout     | Tweak joint 6 backward by J6TweakVal (writes to J6CmdU)     |
-| Control:moveL    | bo     | Executes moveL to the commanded TCP pose     |
+| Control:moveL    | busy     | Executes moveL to the commanded TCP pose     |
 | Control:LinearSpeed    | ao     | Speed for moveL (mm/s)     |
 | Control:LinearAcceleration    | ao     | Acceleration for moveL (mm/s/s)     |
 | Control:LinearBlend    | ao     | Blend radius for moveL (mm)     |
@@ -305,8 +305,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | RobotiqGripper:Connect    | bo     | Connects to Robotiq gripper     |
 | RobotiqGripper:Activate    | bo     | Activates Robotiq gripper     |
 | RobotiqGripper:AutoCalibrate    | bo     | Calibrates open/close positions     |
-| RobotiqGripper:Open    | bo     | Opens Robotiq gripper     |
-| RobotiqGripper:Close    | bo     | Closes Robotiq gripper     |
+| RobotiqGripper:Open    | busy     | Opens Robotiq gripper     |
+| RobotiqGripper:Close    | busy     | Closes Robotiq gripper     |
 | RobotiqGripper:SetPositionRange    | bo     | Sets min/max positions     |
 | RobotiqGripper:SetSpeed    | ao     | Default gripper speed     |
 | RobotiqGripper:SetForce    | ao     | Default gripper force     |
