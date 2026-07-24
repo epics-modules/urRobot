@@ -218,11 +218,31 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             spdlog::debug("Activating gripper");
             gripper_->activate();
         } else if (function == openIndex_) {
-            spdlog::debug("Opening gripper");
-            gripper_->open();
+            if (value == 1) {
+                setIntegerParam(openIndex_, 1);
+                const bool is_open = gripper_->isOpen();
+                const bool stopped_outer = gripper_->objectDetectionStatus() == ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_OUTER_OBJECT;
+                if (is_open || stopped_outer) {
+                    spdlog::warn("Gripper already open or stopped at outer object");
+                    setIntegerParam(openIndex_, 0);
+                } else {
+                    spdlog::debug("Opening gripper");
+                    gripper_->open();
+                }
+            }
         } else if (function == closeIndex_) {
-            spdlog::debug("Closing gripper");
-            gripper_->close();
+            if (value == 1) {
+                setIntegerParam(closeIndex_, 1);
+                const bool is_closed = gripper_->isClosed();
+                const bool stopped_inner = gripper_->objectDetectionStatus() == ur_rtde::RobotiqGripper::eObjectStatus::STOPPED_INNER_OBJECT;
+                if (is_closed || stopped_inner) {
+                    spdlog::warn("Gripper already closed or stopped at inner object");
+                    setIntegerParam(closeIndex_, 0);
+                } else {
+                    spdlog::debug("Closing gripper");
+                    gripper_->close();
+                }
+            }
         } else if (function == setPositionRangeIndex_) {
             int minpos = 0;
             int maxpos = 0;
