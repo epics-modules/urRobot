@@ -445,11 +445,14 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
                 pending_motion_ = MotionTask{MotionType::Joint, waypoint_move_};
                 waypoint_move_ = false;
                 setIntegerParam(asyncMoveDoneIndex_, 0);
+                setIntegerParam(moveJIndex_, 1);
             } else {
                 spdlog::warn("Requested joint angles not within safety limits. No action taken.");
+                setIntegerParam(moveJIndex_, 0);
             }
         } else {
             spdlog::warn("Motion already in progress...please wait");
+            setIntegerParam(moveJIndex_, 0);
         }
     }
 
@@ -460,11 +463,14 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
                 pending_motion_ = MotionTask{MotionType::Cartesian, waypoint_move_};
                 waypoint_move_ = false;
                 setIntegerParam(asyncMoveDoneIndex_, 0);
+                setIntegerParam(moveLIndex_, 1);
             } else {
                 spdlog::warn("Requested TCP pose not within safety limits. No action taken.");
+                setIntegerParam(moveLIndex_, 0);
             }
         } else {
             spdlog::warn("Motion already in progress...please wait");
+            setIntegerParam(moveLIndex_, 0);
         }
     }
 

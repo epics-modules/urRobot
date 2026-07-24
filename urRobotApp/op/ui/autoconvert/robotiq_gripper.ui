@@ -156,7 +156,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)RobotiqGripper:Open.PROC</string>
+                <string>$(P)RobotiqGripper:Open</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -285,7 +285,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)RobotiqGripper:Close.PROC</string>
+                <string>$(P)RobotiqGripper:Close</string>
             </property>
             <property name="foreground">
                 <color alpha="255">

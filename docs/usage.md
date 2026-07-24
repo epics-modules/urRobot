@@ -414,25 +414,37 @@ After configuring the action, assign it to a waypoint by setting the waypoint's
 
 ## Python Scripting
 
-Below an example Python script using [PyEpics](https://github.com/pyepics/pyepics) is provided which demonstrates how to move
-all six joints by +1.0deg.
-
+Below is an example Python script using [PyEpics](https://github.com/pyepics/pyepics).
 
 ```python
 from epics import caget, caput
 
 # IOC prefix
-PREFIX = "MyIOC:"
+P = "urExample:"
+
+# Helper function to set target joint angles and execute move
+def move_joints(q, wait=True):
+    for i in range(len(q)):
+        caput(f"{P}Control:J{i+1}Cmd.VAL", q[i])
+    caput(f"{P}Control:moveJ", 1, wait=wait)
 
 # Get the current joint angles
-angles = caget(f"{PREFIX}Receive:ActualJointPositions.VAL")
+angles = caget(f"{P}Receive:ActualJointPositions")
 
-# Set all joint targets to current + 1.0 deg
-angles += 1.0
-for i in range(len(angles)):
-    caput(f"{PREFIX}Control:J{i+1}Cmd.VAL", angles[i])
 
-# Execute the move
-caput(f"{PREFIX}Control:moveJ.PROC", 1)
+# Now we run though a simple program.
+# Each line waits for motion to finish before proceeding.
+
+# Move all joints +5deg
+move_joints(angles+5.0)
+
+# Close gripper
+caput(f"{P}RobotiqGripper:Close", 1, wait=True)
+
+# Move joints back to starting positions
+move_joints(angles)
+
+# Open gripper
+caput(f"{P}RobotiqGripper:Open", 1, wait=True)
 ```
 

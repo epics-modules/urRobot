@@ -5696,7 +5696,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:moveJ.PROC</string>
+                <string>$(P)Control:moveJ</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -5735,7 +5735,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Control:moveL.PROC</string>
+                <string>$(P)Control:moveL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
