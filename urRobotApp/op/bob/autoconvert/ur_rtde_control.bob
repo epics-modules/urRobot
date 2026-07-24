@@ -2420,12 +2420,12 @@
     <name>message button #444</name>
     <actions>
       <action type="write_pv">
-        <pv_name>$(P)Control:moveJ.PROC</pv_name>
+        <pv_name>$(P)Control:moveJ</pv_name>
         <value>1</value>
         <description>Write</description>
       </action>
     </actions>
-    <pv_name>$(P)Control:moveJ.PROC</pv_name>
+    <pv_name>$(P)Control:moveJ</pv_name>
     <text>Move</text>
     <x>495</x>
     <y>240</y>
@@ -2440,12 +2440,12 @@
     <name>message button #447</name>
     <actions>
       <action type="write_pv">
-        <pv_name>$(P)Control:moveL.PROC</pv_name>
+        <pv_name>$(P)Control:moveL</pv_name>
         <value>1</value>
         <description>Write</description>
       </action>
     </actions>
-    <pv_name>$(P)Control:moveL.PROC</pv_name>
+    <pv_name>$(P)Control:moveL</pv_name>
     <text>Move</text>
     <x>495</x>
     <y>460</y>
