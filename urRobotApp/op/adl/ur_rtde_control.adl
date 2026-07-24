@@ -1948,7 +1948,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:moveJ.PROC"
+		chan="$(P)Control:moveJ"
 		clr=14
 		bclr=51
 	}
@@ -1963,7 +1963,7 @@ text {
 		height=20
 	}
 	control {
-		chan="$(P)Control:moveL.PROC"
+		chan="$(P)Control:moveL"
 		clr=14
 		bclr=51
 	}

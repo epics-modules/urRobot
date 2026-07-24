@@ -108,6 +108,8 @@ class RTDEControl : public asynPortDriver {
         setIntegerParam(asyncMoveDoneIndex_, 1);
         setIntegerParam(motionDoneCountIndex_, ++motion_done_count_);
         pending_motion_.reset();
+        setIntegerParam(moveJIndex_, 0);
+        setIntegerParam(moveLIndex_, 0);
     }
 
   protected:
