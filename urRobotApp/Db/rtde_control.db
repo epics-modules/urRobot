@@ -892,3 +892,36 @@ record(bi, "$(P)Control:CustomScriptError")
     field(ONAM, "Error")
     field(SCAN, "I/O Intr")
 }
+
+#======================
+# Contact Detection
+#======================
+record(busy, "$(P)Control:StartContactDetect")
+{
+    field(DESC, "Starts contact detection")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),0,1)START_CONTACT")
+    field(FLNK, "$(P)Control:ContactPose.PROC")
+}
+
+record(waveform, "$(P)Control:ContactPose")
+{
+    field(DESC, "Pose at last detected contact")
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(INP, "$(P)Receive:ActualTCPPose.VAL")
+}
+
+record(bo, "$(P)Control:StopContactDetect")
+{
+    field(DESC, "Stops contact detection")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),0,1)STOP_CONTACT")
+    field(FLNK, "$(P)Control:clear_contact_busy.PROC")
+}
+
+record(bo, "$(P)Control:clear_contact_busy") {
+    field(DOL, 0)
+    field(OMSL, "closed_loop")
+    field(OUT, "$(P)Control:StartContactDetect.VAL PP")
+}

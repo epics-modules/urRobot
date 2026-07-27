@@ -210,6 +210,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("JOG_ACCELERATION", asynParamFloat64, &jogAccelerationIndex_);
     createParam("JOGGING", asynParamInt32, &joggingIndex_);
 
+    createParam("START_CONTACT", asynParamInt32, &startContactIndex_);
+    createParam("STOP_CONTACT", asynParamInt32, &stopContactIndex_);
+
     // gets log level from SPDLOG_LEVEL environment variable
     spdlog::cfg::load_env_levels();
 
@@ -269,6 +272,15 @@ void RTDEControl::poll() {
                 unlock();
                 epicsThreadSleep(poll_period_);
                 continue;
+            }
+
+            if (waiting_contact_) {
+                if (rtde_control_->readContactDetection()) {
+                    spdlog::debug("Contact detected");
+                    // TODO: add timeout
+                    waiting_contact_ = false;
+                    setIntegerParam(startContactIndex_, 0);
+                }
             }
 
             if (pending_motion_) {
@@ -525,6 +537,21 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             spdlog::debug("Disabling teach mode");
             rtde_control_->endTeachMode();
         }
+    }
+
+    else if (function == startContactIndex_) {
+        if (value == 1) {
+            spdlog::debug("Starting contact detection");
+            setIntegerParam(startContactIndex_, 1);
+            rtde_control_->startContactDetection();
+            waiting_contact_ = true;
+        }
+    }
+
+    else if (function == stopContactIndex_) {
+        spdlog::debug("Stopping contact detection");
+        setIntegerParam(startContactIndex_, 0);
+        rtde_control_->stopContactDetection();
     }
 
     else if (function == runCustomScriptFileIndex_) {

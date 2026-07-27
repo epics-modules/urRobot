@@ -89,6 +89,8 @@ class RTDEControl : public asynPortDriver {
     /// callParamCallbacks will be called after calling poll_custom_script().
     void poll_custom_script();
 
+    bool waiting_contact_ = false;
+
     /// --- Async motion state machine ---
 
     AsyncMotionStatus motion_status_ = AsyncMotionStatus::Done;
@@ -159,6 +161,10 @@ class RTDEControl : public asynPortDriver {
     int jogSpeedIndex_; ///< Vector of jog speeds, addr 0-5
     int jogAccelerationIndex_;
     int joggingIndex_;
+
+    /// Contact detection
+    int startContactIndex_;
+    int stopContactIndex_;
 
     /// Misc
     int reuploadCtrlScriptIndex_;

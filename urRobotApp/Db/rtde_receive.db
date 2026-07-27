@@ -254,7 +254,7 @@ record(waveform, "$(P)Receive:JointControlCurrents")
 
 record(waveform, "$(P)Receive:ActualTCPPose")
 {
-    field(DESC, "Actual TCP pose (x,y,z,r,p,y)")
+    field(DESC, "Actual TCP pose (x,y,z,rx,ry,rz)")
     field(DTYP, "asynFloat64ArrayIn")
     field(FTVL, "DOUBLE")
     field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))ACTUAL_TCP_POSE_ARR")
