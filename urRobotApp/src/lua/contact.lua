@@ -7,10 +7,13 @@ local osi = require("osi")
 function muc(args)
 
     -- Set motion target
-    -- Provided via INPA, INPB, INPC links
+    -- Provided via input links
     epics.put(args.P .. "Control:PoseXCmd", A)
     epics.put(args.P .. "Control:PoseYCmd", B)
     epics.put(args.P .. "Control:PoseZCmd", C)
+    epics.put(args.P .. "Control:PoseRxCmd", D)
+    epics.put(args.P .. "Control:PoseRyCmd", E)
+    epics.put(args.P .. "Control:PoseRzCmd", F)
 
     -- Clear stop flag
     epics.put(args.P .. "Control:StopContactDetect", 0)
@@ -19,7 +22,7 @@ function muc(args)
     epics.put(args.P .. "Control:moveL", 1)
     osi.sleep(0.1)
     if epics.get(args.P .. "Control:AsyncMoveDone") == 1 then
-        print("Motion failed to start")
+        print("MoveUntilContact: Motion failed to start")
         epics.put(args.P .. "Control:ContactError", 2)
         epics.put(args.P .. "Control:MoveUntilContact", 0)
         return
@@ -27,9 +30,10 @@ function muc(args)
 
     -- Start contact detection
     epics.put(args.P .. "Control:StartContactDetect", 1)
+    osi.sleep(0.1) -- wait until the contact detected flag is cleared
 
-    -- Timeout provided via INPD
-    local timeout = D
+    -- Timeout provided via INPG
+    local timeout = G
     local t0 = os.time()
     local success = true
 
@@ -47,7 +51,7 @@ function muc(args)
         -- Check timeout
         local elap = os.time() - t0
         if elap >= timeout then
-            print("Error: Timeout exceeded waiting for contact")
+            print("MoveUntilContact: Timeout exceeded waiting for contact")
             epics.put(args.P .. "Control:StopContactDetect", 1)
             epics.put(args.P .. "Control:Stop", 1)
             epics.put(args.P .. "Control:ContactError", 1)
@@ -57,15 +61,25 @@ function muc(args)
 
         -- Stop detection if requested
         if epics.get(args.P .. "Control:StopContactDetect") == 1 then
+            print("MoveUntilContact: Stop requested")
             epics.put(args.P .. "Control:Stop", 1)
             epics.put(args.P .. "Control:ContactError", 2)
             success = false
             break;
         end
 
+        -- Stop if robot has stopped for any other reason
+        if epics.get(args.P .. "Control:Moving") == 0 then
+            print("MoveUntilContact: Stopping contact detection. Robot is stopped")
+            epics.put(args.P .. "Control:StopContactDetect", 1)
+            epics.put(args.P .. "Control:ContactError", 2)
+            success = false
+            break
+        end
+
         -- Break out if contact detected
         if epics.get(args.P .. "Control:ReadContactDetect") == 1 then
-            -- TODO: maybe don't need a call to Control:Stop here?
+            print("MoveUntilContact: Contact detected")
             epics.put(args.P .. "Control:Stop", 1)
             success = true
             break;

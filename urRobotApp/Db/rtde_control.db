@@ -924,6 +924,30 @@ record(ao, "$(P)Control:ContactTimeout") {
     field(PREC, 1)
 }
 
+record(seq, "$(P)Control:sync_contact_target")
+{
+    field(PINI, 1)
+    field(DLY0, 1)
+
+    field(DOL0, "$(P)Receive:PoseX")
+    field(LNK0, "$(P)Control:ContactTargetX PP")
+
+    field(DOL1, "$(P)Receive:PoseY")
+    field(LNK1, "$(P)Control:ContactTargetY PP")
+
+    field(DOL2, "$(P)Receive:PoseZ")
+    field(LNK2, "$(P)Control:ContactTargetZ PP")
+
+    field(DOL3, "$(P)Receive:PoseRx")
+    field(LNK3, "$(P)Control:ContactTargetRx PP")
+
+    field(DOL4, "$(P)Receive:PoseRy")
+    field(LNK4, "$(P)Control:ContactTargetRy PP")
+
+    field(DOL5, "$(P)Receive:PoseRz")
+    field(LNK5, "$(P)Control:ContactTargetRz PP")
+}
+
 record(ao, "$(P)Control:ContactTargetX") {
     field(EGU, "mm")
     field(PREC, 3)
@@ -933,6 +957,18 @@ record(ao, "$(P)Control:ContactTargetY") {
     field(PREC, 3)
 }
 record(ao, "$(P)Control:ContactTargetZ") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+record(ao, "$(P)Control:ContactTargetRx") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+record(ao, "$(P)Control:ContactTargetRy") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+record(ao, "$(P)Control:ContactTargetRz") {
     field(EGU, "mm")
     field(PREC, 3)
 }
@@ -970,7 +1006,10 @@ record(luascript, "$(P)Control:lua_muc")
     field(INPA, "$(P)Control:ContactTargetX")
     field(INPB, "$(P)Control:ContactTargetY")
     field(INPC, "$(P)Control:ContactTargetZ")
-    field(INPD, "$(P)Control:ContactTimeout")
+    field(INPD, "$(P)Control:ContactTargetRx")
+    field(INPE, "$(P)Control:ContactTargetRy")
+    field(INPF, "$(P)Control:ContactTargetRz")
+    field(INPG, "$(P)Control:ContactTimeout")
     field(SYNC, "Async")
     field(CODE, "@contact.lua muc({P='$(P)'})")
 }
