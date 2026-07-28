@@ -280,14 +280,16 @@ void RTDEControl::poll() {
             }
 
             if (waiting_contact_) {
+                printf("Waiting for contact...\n");
                 auto elap = std::chrono::steady_clock::now() - contact_detect_start_time_;
                 if (elap >= std::chrono::duration<double>(contact_timeout_)) {
                     spdlog::error("Timed out waiting for contact detection");
                     waiting_contact_ = false;
-                    setIntegerParam(startContactIndex_, 0);
                     setIntegerParam(contactErrorIndex_, 1);
+                    setIntegerParam(startContactIndex_, 0);
                 } else if (rtde_control_->readContactDetection()) {
                     spdlog::debug("Contact detected");
+                    rtde_control_->stopL();
                     waiting_contact_ = false;
                     setIntegerParam(startContactIndex_, 0);
                 }
@@ -557,14 +559,15 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         setIntegerParam(contactErrorIndex_, 0);
         setIntegerParam(startContactIndex_, 1);
         waiting_contact_ = true;
-        double contact_timeout = 0.0;
-        getDoubleParam(contactTimeoutIndex_, &contact_timeout);
+        getDoubleParam(contactTimeoutIndex_, &contact_timeout_);
         rtde_control_->startContactDetection();
     }
 
     else if (function == stopContactIndex_) {
         spdlog::debug("Stopping contact detection");
+        setIntegerParam(contactErrorIndex_, 2);
         setIntegerParam(startContactIndex_, 0);
+        waiting_contact_ = false;
         rtde_control_->stopContactDetection();
     }
 

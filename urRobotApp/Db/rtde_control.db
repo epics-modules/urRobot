@@ -900,7 +900,7 @@ record(busy, "$(P)Control:StartContactDetect")
     field(DESC, "Starts contact detection")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT),0,1)START_CONTACT")
-    field(FLNK, "$(P)Control:update_contact_pose.PROC")
+    field(FLNK, "$(P)Control:get_contact_pose.PROC")
 }
 
 record(calcout, "$(P)Control:get_contact_pose") {
@@ -915,6 +915,7 @@ record(waveform, "$(P)Control:ContactPose")
     field(DESC, "Pose at last detected contact")
     field(FTVL, "DOUBLE")
     field(NELM, 6)
+    field(PREC, 3)
     field(INP, "$(P)Receive:ActualTCPPose.VAL")
 }
 
@@ -923,13 +924,20 @@ record(ao, "$(P)Control:ContactTimeout")
     field(DESC, "Timeout for contact detection")
     field(EGU, "sec")
     field(VAL, 10.0)
+    field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(PORT),0,1)CONTACT_TIMEOUT")
 }
 
-record(bi, "$(P)Control:ContactError")
+record(mbbi, "$(P)Control:ContactError")
 {
-    field(ZNAM, "Okay")
-    field(ONAM, "Timeout")
+    field(ZRST, "")
+    field(ONST, "Timeout")
+    field(TWST, "Stopped")
+    field(ZRVL, 0)
+    field(ONVL, 1)
+    field(TWVL, 2)
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),0,1)CONTACT_ERROR")
 }
 
