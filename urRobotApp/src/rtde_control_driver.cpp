@@ -211,8 +211,7 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("JOGGING", asynParamInt32, &joggingIndex_);
     createParam("START_CONTACT", asynParamInt32, &startContactIndex_);
     createParam("STOP_CONTACT", asynParamInt32, &stopContactIndex_);
-    createParam("CONTACT_TIMEOUT", asynParamFloat64, &contactTimeoutIndex_);
-    createParam("CONTACT_ERROR", asynParamInt32, &contactErrorIndex_);
+    createParam("READ_CONTACT", asynParamInt32, &readContactIndex_);
 
     // gets log level from SPDLOG_LEVEL environment variable
     spdlog::cfg::load_env_levels();
@@ -280,30 +279,28 @@ void RTDEControl::poll() {
             }
 
             if (waiting_contact_) {
-                printf("Waiting for contact...\n");
-                auto elap = std::chrono::steady_clock::now() - contact_detect_start_time_;
-                if (elap >= std::chrono::duration<double>(contact_timeout_)) {
-                    spdlog::error("Timed out waiting for contact detection");
+                if (rtde_control_->readContactDetection()) {
+                    setIntegerParam(readContactIndex_, 1);
                     waiting_contact_ = false;
-                    setIntegerParam(contactErrorIndex_, 1);
-                    setIntegerParam(startContactIndex_, 0);
-                } else if (rtde_control_->readContactDetection()) {
-                    spdlog::debug("Contact detected");
-                    rtde_control_->stopL();
-                    waiting_contact_ = false;
-                    setIntegerParam(startContactIndex_, 0);
                 }
             }
 
             if (pending_motion_) {
                 if (motion_status_ == AsyncMotionStatus::Done) {
                     // starting new asynchronous motion
+                    bool accepted = false;
                     if (pending_motion_->type == MotionType::Joint) {
-                        rtde_control_->moveJ(cmd_joints_, joint_speed_, joint_accel_, true);
+                        accepted = rtde_control_->moveJ(cmd_joints_, joint_speed_, joint_accel_, true);
                     } else if (pending_motion_->type == MotionType::Cartesian) {
-                        rtde_control_->moveL(cmd_pose_, linear_speed_, linear_accel_, true);
+                        accepted = rtde_control_->moveL(cmd_pose_, linear_speed_, linear_accel_, true);
                     }
-                    motion_status_ = AsyncMotionStatus::WaitingMotion;
+                    if (accepted) {
+                        setIntegerParam(asyncMoveDoneIndex_, 0);
+                        motion_status_ = AsyncMotionStatus::WaitingMotion;
+                    } else {
+                        spdlog::error("RTDE motion command was rejected");
+                        set_motion_task_done();
+                    }
                 } else { // async motion task in progress
                     if (motion_status_ == AsyncMotionStatus::WaitingMotion) {
                         auto op_status = rtde_control_->getAsyncOperationProgressEx();
@@ -438,6 +435,14 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     int function = pasynUser->reason;
     bool comm_ok = true;
 
+    auto clear_move_busy = [this, function] {
+        if (function == moveJIndex_) {
+            setIntegerParam(moveJIndex_, 0);
+        } else if (function == moveLIndex_) {
+            setIntegerParam(moveLIndex_, 0);
+        }
+    };
+
     if (function == reconnectIndex_) {
         comm_ok = try_connect();
         goto skip;
@@ -446,6 +451,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
         comm_ok = false;
+        clear_move_busy();
         goto skip;
     }
     if (function == disconnectIndex_) {
@@ -458,18 +464,17 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     // Check that it's connected before conntinuing
     if (!rtde_control_->isConnected()) {
         spdlog::error("RTDE Control interface not connected");
+        clear_move_busy();
         comm_ok = false;
         goto skip;
     }
 
-    // FIX: will get stuck in busy state if run when RTDE control not connected/initialized
     if (function == moveJIndex_) {
         if (!pending_motion_) {
             spdlog::debug("moveJ({:.4f}) rad", fmt::join(cmd_joints_, ","));
             if (rtde_control_->isJointsWithinSafetyLimits(cmd_joints_)) {
                 pending_motion_ = MotionTask{MotionType::Joint, waypoint_move_};
                 waypoint_move_ = false;
-                setIntegerParam(asyncMoveDoneIndex_, 0);
                 setIntegerParam(moveJIndex_, 1);
             } else {
                 spdlog::warn("Requested joint angles not within safety limits. No action taken.");
@@ -481,14 +486,12 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         }
     }
 
-    // FIX: will get stuck in busy state if run when RTDE control not connected/initialized
     else if (function == moveLIndex_) {
         if (!pending_motion_) {
             spdlog::debug("moveL({:.4f}) m,rad", fmt::join(cmd_pose_, ","));
             if (rtde_control_->isPoseWithinSafetyLimits(cmd_pose_)) {
                 pending_motion_ = MotionTask{MotionType::Cartesian, waypoint_move_};
                 waypoint_move_ = false;
-                setIntegerParam(asyncMoveDoneIndex_, 0);
                 setIntegerParam(moveLIndex_, 1);
             } else {
                 spdlog::warn("Requested TCP pose not within safety limits. No action taken.");
@@ -553,20 +556,16 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         }
     }
 
-    else if (function == startContactIndex_ && value == 1) {
+    else if (function == startContactIndex_) {
         spdlog::debug("Starting contact detection");
-        contact_detect_start_time_ = std::chrono::steady_clock::now();
-        setIntegerParam(contactErrorIndex_, 0);
-        setIntegerParam(startContactIndex_, 1);
+        setIntegerParam(readContactIndex_, 0);
         waiting_contact_ = true;
-        getDoubleParam(contactTimeoutIndex_, &contact_timeout_);
         rtde_control_->startContactDetection();
     }
 
-    else if (function == stopContactIndex_) {
+    else if (function == stopContactIndex_ && value == 1) {
         spdlog::debug("Stopping contact detection");
-        setIntegerParam(contactErrorIndex_, 2);
-        setIntegerParam(startContactIndex_, 0);
+        setIntegerParam(readContactIndex_, 0);
         waiting_contact_ = false;
         rtde_control_->stopContactDetection();
     }

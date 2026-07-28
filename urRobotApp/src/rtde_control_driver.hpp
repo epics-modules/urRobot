@@ -91,8 +91,8 @@ class RTDEControl : public asynPortDriver {
 
     /// Contact detection
     bool waiting_contact_ = false;
-    double contact_timeout_ = 10.0;
-    std::chrono::time_point<std::chrono::steady_clock> contact_detect_start_time_;
+    // double contact_timeout_ = 10.0;
+    // std::chrono::time_point<std::chrono::steady_clock> contact_detect_start_time_;
 
     /// --- Async motion state machine ---
 
@@ -168,8 +168,7 @@ class RTDEControl : public asynPortDriver {
     /// Contact detection
     int startContactIndex_;
     int stopContactIndex_;
-    int contactTimeoutIndex_;
-    int contactErrorIndex_;
+    int readContactIndex_;
 
     /// Misc
     int reuploadCtrlScriptIndex_;

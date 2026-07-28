@@ -895,62 +895,82 @@ record(bi, "$(P)Control:CustomScriptError")
 #======================
 # Contact Detection
 #======================
-record(busy, "$(P)Control:StartContactDetect")
+
+record(bo, "$(P)Control:StartContactDetect")
 {
     field(DESC, "Starts contact detection")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT),0,1)START_CONTACT")
-    field(FLNK, "$(P)Control:get_contact_pose.PROC")
-}
-
-record(calcout, "$(P)Control:get_contact_pose") {
-    field(INPA, "$(P)Control:ContactError")
-    field(CALC, "A == 0")
-    field(OOPT, "When Non-zero")
-    field(OUT, "$(P)Control:ContactPose.PROC")
-}
-
-record(waveform, "$(P)Control:ContactPose")
-{
-    field(DESC, "Pose at last detected contact")
-    field(FTVL, "DOUBLE")
-    field(NELM, 6)
-    field(PREC, 3)
-    field(INP, "$(P)Receive:ActualTCPPose.VAL")
-}
-
-record(ao, "$(P)Control:ContactTimeout")
-{
-    field(DESC, "Timeout for contact detection")
-    field(EGU, "sec")
-    field(VAL, 10.0)
-    field(DTYP, "asynFloat64")
-    field(OUT, "@asyn($(PORT),0,1)CONTACT_TIMEOUT")
-}
-
-record(mbbi, "$(P)Control:ContactError")
-{
-    field(ZRST, "")
-    field(ONST, "Timeout")
-    field(TWST, "Stopped")
-    field(ZRVL, 0)
-    field(ONVL, 1)
-    field(TWVL, 2)
-    field(DTYP, "asynInt32")
-    field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),0,1)CONTACT_ERROR")
 }
 
 record(bo, "$(P)Control:StopContactDetect")
 {
     field(DESC, "Stops contact detection")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(PORT),0,1)STOP_CONTACT")
-    field(FLNK, "$(P)Control:clear_contact_busy.PROC")
+    field(OUT,  "@asyn($(PORT),0,1)STOP_CONTACT")
 }
 
-record(bo, "$(P)Control:clear_contact_busy") {
-    field(DOL, 0)
-    field(OMSL, "closed_loop")
-    field(OUT, "$(P)Control:StartContactDetect.VAL PP")
+record(bi, "$(P)Control:ReadContactDetect")
+{
+    field(DESC, "1 if contact detected")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),0,1)READ_CONTACT")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)Control:ContactTimeout") {
+    field(EGU, "sec")
+    field(VAL, 10.0)
+    field(PREC, 1)
+}
+
+record(ao, "$(P)Control:ContactTargetX") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+record(ao, "$(P)Control:ContactTargetY") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+record(ao, "$(P)Control:ContactTargetZ") {
+    field(EGU, "mm")
+    field(PREC, 3)
+}
+
+record(mbbi, "$(P)Control:ContactError") {
+    field(ZRVL, 0)
+    field(ONVL, 1)
+    field(TWVL, 2)
+    field(ZRST, "")
+    field(ONST, "Error")
+    field(TWST, "Stopped")
+}
+
+record(waveform, "$(P)Control:ContactPose") {
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(INP, "$(P)Receive:ActualTCPPose.VAL")
+    field(PREC, 3)
+}
+
+record(busy, "$(P)Control:MoveUntilContact")
+{
+    field(OUT, "$(P)Control:trigger_muc.A PP")
+}
+
+record(calcout, "$(P)Control:trigger_muc") {
+    field(CALC, "A==1")
+    field(OOPT, "When Non-zero")
+    field(OUT, "$(P)Control:lua_muc.PROC")
+}
+
+record(luascript, "$(P)Control:lua_muc")
+{
+    field(DESC, "Move until contact")
+    field(INPA, "$(P)Control:ContactTargetX")
+    field(INPB, "$(P)Control:ContactTargetY")
+    field(INPC, "$(P)Control:ContactTargetZ")
+    field(INPD, "$(P)Control:ContactTimeout")
+    field(SYNC, "Async")
+    field(CODE, "@contact.lua muc({P='$(P)'})")
 }

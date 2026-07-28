@@ -5,9 +5,9 @@ file {
 }
 display {
 	object {
-		x=3401
-		y=737
-		width=629
+		x=3119
+		y=785
+		width=410
 		height=182
 	}
 	clr=14
@@ -90,16 +90,16 @@ display {
 "message button" {
 	object {
 		x=5
-		y=90
-		width=50
-		height=21
+		y=40
+		width=150
+		height=20
 	}
 	control {
-		chan="urExample:Control:StartContactDetect"
+		chan="urExample:Control:MoveUntilContact"
 		clr=14
 		bclr=51
 	}
-	label="Start"
+	label="Move until contact"
 	press_msg="1"
 }
 rectangle {
@@ -140,13 +140,13 @@ text {
 }
 "message button" {
 	object {
-		x=5
-		y=65
+		x=165
+		y=40
 		width=50
 		height=21
 	}
 	control {
-		chan="urExample:Control:StopContactDetect.PROC"
+		chan="urExample:Control:StopContactDetect"
 		clr=30
 		bclr=20
 	}
@@ -155,8 +155,8 @@ text {
 }
 "text entry" {
 	object {
-		x=180
-		y=120
+		x=135
+		y=70
 		width=50
 		height=15
 	}
@@ -170,8 +170,8 @@ text {
 }
 text {
 	object {
-		x=65
-		y=120
+		x=10
+		y=70
 		width=110
 		height=15
 	}
@@ -179,17 +179,16 @@ text {
 		clr=14
 	}
 	textix="Timeout(sec):"
-	align="horiz. right"
 }
 "text update" {
 	object {
-		x=65
-		y=60
+		x=225
+		y=40
 		width=100
 		height=20
 	}
 	monitor {
-		chan="urExample:Control:StartContactDetect"
+		chan="urExample:Control:MoveUntilContact"
 		clr=54
 		bclr=4
 	}
@@ -199,8 +198,8 @@ text {
 }
 "text update" {
 	object {
-		x=65
-		y=90
+		x=10
+		y=95
 		width=60
 		height=15
 	}
@@ -214,8 +213,8 @@ text {
 }
 "text update" {
 	object {
-		x=130
-		y=90
+		x=75
+		y=95
 		width=60
 		height=15
 	}
@@ -229,8 +228,8 @@ text {
 }
 "text update" {
 	object {
-		x=195
-		y=90
+		x=140
+		y=95
 		width=60
 		height=15
 	}
@@ -244,8 +243,8 @@ text {
 }
 "text update" {
 	object {
-		x=260
-		y=90
+		x=205
+		y=95
 		width=60
 		height=15
 	}
@@ -259,8 +258,8 @@ text {
 }
 "text update" {
 	object {
-		x=325
-		y=90
+		x=270
+		y=95
 		width=60
 		height=15
 	}
@@ -274,8 +273,8 @@ text {
 }
 "text update" {
 	object {
-		x=390
-		y=90
+		x=335
+		y=95
 		width=60
 		height=15
 	}
@@ -287,19 +286,72 @@ text {
 	limits {
 	}
 }
-"text update" {
+"text entry" {
 	object {
-		x=180
-		y=60
-		width=100
-		height=20
+		x=80
+		y=120
+		width=50
+		height=15
 	}
-	monitor {
-		chan="urExample:Control:ContactError"
-		clr=20
-		bclr=4
+	control {
+		chan="urExample:Control:ContactTargetX"
+		clr=14
+		bclr=51
 	}
-	format="string"
 	limits {
 	}
+}
+"text entry" {
+	object {
+		x=135
+		y=120
+		width=50
+		height=15
+	}
+	control {
+		chan="urExample:Control:ContactTargetY"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=190
+		y=120
+		width=50
+		height=15
+	}
+	control {
+		chan="urExample:Control:ContactTargetZ"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=10
+		y=120
+		width=75
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Target:"
+}
+text {
+	object {
+		x=245
+		y=120
+		width=75
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="mm"
 }
