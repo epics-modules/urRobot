@@ -89,7 +89,10 @@ class RTDEControl : public asynPortDriver {
     /// callParamCallbacks will be called after calling poll_custom_script().
     void poll_custom_script();
 
+    /// Contact detection
     bool waiting_contact_ = false;
+    double contact_timeout_ = 10.0;
+    std::chrono::time_point<std::chrono::steady_clock> contact_detect_start_time_;
 
     /// --- Async motion state machine ---
 
@@ -165,6 +168,8 @@ class RTDEControl : public asynPortDriver {
     /// Contact detection
     int startContactIndex_;
     int stopContactIndex_;
+    int contactTimeoutIndex_;
+    int contactErrorIndex_;
 
     /// Misc
     int reuploadCtrlScriptIndex_;
