@@ -36,6 +36,9 @@
 #-                Default: gripper
 #- ###################################################
 
+# Add $(URROBOT)/urRobotApp/src/lua to LUA_SCRIPT_PATH
+epicsEnvSet("LUA_SCRIPT_PATH", "$(LUA_SCRIPT_PATH=):$(URROBOT)/urRobotApp/src/lua")
+
 # Set up UR Dashboard server
 URDashboardConfig("$(DASH_PORT=dash)", "$(IP)", "$(DASH_POLL=0.1)")
 dbLoadRecords("$(URROBOT)/db/dashboard.db", "P=$(PREFIX), PORT=$(DASH_PORT=dash)")

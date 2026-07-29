@@ -158,7 +158,7 @@ record(dfanout, "$(P)Control:Stop")
     field(OUTC, "$(P)Control:sync_both_cmd.PROC")
 }
 
-record(calcout, "$(P)Control:auto_sync_steady")
+record(calcout, "$(P)Control:sync_after_steady")
 {
     field(INPA, "$(P)Control:Steady.VAL CP NMS")
     field(CALC, "A")
@@ -176,16 +176,8 @@ record(calcout, "$(P)Control:startup_sync_cmds")
 
 record(fanout, "$(P)Control:sync_both_cmd")
 {
-    field(LNK0, "$(P)Control:sync_joint_cmd")
-    field(LNK1, "$(P)Control:sync_pose_cmd")
-}
-
-record(calcout, "$(P)Control:sync_after_async_move")
-{
-    field(INPA, "$(P)Control:AsyncMoveDone CP")
-    field(CALC, "A")
-    field(OOPT, "Transition To Non-zero")
-    field(OUT, "$(P)Control:sync_both_cmd.PROC")
+    field(LNK0, "$(P)Control:sync_joint_cmds.PROC")
+    field(LNK1, "$(P)Control:sync_pose_cmds.PROC")
 }
 
 #======================
@@ -258,40 +250,31 @@ record(calcout, "$(P)Control:moveJ_if_not_syncing") {
     field(OUT, "$(P)Control:moveJ.PROC")
 }
 
-record(sseq, "$(P)Control:sync_joint_cmd")
+record(seq, "$(P)Control:sync_joint_cmds")
 {
-    field(PINI, 0)
-
-    field(LNK1, "$(P)Control:syncing_joints.VAL CA")
-    field(STR1, "1")
+    field(LNK1, 0)
+    field(LNK1, "$(P)Control:syncing_joints.VAL PP")
 
     field(DOL2, "$(P)Receive:Joint1")
-    field(LNK2, "$(P)Control:J1CmdU CA")
-    field(WAIT2, "After1")
+    field(LNK2, "$(P)Control:J1CmdU PP")
 
     field(DOL3, "$(P)Receive:Joint2")
-    field(LNK3, "$(P)Control:J2CmdU CA")
-    field(WAIT3, "After1")
+    field(LNK3, "$(P)Control:J2CmdU PP")
 
     field(DOL4, "$(P)Receive:Joint3")
-    field(LNK4, "$(P)Control:J3CmdU CA")
-    field(WAIT4, "After1")
+    field(LNK4, "$(P)Control:J3CmdU PP")
 
     field(DOL5, "$(P)Receive:Joint4")
-    field(LNK5, "$(P)Control:J4CmdU CA")
-    field(WAIT5, "After1")
+    field(LNK5, "$(P)Control:J4CmdU PP")
 
     field(DOL6, "$(P)Receive:Joint5")
-    field(LNK6, "$(P)Control:J5CmdU CA")
-    field(WAIT6, "After1")
+    field(LNK6, "$(P)Control:J5CmdU PP")
 
     field(DOL7, "$(P)Receive:Joint6")
-    field(LNK7, "$(P)Control:J6CmdU CA")
-    field(WAIT7, "After1")
+    field(LNK7, "$(P)Control:J6CmdU PP")
 
-    field(LNK8, "$(P)Control:syncing_joints.VAL CA")
-    field(STR8, "0")
-    field(WAIT8, "After7")
+    field(LNK8, 0)
+    field(LNK8, "$(P)Control:syncing_joints.VAL PP")
 }
 
 # -----------------------------------------------------------
@@ -598,40 +581,30 @@ record(calcout, "$(P)Control:moveL_if_not_syncing") {
     field(OUT, "$(P)Control:moveL.PROC")
 }
 
-record(sseq, "$(P)Control:sync_pose_cmd")
-{
-    field(PINI, 0)
-
-    field(LNK1, "$(P)Control:syncing_pose.VAL CA")
-    field(STR1, "1")
+record(seq, "$(P)Control:sync_pose_cmds") {
+    field(DOL1, 1)
+    field(LNK1, "$(P)Control:syncing_pose.VAL PP")
 
     field(DOL2, "$(P)Receive:PoseX")
-    field(LNK2, "$(P)Control:PoseXCmdU CA")
-    field(WAIT2, "After1")
+    field(LNK2, "$(P)Control:PoseXCmdU PP")
 
     field(DOL3, "$(P)Receive:PoseY")
-    field(LNK3, "$(P)Control:PoseYCmdU CA")
-    field(WAIT3, "After1")
+    field(LNK3, "$(P)Control:PoseYCmdU PP")
 
     field(DOL4, "$(P)Receive:PoseZ")
-    field(LNK4, "$(P)Control:PoseZCmdU CA")
-    field(WAIT4, "After1")
+    field(LNK4, "$(P)Control:PoseZCmdU PP")
 
     field(DOL5, "$(P)Receive:PoseRx")
-    field(LNK5, "$(P)Control:PoseRxCmd CA")
-    field(WAIT5, "After1")
+    field(LNK5, "$(P)Control:PoseRxCmd PP")
 
     field(DOL6, "$(P)Receive:PoseRy")
-    field(LNK6, "$(P)Control:PoseRyCmd CA")
-    field(WAIT6, "After1")
+    field(LNK6, "$(P)Control:PoseRyCmd PP")
 
     field(DOL7, "$(P)Receive:PoseRz")
-    field(LNK7, "$(P)Control:PoseRzCmd CA")
-    field(WAIT7, "After1")
+    field(LNK7, "$(P)Control:PoseRzCmd PP")
 
-    field(LNK8, "$(P)Control:syncing_pose.VAL CA")
-    field(STR8, "0")
-    field(WAIT8, "After7")
+    field(DOL8, 0)
+    field(LNK8, "$(P)Control:syncing_pose.VAL PP")
 }
 
 # -----------------------------------------------------------

@@ -7,9 +7,6 @@
 #- CTRL_PORT  - (Optional) Name of the asyn port for control interface
 #- ###################################################################
 
-# Add $(URROBOT)/urRobotApp/src/lua to LUA_SCRIPT_PATH
-epicsEnvSet("LUA_SCRIPT_PATH", "$(LUA_SCRIPT_PATH=):$(URROBOT)/urRobotApp/src/lua")
-
 # Load waypoint and path databases
 luash("$(URROBOT)/urRobotApp/iocsh/load_waypoints.lua", "P=$(PREFIX),N=$(N_WP=30)")
 luash("$(URROBOT)/urRobotApp/iocsh/load_actions.lua", "P=$(PREFIX),N=$(N_ACTIONS=10)")
