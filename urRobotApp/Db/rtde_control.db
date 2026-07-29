@@ -252,7 +252,7 @@ record(calcout, "$(P)Control:moveJ_if_not_syncing") {
 
 record(seq, "$(P)Control:sync_joint_cmds")
 {
-    field(LNK1, 0)
+    field(DOL1, 1)
     field(LNK1, "$(P)Control:syncing_joints.VAL PP")
 
     field(DOL2, "$(P)Receive:Joint1")
@@ -273,7 +273,7 @@ record(seq, "$(P)Control:sync_joint_cmds")
     field(DOL7, "$(P)Receive:Joint6")
     field(LNK7, "$(P)Control:J6CmdU PP")
 
-    field(LNK8, 0)
+    field(DOL8, 0)
     field(LNK8, "$(P)Control:syncing_joints.VAL PP")
 }
 
