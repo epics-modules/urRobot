@@ -249,11 +249,20 @@ record(bo, "$(P)Control:stopJ")
 }
 
 
+record(bo, "$(P)Control:syncing_joints") {}
+
+record(calcout, "$(P)Control:moveJ_if_not_syncing") {
+    field(INPA, "$(P)Control:syncing_joints")
+    field(CALC, "A==0")
+    field(OOPT, "When Non-zero")
+    field(OUT, "$(P)Control:moveJ.PROC")
+}
+
 record(sseq, "$(P)Control:sync_joint_cmd")
 {
     field(PINI, 0)
 
-    field(LNK1, "$(P)Control:moveJ.DISA CA")
+    field(LNK1, "$(P)Control:syncing_joints.VAL CA")
     field(STR1, "1")
 
     field(DOL2, "$(P)Receive:Joint1")
@@ -280,7 +289,7 @@ record(sseq, "$(P)Control:sync_joint_cmd")
     field(LNK7, "$(P)Control:J6CmdU CA")
     field(WAIT7, "After1")
 
-    field(LNK8, "$(P)Control:moveJ.DISA CA")
+    field(LNK8, "$(P)Control:syncing_joints.VAL CA")
     field(STR8, "0")
     field(WAIT8, "After7")
 }
@@ -302,7 +311,7 @@ record(ao, "$(P)Control:J1CmdU")
     field(OUT,  "$(P)Control:J1Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J1TweakVal")
 {
@@ -343,7 +352,7 @@ record(ao, "$(P)Control:J2CmdU")
     field(OUT,  "$(P)Control:J2Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J2TweakVal")
 {
@@ -384,7 +393,7 @@ record(ao, "$(P)Control:J3CmdU")
     field(OUT,  "$(P)Control:J3Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J3TweakVal")
 {
@@ -425,7 +434,7 @@ record(ao, "$(P)Control:J4CmdU")
     field(OUT,  "$(P)Control:J4Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J4TweakVal")
 {
@@ -466,7 +475,7 @@ record(ao, "$(P)Control:J5CmdU")
     field(OUT,  "$(P)Control:J5Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J5TweakVal")
 {
@@ -507,7 +516,7 @@ record(ao, "$(P)Control:J6CmdU")
     field(OUT,  "$(P)Control:J6Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveJ.PROC")
+    field(FLNK, "$(P)Control:moveJ_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:J6TweakVal")
 {
@@ -580,11 +589,20 @@ record(bo, "$(P)Control:stopL")
     field(FLNK, "$(P)Control:sync_both_cmd.PROC")
 }
 
+record(bo, "$(P)Control:syncing_pose") {}
+
+record(calcout, "$(P)Control:moveL_if_not_syncing") {
+    field(INPA, "$(P)Control:syncing_pose")
+    field(CALC, "A==0")
+    field(OOPT, "When Non-zero")
+    field(OUT, "$(P)Control:moveL.PROC")
+}
+
 record(sseq, "$(P)Control:sync_pose_cmd")
 {
     field(PINI, 0)
 
-    field(LNK1, "$(P)Control:moveL.DISA CA")
+    field(LNK1, "$(P)Control:syncing_pose.VAL CA")
     field(STR1, "1")
 
     field(DOL2, "$(P)Receive:PoseX")
@@ -611,7 +629,7 @@ record(sseq, "$(P)Control:sync_pose_cmd")
     field(LNK7, "$(P)Control:PoseRzCmd CA")
     field(WAIT7, "After1")
 
-    field(LNK8, "$(P)Control:moveL.DISA CA")
+    field(LNK8, "$(P)Control:syncing_pose.VAL CA")
     field(STR8, "0")
     field(WAIT8, "After7")
 }
@@ -633,7 +651,7 @@ record(ao, "$(P)Control:PoseXCmdU")
     field(OUT,  "$(P)Control:PoseXCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
+    field(FLNK, "$(P)Control:moveL_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:PoseXTweakVal")
 {
@@ -676,7 +694,7 @@ record(ao, "$(P)Control:PoseYCmdU")
     field(OUT,  "$(P)Control:PoseYCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
+    field(FLNK, "$(P)Control:moveL_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:PoseYTweakVal")
 {
@@ -720,7 +738,7 @@ record(ao, "$(P)Control:PoseZCmdU")
     field(OUT,  "$(P)Control:PoseZCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
-    field(FLNK, "$(P)Control:moveL.PROC")
+    field(FLNK, "$(P)Control:moveL_if_not_syncing.PROC")
 }
 record(ao, "$(P)Control:PoseZTweakVal")
 {
