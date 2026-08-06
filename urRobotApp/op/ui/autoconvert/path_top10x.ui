@@ -123,7 +123,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N1):Go.PROC</string>
+                <string>$(P)Path$(N1):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -162,7 +162,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N2):Go.PROC</string>
+                <string>$(P)Path$(N2):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -201,7 +201,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N3):Go.PROC</string>
+                <string>$(P)Path$(N3):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -240,7 +240,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N4):Go.PROC</string>
+                <string>$(P)Path$(N4):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -279,7 +279,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N5):Go.PROC</string>
+                <string>$(P)Path$(N5):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -999,7 +999,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N6):Go.PROC</string>
+                <string>$(P)Path$(N6):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1131,7 +1131,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N7):Go.PROC</string>
+                <string>$(P)Path$(N7):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1263,7 +1263,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N8):Go.PROC</string>
+                <string>$(P)Path$(N8):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1395,7 +1395,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N9):Go.PROC</string>
+                <string>$(P)Path$(N9):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
@@ -1527,7 +1527,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N10):Go.PROC</string>
+                <string>$(P)Path$(N10):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
