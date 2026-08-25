@@ -69,7 +69,7 @@ It also has a button to enable/disable teach (freedrive) mode.
 
 <img src="./assets/GUIs/ui/urRobot_control.png" alt="ui-control" width="600">
 
-Although the default control GUI may look similar to typical EPICS motor screens, the robot's joints are *not* true EPICS motors.
+Although the default control GUI may look similar to typical EPICS motor screens, the robot's joints and TCP pose are *not* true EPICS motors.
 The x, y, z, rx, ry, and rz axes are virtual axes and moving them will move one or more joint motors. The joint motors
 themselves are independent of each other, however motion of any joint motor will affect the position of the tool. To reconcile
 this and reduce the likelihood of accidentally commanding motion you didn't intend, every time motion completes, the command values
@@ -79,8 +79,8 @@ There are two sets of command PVs for each axis:
 
 - **`J*Cmd` / `Pose*Cmd`** (e.g. `$(P)Control:J1Cmd`, `$(P)Control:PoseXCmd`) are target-only setpoints.
   Writing to these records updates the target position in the driver but does *not* trigger motion.
-  To actually move the robot, you must separately process `$(P)Control:moveJ` (for joints) or
-  `$(P)Control:moveL` (for Cartesian). This is the intended workflow for scripts, where you want to
+  To actually move the robot, you must separately write a value of 1 to `$(P)Control:moveJ` (for joints) or
+  `$(P)Control:moveL` (for Cartesian). This is the intended workflow for most general tasks and scripts, where you want to
   set all target values first and then trigger a single coordinated move.
 
 - **`J*CmdU` / `Pose*CmdU`** (e.g. `$(P)Control:J1CmdU`, `$(P)Control:PoseXCmdU`) are convenience
@@ -92,6 +92,17 @@ Note that the "Move" buttons tell the robot to move to the current
 joint or Cartesian configuration defined by all 6 of the respective target values (J1Cmd, J2Cmd, ...
 or PoseXCmd, PoseYCmd, ...).
 
+### TCP Pose
+
+Universal Robots (and this support module) reports the TCP pose as a six-element vector [x, y, z, rx, ry, rz].
+The first three elements are the translation, and the last three are the orientation as a rotation vector
+(axis-angle scaled by the angle, also called the Rodrigues representation), not roll-pitch-yaw.
+This website may be helpful if you need to convert between various representations: [pose-conversions](https://support.zivid.com/en/latest/camera/reference-articles/pose-conversions.html)
+
+Because of this, there are no `$(P)Control:PoseRxCmdU`,`$(P)Control:PoseRyCmdU`, or `$(P)Control:PoseRzCmdU` PVs like
+there are for the X, Y, and Z axes. Tweaking these axes is not reasonable because these values represent a
+rotation vector of the TCP, not a direct angle representation like Euler angles. In the future, support may be added that
+converts this vector into Euler angles and provides PVs for tweaking the orientation similar to the X, Y, and Z components of the TCP pose.
 
 ### Safety Event Handling
 
