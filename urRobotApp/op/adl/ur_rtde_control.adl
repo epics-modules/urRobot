@@ -1,12 +1,12 @@
 
 file {
-	name="/net/s100dserv/xorApps/epics/synApps_6_3/support/urRobot/urRobotApp/op/adl/ur_rtde_control.adl"
+	name="/home/beams0/NMARKS/devel/ur/urRobot/urRobotApp/op/adl/ur_rtde_control.adl"
 	version=030111
 }
 display {
 	object {
-		x=1277
-		y=401
+		x=1267
+		y=393
 		width=820
 		height=635
 	}
@@ -2510,4 +2510,34 @@ text {
 	}
 	limits {
 	}
+}
+"message button" {
+	object {
+		x=325
+		y=90
+		width=60
+		height=25
+	}
+	control {
+		chan="$(P)Control:TriggerProtectiveStop.PROC"
+		clr=31
+		bclr=20
+	}
+	label="E-STOP"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=390
+		y=90
+		width=60
+		height=25
+	}
+	control {
+		chan="$(P)Dashboard:UnlockProtectiveStop.PROC"
+		clr=14
+		bclr=33
+	}
+	label="CLEAR"
+	press_msg="1"
 }
