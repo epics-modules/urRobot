@@ -28,7 +28,7 @@ enum class MotionType : int { Joint, Cartesian };
 class RTDEControl : public asynPortDriver {
   public:
     RTDEControl(const char* asyn_port_name, const char* dash_drv_name, const char* recv_drv_name,
-                double poll_period);
+                double poll_period, int auto_connect = 1);
     asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value) override;
     asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value) override;
     asynStatus writeOctet(asynUser* pasynUser, const char* value, size_t maxChars, size_t* nActual) override;

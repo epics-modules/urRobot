@@ -164,7 +164,7 @@ constexpr int ASYN_INTERFACE_MASK =
 constexpr int ASYN_INTERRUPT_MASK = asynInt32Mask | asynFloat64Mask | asynOctetMask | asynFloat64ArrayMask;
 
 RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, const char* recv_drv_name,
-                         double poll_period)
+                         double poll_period, int auto_connect)
     : asynPortDriver(asyn_port_name, MAX_ADDR, ASYN_INTERFACE_MASK, ASYN_INTERRUPT_MASK,
                      ASYN_MULTIDEVICE | ASYN_CANBLOCK, 1, 0, 0),
       rtde_control_(nullptr), script_client_(nullptr), dash_drv_name_(dash_drv_name),
@@ -236,7 +236,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     drv_receive_->findParam("OUTPUT_INTEGER_REG12", &outputIntRegId_);
 
     // Try connecting to the control server on the robot controller
-    try_connect();
+    if (auto_connect) {
+        try_connect();
+    }
 
     epicsThreadCreate("RTDEControlPoller", epicsThreadPriorityLow,
                       epicsThreadGetStackSize(epicsThreadStackMedium), (EPICSTHREADFUNC)poll_thread_C, this);
@@ -655,8 +657,8 @@ skip:
 
 // register function for iocsh
 extern "C" int RTDEControlConfig(const char* asyn_port_name, const char* dash_drv_name,
-                                 const char* recv_drv_name, double poll_period) {
-    new RTDEControl(asyn_port_name, dash_drv_name, recv_drv_name, poll_period);
+                                 const char* recv_drv_name, double poll_period, int auto_connect) {
+    new RTDEControl(asyn_port_name, dash_drv_name, recv_drv_name, poll_period, auto_connect);
     return asynSuccess;
 }
 
@@ -664,11 +666,12 @@ static const iocshArg urRobotArg0 = {"Asyn port name", iocshArgString};
 static const iocshArg urRobotArg1 = {"Dashboard driver name", iocshArgString};
 static const iocshArg urRobotArg2 = {"Receive driver name", iocshArgString};
 static const iocshArg urRobotArg3 = {"Poll period", iocshArgDouble};
-static const iocshArg* const urRobotArgs[4] = {&urRobotArg0, &urRobotArg1, &urRobotArg2, &urRobotArg3};
-static const iocshFuncDef urRobotFuncDef = {"RTDEControlConfig", 4, urRobotArgs};
+static const iocshArg urRobotArg4 = {"Auto connect", iocshArgInt};
+static const iocshArg* const urRobotArgs[5] = {&urRobotArg0, &urRobotArg1, &urRobotArg2, &urRobotArg3, &urRobotArg4};
+static const iocshFuncDef urRobotFuncDef = {"RTDEControlConfig", 5, urRobotArgs};
 
 static void urRobotCallFunc(const iocshArgBuf* args) {
-    RTDEControlConfig(args[0].sval, args[1].sval, args[2].sval, args[3].dval);
+    RTDEControlConfig(args[0].sval, args[1].sval, args[2].sval, args[3].dval, args[4].ival);
 }
 
 void RTDEControlRegister(void) { iocshRegister(&urRobotFuncDef, urRobotCallFunc); }
