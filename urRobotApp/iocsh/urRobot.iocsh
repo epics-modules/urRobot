@@ -49,7 +49,7 @@ RTDEInOutConfig("$(IO_PORT=rtde_io)", "$(IP)", "$(IO_POLL=0.1)")
 dbLoadRecords("$(URROBOT)/db/rtde_io.db", "P=$(PREFIX), PORT=$(IO_PORT=rtde_io)")
 
 # Set up UR RTDE Control interface
-RTDEControlConfig("$(CTRL_PORT=rtde_ctrl)", "$(DASH_PORT=dash)", "$(RECV_PORT=rtde_recv)", "$(CTRL_POLL=0.02)")
+RTDEControlConfig("$(CTRL_PORT=rtde_ctrl)", "$(DASH_PORT=dash)", "$(RECV_PORT=rtde_recv)", "$(CTRL_POLL=0.02)", "$(AUTO_CONNECT=1)")
 dbLoadRecords("$(URROBOT)/db/rtde_control.db", "P=$(PREFIX), PORT=$(CTRL_PORT=rtde_ctrl)")
 
 # Set up Robotiq Gripper
