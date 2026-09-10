@@ -93,7 +93,8 @@ record(calcout, "$(P)Control:jog_watchdog:count") {
 record(calcout, "$(P)Control:jog_watchdog:trigger") {
   field(DESC, "Trigger Set")
   field(INPA, "$(P)Control:jog_watchdog:stop_start NPP NMS")
-  field(CALC, "!A")
+  field(INPB, "$(P)Control:jog_watchdog:start NPP NMS")
+  field(CALC, "B&&!A")
   field(OOPT, "Transition To Non-zero")
   field(OUT, "$(P)Control:JogStop.PROC")
 }

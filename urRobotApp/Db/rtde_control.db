@@ -76,7 +76,8 @@ record(calcout, "$(P)Control:moving_calc")
     field(INPA, "$(P)Control:Steady.VAL CP")
     field(INPB, "$(P)Control:AsyncMoveDone.VAL CP")
     field(INPC, "$(P)Receive:RuntimeState.VAL CP")
-    field(CALC, "(!A || !B) && (C=2)")
+    field(INPD, "$(P)Control:Connected.RVAL CP")
+    field(CALC, "(!A || !B) && (C=2 && D=1)")
 }
 
 record(bi, "$(P)Control:Moving")
@@ -193,7 +194,7 @@ record(calcout, "$(P)Control:sync_after_async_move")
 # Joint control
 #======================
 
-record(bo, "$(P)Control:moveJ")
+record(busy, "$(P)Control:moveJ")
 {
     field(DESC, "Moves joints to commanded values")
     field(DTYP, "asynInt32")
@@ -536,7 +537,7 @@ record(calcout, "$(P)Control:J6TweakRev")
 # TCP pose control
 #======================
 
-record(bo, "$(P)Control:moveL")
+record(busy, "$(P)Control:moveL")
 {
     field(DESC, "Move to TCP pose linearly")
     field(DTYP, "asynInt32")

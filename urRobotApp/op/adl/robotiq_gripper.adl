@@ -106,7 +106,7 @@ rectangle {
 		height=25
 	}
 	control {
-		chan="$(P)RobotiqGripper:Open.PROC"
+		chan="$(P)RobotiqGripper:Open"
 		clr=14
 		bclr=51
 	}
@@ -149,7 +149,7 @@ text {
 		height=25
 	}
 	control {
-		chan="$(P)RobotiqGripper:Close.PROC"
+		chan="$(P)RobotiqGripper:Close"
 		clr=14
 		bclr=51
 	}

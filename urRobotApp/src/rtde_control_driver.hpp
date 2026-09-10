@@ -5,11 +5,11 @@
 /// and monitors async motion progress in a poll thread.
 
 #pragma once
+#include <optional>
+#include <asynPortDriver.h>
 #include "rtde_receive_driver.hpp"
 #include "ur_rtde/rtde_control_interface.h"
 #include "ur_rtde/script_client.h"
-#include <asynPortDriver.h>
-#include <optional>
 
 /// State machine for tracking asynchronous motion progress in the poll thread.
 ///   Done -> WaitingMotion -> WaitingAction -> Done
@@ -28,7 +28,7 @@ enum class MotionType : int { Joint, Cartesian };
 class RTDEControl : public asynPortDriver {
   public:
     RTDEControl(const char* asyn_port_name, const char* dash_drv_name, const char* recv_drv_name,
-                double poll_period);
+                double poll_period, int auto_connect);
     asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value) override;
     asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value) override;
     asynStatus writeOctet(asynUser* pasynUser, const char* value, size_t maxChars, size_t* nActual) override;
@@ -108,6 +108,8 @@ class RTDEControl : public asynPortDriver {
         setIntegerParam(asyncMoveDoneIndex_, 1);
         setIntegerParam(motionDoneCountIndex_, ++motion_done_count_);
         pending_motion_.reset();
+        setIntegerParam(moveJIndex_, 0);
+        setIntegerParam(moveLIndex_, 0);
     }
 
   protected:

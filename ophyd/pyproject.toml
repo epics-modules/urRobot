@@ -1,0 +1,23 @@
+[project]
+name = "ur-robot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Nick Marks", email = "nmarks@anl.gov" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "ophyd>=1.11.2",
+    "pyepics>=3.5.10",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.0,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.ty.rules]
+all = "warn"
+
+[tool.ty.environment]
+python = "./.venv"
