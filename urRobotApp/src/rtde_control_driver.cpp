@@ -331,18 +331,6 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     int addr = 0;
     getAddress(pasynUser, &addr);
 
-    if (!rtde_control_) {
-        spdlog::error("RTDE Control interface not initialized");
-        comm_ok = false;
-        goto skip;
-    }
-
-    if (not rtde_control_->isConnected()) {
-        spdlog::error("RTDE Control interface not connected");
-        comm_ok = false;
-        goto skip;
-    }
-
     if (function == jointCmdIndex_) {
         // convert commanded joint angles to radians
         const double val = value * M_PI / 180.0;
@@ -350,14 +338,6 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     } else if (function == poseCmdIndex_) {
         const double val = (addr >= 3) ? value : (value / 1000.0);
         this->cmd_pose_.at(addr) = val;
-    }
-
-    else if (function == tcpOffsetIndex_) {
-        // convert commanded x,y,z from mm to meters. Assume rx, ry, rz is radians
-        const double val = (addr >= 3) ? value : (value / 1000.0);
-        this->tcp_offset_.at(addr) = val;
-        spdlog::debug("Setting TCP offset to [{:.4f}] m,rad", fmt::join(tcp_offset_, ","));
-        rtde_control_->setTcp(this->tcp_offset_);
     }
 
     // Dynamics for joint moves (moveJ)
@@ -398,6 +378,21 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
 
+    else if (function == tcpOffsetIndex_) {
+        // convert commanded x,y,z from mm to meters. Assume rx, ry, rz is radians
+        if (rtde_control_ && rtde_control_->isConnected()) {
+            const double val = (addr >= 3) ? value : (value / 1000.0);
+            this->tcp_offset_.at(addr) = val;
+            spdlog::debug("Setting TCP offset to [{:.4f}] m,rad", fmt::join(tcp_offset_, ","));
+            rtde_control_->setTcp(this->tcp_offset_);
+        } else {
+            spdlog::error("RTDE Control interface not initialized/connected");
+            comm_ok = false;
+            goto skip;
+        }
+
+    }
+
     else {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
@@ -415,6 +410,10 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     int function = pasynUser->reason;
     bool comm_ok = true;
+
+    const char* name;
+    getParamName(function, &name);
+    printf("writeInt32 called for %s\n", name);
 
     if (function == reconnectIndex_) {
         comm_ok = try_connect();
@@ -596,6 +595,10 @@ skip:
 asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_t maxChars, size_t* nActual) {
     int function = pasynUser->reason;
     bool comm_ok = true;
+
+    const char* name;
+    getParamName(function, &name);
+    printf("writeOctet called for %s\n", name);
 
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
