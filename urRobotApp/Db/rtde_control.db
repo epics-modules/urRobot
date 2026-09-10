@@ -76,7 +76,8 @@ record(calcout, "$(P)Control:moving_calc")
     field(INPA, "$(P)Control:Steady.VAL CP")
     field(INPB, "$(P)Control:AsyncMoveDone.VAL CP")
     field(INPC, "$(P)Receive:RuntimeState.VAL CP")
-    field(CALC, "(!A || !B) && (C=2)")
+    field(INPD, "$(P)Control:Connected.RVAL CP")
+    field(CALC, "(!A || !B) && (C=2 && D=1)")
 }
 
 record(bi, "$(P)Control:Moving")
