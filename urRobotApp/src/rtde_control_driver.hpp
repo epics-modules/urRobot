@@ -5,13 +5,11 @@
 /// and monitors async motion progress in a poll thread.
 
 #pragma once
+#include <optional>
+#include <asynPortDriver.h>
 #include "rtde_receive_driver.hpp"
 #include "ur_rtde/rtde_control_interface.h"
 #include "ur_rtde/script_client.h"
-#include <asynPortDriver.h>
-#include <optional>
-#include <initHooks.h>
-#include "spdlog/spdlog.h"
 
 /// State machine for tracking asynchronous motion progress in the poll thread.
 ///   Done -> WaitingMotion -> WaitingAction -> Done
@@ -45,22 +43,6 @@ class RTDEControl : public asynPortDriver {
     RTDEReceive* drv_receive_ = nullptr;
     int safetyStatusBitsParamId_ = -1;
     int motion_done_count_ = 0;
-
-    // debug print wrapper to only print after IOC running
-    template <typename... Args>
-    void debug(spdlog::string_view_t fmt, Args&&... args) {
-        if (init_state_ == initHookAfterIocRunning) {
-            spdlog::debug(fmt, std::forward<Args>(args)...);
-        }
-    }
-
-    inline static RTDEControl* this_class_ = nullptr;
-    initHookState init_state_;
-    static void init_hook_callback(initHookState state) {
-        if (this_class_) {
-            this_class_->init_state_ = state;
-        }
-    }
 
     std::string robot_ip_ = "0.0.0.0";
     std::string dash_drv_name_;

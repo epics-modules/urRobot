@@ -1,18 +1,35 @@
-#include <epicsExport.h>
-#include <epicsThread.h>
 #include <exception>
 #include <filesystem>
 #include <fstream>
-#include <iocsh.h>
 #include <optional>
-
+#include <atomic>
+#include <utility>
+#include <epicsExport.h>
+#include <epicsThread.h>
 #include <initHooks.h>
-
+#include <iocsh.h>
+#include <asynOctetSyncIO.h>
 #include "dashboard_driver.hpp"
 #include "rtde_control_driver.hpp"
 #include "spdlog/cfg/env.h"
 #include "spdlog/spdlog.h"
-#include <asynOctetSyncIO.h>
+
+// helpers for initHook and debug print wrapper
+namespace {
+std::atomic<bool> ioc_running{false};
+
+void init_hook_callback(initHookState state) {
+    ioc_running.store(state == initHookAfterIocRunning);
+}
+
+// debug print wrapper to only print after IOC running
+template <typename... Args>
+void debug(spdlog::string_view_t fmt, Args&&... args) {
+    if (ioc_running.load()) {
+        spdlog::debug(fmt, std::forward<Args>(args)...);
+    }
+}
+}
 
 bool RTDEControl::try_connect() {
     // RTDE class construction automatically tries connecting.
@@ -241,10 +258,6 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     if (auto_connect) {
         try_connect();
     }
-
-    // Track init state. For now this is just to avoid many noisy debug messages at init
-    this_class_ = this;
-    initHookRegister(init_hook_callback);
 
     epicsThreadCreate("RTDEControlPoller", epicsThreadPriorityLow,
                       epicsThreadGetStackSize(epicsThreadStackMedium), (EPICSTHREADFUNC)poll_thread_C, this);
@@ -679,7 +692,10 @@ static void urRobotCallFunc(const iocshArgBuf* args) {
     RTDEControlConfig(args[0].sval, args[1].sval, args[2].sval, args[3].dval, args[4].ival);
 }
 
-void RTDEControlRegister(void) { iocshRegister(&urRobotFuncDef, urRobotCallFunc); }
+void RTDEControlRegister(void) {
+    initHookRegister(init_hook_callback);
+    iocshRegister(&urRobotFuncDef, urRobotCallFunc);
+}
 
 extern "C" {
 epicsExportRegistrar(RTDEControlRegister);
