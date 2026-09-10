@@ -257,6 +257,7 @@ void RTDEControl::poll() {
         lock();
 
         if (rtde_control_ and rtde_control_->isConnected()) {
+
             setIntegerParam(isConnectedIndex_, 1);
             int is_steady = 0;
             if (!custom_script_running_) {
@@ -398,7 +399,6 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
 
-skip:
     callParamCallbacks();
     if (comm_ok) {
         return asynSuccess;
