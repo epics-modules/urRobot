@@ -1,3 +1,5 @@
+local db = require("db")
+
 NPATHS = tonumber(N)
 KMAX = tonumber(K)
 for n = 1, NPATHS do
@@ -7,6 +9,13 @@ for n = 1, NPATHS do
     end
 end
 for n = 1, NPATHS do
-    local macros = string.format("P=%s,N=%d,KMAX=%d,DESC='Path %d',CTRL_PORT='%s'", P, n, KMAX, n, CTRL_PORT)
-    dbLoadRecords("$(URROBOT)/urRobotApp/Db/path.db", macros)
+    db.record("stringout", P .. "Path" .. n) {
+        DESC = "Description of path",
+        VAL = "Path " .. n
+    }
+    db.record("bo", P .. "Path" .. n .. ":Go") {
+        ZNAM = "Idle",
+        ONAM = "Go",
+    }
+    luaLoadFile("paths_seq.lua", string.format("P=%s,N=%d,KMAX=%d,CTRL_PORT=%s,STATE=path_seq_%d", P, n, KMAX, CTRL_PORT, n))
 end
