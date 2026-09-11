@@ -213,21 +213,27 @@ record(bo, "$(P)RobotiqGripper:Move")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))MOVE")
 }
 
-record(ao, "$(P)RobotiqGripper:SetSpeed")
+record(longout, "$(P)RobotiqGripper:SetSpeed")
 {
     field(DESC, "Default gripper speed")
-    field(DTYP, "asynFloat64")
-    field(PREC, 2)
+    field(DTYP, "asynInt32")
     field(PINI, 1)
+    field(DRVH, 100)
+    field(DRVL, 0)
+    field(EGU, "%")
+    field(VAL, 50)
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SET_SPEED")
 }
 
-record(ao, "$(P)RobotiqGripper:SetForce")
+record(longout, "$(P)RobotiqGripper:SetForce")
 {
     field(DESC, "Default gripper force")
-    field(DTYP, "asynFloat64")
-    field(PREC, 2)
+    field(DTYP, "asynInt32")
     field(PINI, 1)
+    field(DRVH, 100)
+    field(DRVL, 0)
+    field(EGU, "%")
+    field(VAL, 50)
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SET_FORCE")
 }
 

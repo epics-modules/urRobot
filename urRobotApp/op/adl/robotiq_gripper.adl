@@ -5,8 +5,8 @@ file {
 }
 display {
 	object {
-		x=1593
-		y=907
+		x=1573
+		y=891
 		width=417
 		height=249
 	}
@@ -330,7 +330,7 @@ text {
 	object {
 		x=110
 		y=195
-		width=75
+		width=50
 		height=20
 	}
 	control {
@@ -359,7 +359,7 @@ text {
 	object {
 		x=110
 		y=220
-		width=75
+		width=50
 		height=20
 	}
 	control {
@@ -453,6 +453,7 @@ menu {
 		clr=54
 		bclr=2
 	}
+	align="horiz. centered"
 	format="string"
 	limits {
 	}
@@ -468,6 +469,39 @@ menu {
 		chan="$(P)RobotiqGripper:ClosedPosition"
 		clr=54
 		bclr=2
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=165
+		y=200
+		width=20
+		height=15
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:SetSpeed.EGU"
+		clr=54
+		bclr=4
+	}
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=165
+		y=225
+		width=20
+		height=15
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:SetForce.EGU"
+		clr=54
+		bclr=4
 	}
 	format="string"
 	limits {

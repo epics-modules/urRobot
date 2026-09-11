@@ -22,7 +22,6 @@ class URGripper : public asynPortDriver {
   public:
     URGripper(const char* asyn_port_name, const char* dash_drv_name, double poll_period);
     asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value) override;
-    asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value) override;
 
     /// Poll thread entry point. Runs forever, reading gripper status
     /// and updating asyn parameters each cycle.
@@ -59,8 +58,8 @@ class URGripper : public asynPortDriver {
     int closeIndex_;    ///< close the gripper
     int setPosIndex_;   ///< set gripper target position
     int moveIndex_;     ///< move gripper to target position
-    int setSpeedIndex_; ///< gripper speed (0–255 device units)
-    int setForceIndex_; ///< gripper force (0–255 device units)
+    int setSpeedIndex_; ///< gripper speed (percent)
+    int setForceIndex_; ///< gripper force (percent)
 
     /// Object detection status
     int isOpenIndex_;         ///< 1 when gripper is fully open

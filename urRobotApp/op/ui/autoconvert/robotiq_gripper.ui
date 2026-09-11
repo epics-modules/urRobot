@@ -4,8 +4,8 @@
 <widget class="QMainWindow" name="MainWindow">
     <property name="geometry">
         <rect>
-            <x>1593</x>
-            <y>907</y>
+            <x>1573</x>
+            <y>891</y>
             <width>417</width>
             <height>249</height>
         </rect>
@@ -775,7 +775,7 @@ caMenu{
                 <rect>
                     <x>110</x>
                     <y>195</y>
-                    <width>75</width>
+                    <width>50</width>
                     <height>20</height>
                 </rect>
             </property>
@@ -862,7 +862,7 @@ caMenu{
                 <rect>
                     <x>110</x>
                     <y>220</y>
-                    <width>75</width>
+                    <width>50</width>
                     <height>20</height>
                 </rect>
             </property>
@@ -1129,6 +1129,9 @@ caMenu{
                     <blue>218</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignHCenter|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1143,9 +1146,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -1181,6 +1181,114 @@ caMenu{
                     <red>218</red>
                     <green>218</green>
                     <blue>218</blue>
+                </color>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignHCenter|Qt::AlignVCenter</set>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="formatType">
+                <enum>string</enum>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+        </widget>
+        <widget class="caLineEdit" name="caLineEdit_4">
+            <property name="geometry">
+                <rect>
+                    <x>165</x>
+                    <y>200</y>
+                    <width>20</width>
+                    <height>15</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)RobotiqGripper:SetSpeed.EGU</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>10</red>
+                    <green>0</green>
+                    <blue>184</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>187</red>
+                    <green>187</green>
+                    <blue>187</blue>
+                </color>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="formatType">
+                <enum>string</enum>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+        </widget>
+        <widget class="caLineEdit" name="caLineEdit_5">
+            <property name="geometry">
+                <rect>
+                    <x>165</x>
+                    <y>225</y>
+                    <width>20</width>
+                    <height>15</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)RobotiqGripper:SetForce.EGU</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>10</red>
+                    <green>0</green>
+                    <blue>184</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>187</red>
+                    <green>187</green>
+                    <blue>187</blue>
                 </color>
             </property>
             <property name="limitsMode">
@@ -1234,6 +1342,8 @@ caMenu{
         <zorder>caMenu_0</zorder>
         <zorder>caLineEdit_2</zorder>
         <zorder>caLineEdit_3</zorder>
+        <zorder>caLineEdit_4</zorder>
+        <zorder>caLineEdit_5</zorder>
     </widget>
 </widget>
 </ui>
