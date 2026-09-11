@@ -257,6 +257,8 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     // Try connecting to the control server on the robot controller
     if (auto_connect) {
         try_connect();
+    } else {
+        spdlog::info("Deferred connection to UR RTDE Control interface");
     }
 
     epicsThreadCreate("RTDEControlPoller", epicsThreadPriorityLow,
