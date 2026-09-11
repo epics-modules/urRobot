@@ -287,12 +287,12 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 |-------------- | -------------- | -------------- |
 | RobotiqGripper:Connected    | bi     | Connection status     |
 | RobotiqGripper:Calibrated    | bi     | Calibration status     |
-| RobotiqGripper:IsActive    | bi     | Gripper active status     |
+| RobotiqGripper:Activated    | bi     | Gripper active status     |
 | RobotiqGripper:IsOpen    | bi     | 1 if gripper open     |
 | RobotiqGripper:IsClosed    | bi     | 1 if gripper closed     |
 | RobotiqGripper:IsStoppedInner    | bi     | 1 if stopped on inner object     |
 | RobotiqGripper:IsStoppedOuter    | bi     | 1 if stopped on outer object     |
-| RobotiqGripper:CurrentPosition    | ai     | Current position of gripper  |
+| RobotiqGripper:Position    | ai     | Current position of gripper  |
 | RobotiqGripper:OpenPosition    | ai     | Open position of gripper     |
 | RobotiqGripper:ClosedPosition    | ai     | Closed position of gripper     |
 | RobotiqGripper:MoveStatus    | mbbi     | Enum strings for gripper motion status |
@@ -307,13 +307,15 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | RobotiqGripper:AutoCalibrate    | bo     | Calibrates open/close positions     |
 | RobotiqGripper:Open    | busy     | Opens Robotiq gripper     |
 | RobotiqGripper:Close    | busy     | Closes Robotiq gripper     |
-| RobotiqGripper:SetPositionRange    | bo     | Sets min/max positions     |
-| RobotiqGripper:SetSpeed    | ao     | Default gripper speed     |
-| RobotiqGripper:SetForce    | ao     | Default gripper force     |
-| RobotiqGripper:PositionUnit    | mbbo     | Enum strings for position units  |
+| RobotiqGripper:SetPositionRange    | bo     | Sets min/max native positions     |
+| RobotiqGripper:SetPosition    | ao     | Target position for move     |
+| RobotiqGripper:Move    | bo     | Moves to target position     |
+| RobotiqGripper:SetSpeed    | longout     | Default gripper speed (percent)     |
+| RobotiqGripper:SetForce    | longout     | Default gripper force (percent)     |
+| RobotiqGripper:Units    | mbbo     | Position-unit selection     |
+| RobotiqGripper:UnitsRaw    | longout     | Integer representing position units     |
 | RobotiqGripper:MinPosition    | longout     | Minimum gripper position     |
 | RobotiqGripper:MaxPosition    | longout     | Maximum gripper position     |
-| RobotiqGripper:PositionUnitRaw    | longout     | Integer representing position units     |
 
 ***
 

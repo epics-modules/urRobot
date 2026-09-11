@@ -69,17 +69,19 @@ URGripper::URGripper(const char* asyn_port_name, const char* dash_drv_name, doub
     createParam("ACTIVATE", asynParamInt32, &activateIndex_);
     createParam("OPEN", asynParamInt32, &openIndex_);
     createParam("CLOSE", asynParamInt32, &closeIndex_);
-    createParam("SET_SPEED", asynParamFloat64, &setSpeedIndex_);
-    createParam("SET_FORCE", asynParamFloat64, &setForceIndex_);
+    createParam("SET_SPEED", asynParamInt32, &setSpeedIndex_);
+    createParam("SET_FORCE", asynParamInt32, &setForceIndex_);
     createParam("AUTO_CALIBRATE", asynParamInt32, &autoCalibrateIndex_);
     createParam("OPEN_POSITION", asynParamFloat64, &openPositionIndex_);
     createParam("CLOSED_POSITION", asynParamFloat64, &closedPositionIndex_);
     createParam("CURRENT_POSITION", asynParamFloat64, &currentPositionIndex_);
+    createParam("SET_POSITION", asynParamFloat64, &setPosIndex_);
+    createParam("MOVE", asynParamInt32, &moveIndex_);
     createParam("MOVE_STATUS", asynParamInt32, &moveStatusIndex_);
     createParam("SET_POSITION_RANGE", asynParamInt32, &setPositionRangeIndex_);
     createParam("MIN_POSITION", asynParamInt32, &minPositionIndex_);
     createParam("MAX_POSITION", asynParamInt32, &maxPositionIndex_);
-    createParam("POSITION_UNIT", asynParamInt32, &positionUnitIndex_);
+    createParam("UNITS", asynParamInt32, &unitIndex_);
     createParam("IS_CALIBRATED", asynParamInt32, &isCalibratedIndex_);
 
     // gets log level from SPDLOG_LEVEL environment variable
@@ -93,6 +95,10 @@ URGripper::URGripper(const char* asyn_port_name, const char* dash_drv_name, doub
     drv_dashboard_->findParam("IS_CONNECTED", &robotConnectedParamId_);
 
     gripper_ = std::make_unique<ur_rtde::RobotiqGripper>(drv_dashboard_->get_ip());
+    gripper_->setUnit(ur_rtde::RobotiqGripper::eMoveParameter::SPEED,
+                      ur_rtde::RobotiqGripper::eUnit::UNIT_PERCENT);
+    gripper_->setUnit(ur_rtde::RobotiqGripper::eMoveParameter::FORCE,
+                      ur_rtde::RobotiqGripper::eUnit::UNIT_PERCENT);
 
     // attempt to connect to the gripper
     try_connect();
@@ -148,47 +154,6 @@ void URGripper::poll() {
     }
 }
 
-asynStatus URGripper::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
-    int function = pasynUser->reason;
-    bool comm_ok = true;
-
-    // Check that robot is powered on
-    if (!robot_ready()) {
-        spdlog::error("Robot must be powered and dashboard connected on to use gripper");
-        comm_ok = false;
-        goto skip;
-    }
-
-    // Check that it's connected before continuing
-    if (not gripper_->isConnected()) {
-        spdlog::error("Robotiq gripper not connected");
-        comm_ok = false;
-        goto skip;
-    }
-
-    try {
-        if (function == setSpeedIndex_) {
-            spdlog::debug("Setting speed to {}", value);
-            gripper_->setSpeed(value);
-        } else if (function == setForceIndex_) {
-            spdlog::debug("Setting force to {}", value);
-            gripper_->setForce(value);
-        }
-    } catch (const std::exception& e) {
-        spdlog::error("{}", e.what());
-        comm_ok = false;
-    }
-
-skip:
-    callParamCallbacks();
-    if (comm_ok) {
-        return asynSuccess;
-    } else {
-        spdlog::debug("Error in Gripper::writeFloat64");
-        return asynError;
-    }
-}
-
 asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     int function = pasynUser->reason;
@@ -217,6 +182,18 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if (function == activateIndex_) {
             spdlog::debug("Activating gripper");
             gripper_->activate();
+        } else if (function == setSpeedIndex_) {
+            spdlog::debug("Setting speed to {}%", value);
+            gripper_->setSpeed(value);
+            setIntegerParam(setSpeedIndex_, value);
+        } else if (function == setForceIndex_) {
+            spdlog::debug("Setting force to {}%", value);
+            gripper_->setForce(value);
+            setIntegerParam(setForceIndex_, value);
+        } else if (function == moveIndex_) {
+            double target = 0.0;
+            getDoubleParam(setPosIndex_, &target);
+            gripper_->move(target);
         } else if (function == openIndex_) {
             if (value == 1) {
                 setIntegerParam(openIndex_, 1);
@@ -256,7 +233,7 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         } else if (function == maxPositionIndex_) {
             spdlog::debug("setting max={}", value);
             setIntegerParam(maxPositionIndex_, value);
-        } else if (function == positionUnitIndex_) {
+        } else if (function == unitIndex_) {
             constexpr auto epos = ur_rtde::RobotiqGripper::eMoveParameter::POSITION;
             constexpr auto eunit_device = ur_rtde::RobotiqGripper::eUnit::UNIT_DEVICE;
             constexpr auto eunit_normalized = ur_rtde::RobotiqGripper::eUnit::UNIT_NORMALIZED;

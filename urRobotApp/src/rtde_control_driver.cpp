@@ -1,16 +1,35 @@
-#include <epicsExport.h>
-#include <epicsThread.h>
 #include <exception>
 #include <filesystem>
 #include <fstream>
-#include <iocsh.h>
 #include <optional>
-
+#include <atomic>
+#include <utility>
+#include <epicsExport.h>
+#include <epicsThread.h>
+#include <initHooks.h>
+#include <iocsh.h>
+#include <asynOctetSyncIO.h>
 #include "dashboard_driver.hpp"
 #include "rtde_control_driver.hpp"
 #include "spdlog/cfg/env.h"
 #include "spdlog/spdlog.h"
-#include <asynOctetSyncIO.h>
+
+// helpers for initHook and debug print wrapper
+namespace {
+std::atomic<bool> ioc_running{false};
+
+void init_hook_callback(initHookState state) {
+    ioc_running.store(state == initHookAfterIocRunning);
+}
+
+// debug print wrapper to only print after IOC running
+template <typename... Args>
+void debug(spdlog::string_view_t fmt, Args&&... args) {
+    if (ioc_running.load()) {
+        spdlog::debug(fmt, std::forward<Args>(args)...);
+    }
+}
+}
 
 bool RTDEControl::try_connect() {
     // RTDE class construction automatically tries connecting.
@@ -66,7 +85,7 @@ bool RTDEControl::try_connect() {
         } else {
             try {
                 if (not rtde_control_->isConnected()) {
-                    spdlog::debug("Reconnecting to UR RTDE Control interface");
+                    debug("Reconnecting to UR RTDE Control interface");
                     rtde_control_->reconnect();
                     connected = true;
                 }
@@ -130,8 +149,8 @@ void RTDEControl::poll_custom_script() {
     if (script_finished) {
         custom_script_running_ = false;
         setIntegerParam(customScriptRunningIndex_, 0);
-        spdlog::debug("URScript done");
-        spdlog::debug("Reuploading RTDE control script");
+        debug("URScript done");
+        debug("Reuploading RTDE control script");
         rtde_control_->reuploadScript();
         auto start = std::chrono::steady_clock::now();
         constexpr auto reupload_timeout = 1s;
@@ -254,6 +273,7 @@ void RTDEControl::poll() {
         lock();
 
         if (rtde_control_ and rtde_control_->isConnected()) {
+
             setIntegerParam(isConnectedIndex_, 1);
             int is_steady = 0;
             if (!custom_script_running_) {
@@ -267,7 +287,7 @@ void RTDEControl::poll() {
             drv_receive_->unlock();
             if (safety_bits != 1) {
                 if (pending_motion_) {
-                    spdlog::debug("Motion stopped due to safety.");
+                    debug("Motion stopped due to safety.");
                     set_motion_task_done();
                 }
                 if (waiting_contact_) {
@@ -308,13 +328,13 @@ void RTDEControl::poll() {
                         auto op_status = rtde_control_->getAsyncOperationProgressEx();
                         if (!op_status.isAsyncOperationRunning()) {
                             if (pending_motion_->action) {
-                                spdlog::debug("Waypoint reached. Starting action...");
+                                debug("Waypoint reached. Starting action...");
                                 run_action_val = 1 ^ run_action_val; // ensures action PV processes
                                 setIntegerParam(waypointActionDoneIndex_, 0);
                                 setIntegerParam(runWaypointActionIndex_, run_action_val);
                                 motion_status_ = AsyncMotionStatus::WaitingAction;
                             } else {
-                                spdlog::debug("Motion complete.");
+                                debug("Motion complete.");
                                 set_motion_task_done();
                             }
                         }
@@ -325,7 +345,7 @@ void RTDEControl::poll() {
                         int done = 0;
                         getIntegerParam(waypointActionDoneIndex_, &done);
                         if (done) {
-                            spdlog::debug("Waypoint action complete.");
+                            debug("Waypoint action complete.");
                             set_motion_task_done();
                         }
                     }
@@ -352,18 +372,6 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     int addr = 0;
     getAddress(pasynUser, &addr);
 
-    if (!rtde_control_) {
-        spdlog::error("RTDE Control interface not initialized");
-        comm_ok = false;
-        goto skip;
-    }
-
-    if (not rtde_control_->isConnected()) {
-        spdlog::error("RTDE Control interface not connected");
-        comm_ok = false;
-        goto skip;
-    }
-
     if (function == jointCmdIndex_) {
         // convert commanded joint angles to radians
         const double val = value * M_PI / 180.0;
@@ -373,43 +381,35 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         this->cmd_pose_.at(addr) = val;
     }
 
-    else if (function == tcpOffsetIndex_) {
-        // convert commanded x,y,z from mm to meters. Assume rx, ry, rz is radians
-        const double val = (addr >= 3) ? value : (value / 1000.0);
-        this->tcp_offset_.at(addr) = val;
-        spdlog::debug("Setting TCP offset to [{:.4f}] m,rad", fmt::join(tcp_offset_, ","));
-        rtde_control_->setTcp(this->tcp_offset_);
-    }
-
     // Dynamics for joint moves (moveJ)
     // convert from deg -> rad
     else if (function == jointSpeedIndex_) {
         this->joint_speed_ = value * M_PI / 180.0;
-        spdlog::debug("Setting joint speed to {:.4f}", joint_speed_);
+        debug("Setting joint speed to {:.4f}", joint_speed_);
     } else if (function == jointAccelIndex_) {
         this->joint_accel_ = value * M_PI / 180.0;
-        spdlog::debug("Setting joint acceleration to {:.4f}", joint_accel_);
+        debug("Setting joint acceleration to {:.4f}", joint_accel_);
     } else if (function == jointBlendIndex_) {
         this->joint_blend_ = value / 1000.0;
-        spdlog::debug("Setting joint blend to {:.4f}", joint_blend_);
+        debug("Setting joint blend to {:.4f}", joint_blend_);
     }
 
     // Dynamics for linear moves (moveL)
     // convert from m -> mm
     else if (function == linearSpeedIndex_) {
         this->linear_speed_ = value / 1000.0;
-        spdlog::debug("Setting linear speed to {:.4f}", linear_speed_);
+        debug("Setting linear speed to {:.4f}", linear_speed_);
     } else if (function == linearAccelIndex_) {
         this->linear_accel_ = value / 1000.0;
-        spdlog::debug("Setting linear acceleration to {:.4f}", linear_accel_);
+        debug("Setting linear acceleration to {:.4f}", linear_accel_);
     } else if (function == linearBlendIndex_) {
         this->linear_blend_ = value / 1000.0;
-        spdlog::debug("Setting linear blend to {:.4f}", linear_blend_);
+        debug("Setting linear blend to {:.4f}", linear_blend_);
     }
 
     else if (function == jogSpeedIndex_) {
         const double val = (addr >= 3) ? value : (value / 1000.0);
-        spdlog::debug("Setting jog speed[{}] to {:.4f}", addr, val);
+        debug("Setting jog speed[{}] to {:.4f}", addr, val);
         jog_speeds_[addr] = val;
         new_jog_ = true;
     }
@@ -419,11 +419,20 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
 
+    else if (function == tcpOffsetIndex_) {
+        // convert commanded x,y,z from mm to meters. Assume rx, ry, rz is radians
+        const double val = (addr >= 3) ? value : (value / 1000.0);
+        this->tcp_offset_.at(addr) = val;
+        debug("Setting TCP offset to [{:.4f}] m,rad", fmt::join(tcp_offset_, ","));
+        if (rtde_control_ && rtde_control_->isConnected()) {
+            rtde_control_->setTcp(this->tcp_offset_);
+        }
+    }
+
     else {
         asynPortDriver::writeFloat64(pasynUser, value);
     }
 
-skip:
     callParamCallbacks();
     if (comm_ok) {
         return asynSuccess;
@@ -447,6 +456,11 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function == reconnectIndex_) {
         comm_ok = try_connect();
+        if (comm_ok) {
+            // User could have set TCP offset with driver
+            // disconnected, so we send it again here
+            rtde_control_->setTcp(tcp_offset_);
+        }
         goto skip;
     }
 
@@ -457,7 +471,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         goto skip;
     }
     if (function == disconnectIndex_) {
-        spdlog::debug("Disconnecting from RTDE control interface");
+        debug("Disconnecting from RTDE control interface");
         rtde_control_->disconnect();
         comm_ok = not rtde_control_->isConnected();
         goto skip;
@@ -473,7 +487,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function == moveJIndex_) {
         if (!pending_motion_) {
-            spdlog::debug("moveJ({:.4f}) rad", fmt::join(cmd_joints_, ","));
+            debug("moveJ({:.4f}) rad", fmt::join(cmd_joints_, ","));
             if (rtde_control_->isJointsWithinSafetyLimits(cmd_joints_)) {
                 pending_motion_ = MotionTask{MotionType::Joint, waypoint_move_};
                 waypoint_move_ = false;
@@ -490,7 +504,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     else if (function == moveLIndex_) {
         if (!pending_motion_) {
-            spdlog::debug("moveL({:.4f}) m,rad", fmt::join(cmd_pose_, ","));
+            debug("moveL({:.4f}) m,rad", fmt::join(cmd_pose_, ","));
             if (rtde_control_->isPoseWithinSafetyLimits(cmd_pose_)) {
                 pending_motion_ = MotionTask{MotionType::Cartesian, waypoint_move_};
                 waypoint_move_ = false;
@@ -511,13 +525,13 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     else if (function == stopJIndex_) {
         set_motion_task_done();
-        spdlog::debug("Stopping (linear in joint space)");
+        debug("Stopping (linear in joint space)");
         rtde_control_->stopJ();
     }
 
     else if (function == stopLIndex_) {
         set_motion_task_done();
-        spdlog::debug("Stopping (linear in tool space)");
+        debug("Stopping (linear in tool space)");
         rtde_control_->stopL();
     }
 
@@ -526,7 +540,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     }
 
     else if (function == reuploadCtrlScriptIndex_) {
-        spdlog::debug("Reuploading control script");
+        debug("Reuploading control script");
         try {
             rtde_control_->reuploadScript();
         } catch (const std::exception& e) {
@@ -535,7 +549,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     }
 
     else if (function == stopCtrlScriptIndex_) {
-        spdlog::debug("Stopping control script");
+        debug("Stopping control script");
         try {
             rtde_control_->stopScript();
         } catch (const std::exception& e) {
@@ -544,16 +558,16 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     }
 
     else if (function == triggerProtStopIndex_) {
-        spdlog::debug("Triggering protective stop");
+        debug("Triggering protective stop");
         rtde_control_->triggerProtectiveStop();
     }
 
     else if (function == teachModeIndex_) {
         if (value) {
-            spdlog::debug("Enabling teach mode");
+            debug("Enabling teach mode");
             rtde_control_->teachMode();
         } else {
-            spdlog::debug("Disabling teach mode");
+            debug("Disabling teach mode");
             rtde_control_->endTeachMode();
         }
     }
@@ -591,7 +605,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         // Read entire file into a string
         std::string script_str =
             std::string(std::istreambuf_iterator<char>(fs), std::istreambuf_iterator<char>());
-        spdlog::debug("Running custom URScript: {}", custom_script_path_);
+        debug("Running custom URScript: {}", custom_script_path_);
         setIntegerParam(customScriptErrorIndex_, 0);
         rtde_control_->stopScript();
         script_client_->sendScriptCommand(wrap_script(script_str));
@@ -608,7 +622,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             double accel = 0.0;
             getDoubleParam(jogAccelerationIndex_, &accel);
             rtde_control_->speedL(jog_speeds_, accel, 0.01);
-            spdlog::debug("Starting jog: accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]", accel,
+            debug("Starting jog: accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]", accel,
                           jog_speeds_[0], jog_speeds_[1], jog_speeds_[2], jog_speeds_[3], jog_speeds_[4],
                           jog_speeds_[5]);
             new_jog_ = false;
@@ -617,7 +631,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     }
 
     else if (function == jogStopIndex_) {
-        spdlog::debug("Stopping jog");
+        debug("Stopping jog");
         rtde_control_->speedStop();
         setIntegerParam(joggingIndex_, 0);
     }
@@ -631,7 +645,7 @@ skip:
     if (comm_ok) {
         return asynSuccess;
     } else {
-        spdlog::debug("RTDE communication error in RTDEControl::writeInt32");
+        debug("RTDE communication error in RTDEControl::writeInt32");
         return asynError;
     }
 }
@@ -639,6 +653,10 @@ skip:
 asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_t maxChars, size_t* nActual) {
     int function = pasynUser->reason;
     bool comm_ok = true;
+
+    const char* name;
+    getParamName(function, &name);
+    printf("writeOctet called for %s\n", name);
 
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
@@ -656,7 +674,7 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
         // Set the path, and read it every time in callback for runCustomScriptFileIndex_
         if (std::filesystem::exists(value)) {
             custom_script_path_ = value;
-            spdlog::debug("Successfully read URScript file: {}", value);
+            debug("Successfully read URScript file: {}", value);
             setIntegerParam(customScriptErrorIndex_, 0);
         } else {
             spdlog::error("Failed to read URScript file: {}", value);
@@ -675,7 +693,7 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
             goto skip;
         }
 
-        spdlog::debug("Running inline URScript: {}", value);
+        debug("Running inline URScript: {}", value);
         setIntegerParam(customScriptErrorIndex_, 0);
         rtde_control_->stopScript();
         script_client_->sendScriptCommand(wrap_script(value));
@@ -693,7 +711,7 @@ skip:
     if (comm_ok) {
         return asynSuccess;
     } else {
-        spdlog::debug("RTDE communication error in RTDEControl::writeOctet");
+        debug("RTDE communication error in RTDEControl::writeOctet");
         return asynError;
     }
 }
@@ -717,7 +735,10 @@ static void urRobotCallFunc(const iocshArgBuf* args) {
     RTDEControlConfig(args[0].sval, args[1].sval, args[2].sval, args[3].dval, args[4].ival);
 }
 
-void RTDEControlRegister(void) { iocshRegister(&urRobotFuncDef, urRobotCallFunc); }
+void RTDEControlRegister(void) {
+    initHookRegister(init_hook_callback);
+    iocshRegister(&urRobotFuncDef, urRobotCallFunc);
+}
 
 extern "C" {
 epicsExportRegistrar(RTDEControlRegister);
