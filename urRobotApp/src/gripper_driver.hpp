@@ -57,6 +57,8 @@ class URGripper : public asynPortDriver {
     /// Motion commands
     int openIndex_;     ///< open the gripper
     int closeIndex_;    ///< close the gripper
+    int setPosIndex_;   ///< set gripper target position
+    int moveIndex_;     ///< move gripper to target position
     int setSpeedIndex_; ///< gripper speed (0–255 device units)
     int setForceIndex_; ///< gripper force (0–255 device units)
 
@@ -78,5 +80,5 @@ class URGripper : public asynPortDriver {
     int minPositionIndex_;      ///< min position for native range
     int maxPositionIndex_;      ///< max position for native range
     int setPositionRangeIndex_; ///< apply min/max as native position range
-    int positionUnitIndex_;     ///< position unit: 0=device, 1=normalized, 2=percent, 3=mm
+    int unitIndex_;     ///< position unit: 0=device, 1=normalized, 2=percent, 3=mm
 };

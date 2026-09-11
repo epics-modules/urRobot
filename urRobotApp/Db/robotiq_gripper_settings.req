@@ -1,0 +1,4 @@
+$(P)RobotiqGripper:Units.VAL
+$(P)RobotiqGripper:SetPosition.VAL
+$(P)RobotiqGripper:SetSpeed.VAL
+$(P)RobotiqGripper:SetForce.VAL

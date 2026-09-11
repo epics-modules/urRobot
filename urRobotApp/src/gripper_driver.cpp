@@ -75,11 +75,13 @@ URGripper::URGripper(const char* asyn_port_name, const char* dash_drv_name, doub
     createParam("OPEN_POSITION", asynParamFloat64, &openPositionIndex_);
     createParam("CLOSED_POSITION", asynParamFloat64, &closedPositionIndex_);
     createParam("CURRENT_POSITION", asynParamFloat64, &currentPositionIndex_);
+    createParam("SET_POSITION", asynParamFloat64, &setPosIndex_);
+    createParam("MOVE", asynParamInt32, &moveIndex_);
     createParam("MOVE_STATUS", asynParamInt32, &moveStatusIndex_);
     createParam("SET_POSITION_RANGE", asynParamInt32, &setPositionRangeIndex_);
     createParam("MIN_POSITION", asynParamInt32, &minPositionIndex_);
     createParam("MAX_POSITION", asynParamInt32, &maxPositionIndex_);
-    createParam("POSITION_UNIT", asynParamInt32, &positionUnitIndex_);
+    createParam("UNITS", asynParamInt32, &unitIndex_);
     createParam("IS_CALIBRATED", asynParamInt32, &isCalibratedIndex_);
 
     // gets log level from SPDLOG_LEVEL environment variable
@@ -173,6 +175,8 @@ asynStatus URGripper::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
         } else if (function == setForceIndex_) {
             spdlog::debug("Setting force to {}", value);
             gripper_->setForce(value);
+        } else {
+            asynPortDriver::writeFloat64(pasynUser, value);
         }
     } catch (const std::exception& e) {
         spdlog::error("{}", e.what());
@@ -217,6 +221,10 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if (function == activateIndex_) {
             spdlog::debug("Activating gripper");
             gripper_->activate();
+        } else if (function == moveIndex_) {
+            double target = 0.0;
+            getDoubleParam(setPosIndex_, &target);
+            gripper_->move(target);
         } else if (function == openIndex_) {
             if (value == 1) {
                 setIntegerParam(openIndex_, 1);
@@ -256,8 +264,10 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         } else if (function == maxPositionIndex_) {
             spdlog::debug("setting max={}", value);
             setIntegerParam(maxPositionIndex_, value);
-        } else if (function == positionUnitIndex_) {
+        } else if (function == unitIndex_) {
             constexpr auto epos = ur_rtde::RobotiqGripper::eMoveParameter::POSITION;
+            constexpr auto espeed = ur_rtde::RobotiqGripper::eMoveParameter::SPEED;
+            constexpr auto eforce = ur_rtde::RobotiqGripper::eMoveParameter::FORCE;
             constexpr auto eunit_device = ur_rtde::RobotiqGripper::eUnit::UNIT_DEVICE;
             constexpr auto eunit_normalized = ur_rtde::RobotiqGripper::eUnit::UNIT_NORMALIZED;
             constexpr auto eunit_percent = ur_rtde::RobotiqGripper::eUnit::UNIT_PERCENT;
@@ -266,18 +276,26 @@ asynStatus URGripper::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             case 0:
                 spdlog::debug("Setting position unit to 'Device' (0,255)");
                 gripper_->setUnit(epos, eunit_device);
+                gripper_->setUnit(espeed, eunit_device);
+                gripper_->setUnit(espeed, eunit_device);
                 break;
             case 1:
                 spdlog::debug("Setting position unit to 'Normalized' (0,1.0)");
                 gripper_->setUnit(epos, eunit_normalized);
+                gripper_->setUnit(espeed, eunit_normalized);
+                gripper_->setUnit(eforce, eunit_normalized);
                 break;
             case 2:
                 spdlog::debug("Setting position unit to 'Percent' (0,100%)");
                 gripper_->setUnit(epos, eunit_percent);
+                gripper_->setUnit(espeed, eunit_percent);
+                gripper_->setUnit(eforce, eunit_percent);
                 break;
             case 3:
                 spdlog::debug("Setting position unit to 'mm' (must define range)");
                 gripper_->setUnit(epos, eunit_mm);
+                gripper_->setUnit(espeed, eunit_mm);
+                gripper_->setUnit(eforce, eunit_mm);
                 break;
             default:
                 spdlog::warn("Unit {} undefined, no action taken.", value);
