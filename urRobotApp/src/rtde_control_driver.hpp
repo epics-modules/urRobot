@@ -32,6 +32,7 @@ class RTDEControl : public asynPortDriver {
     asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value) override;
     asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value) override;
     asynStatus writeOctet(asynUser* pasynUser, const char* value, size_t maxChars, size_t* nActual) override;
+    asynStatus writeFloat64Array(asynUser *pasynUser, epicsFloat64 *value, size_t nElements) override;
 
     /// Poll thread entry point. Runs forever, checking async motion status
     /// and updating asyn parameters each cycle.
@@ -165,4 +166,8 @@ class RTDEControl : public asynPortDriver {
     int stopCtrlScriptIndex_;
     int teachModeIndex_;
     int triggerProtStopIndex_;
+    int fkRequestIndex_;
+    int fkResultIndex_;
+    int ikRequestIndex_;
+    int ikResultIndex_;
 };
