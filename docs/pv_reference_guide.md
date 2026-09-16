@@ -140,6 +140,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:Moving    | bi     | 1 if robot is in motion, else 0     |
 | Control:CustomScriptRunning    | bi     | 1 while a custom URScript is executing     |
 | Control:CustomScriptError    | bi     | 1 if the last custom script timed out or failed     |
+| Control:FKResult    | aai     | Forward-kinematics TCP pose `[x, y, z, rx, ry, rz]`: X/Y/Z in mm and rotation vector in rad. Updated by FKRequest. |
+| Control:IKResult    | aai     | Inverse-kinematics joint angles `[J1, J2, J3, J4, J5, J6]` in deg. Updated by IKRequest. |
 
 ***Outputs***
 
@@ -220,6 +222,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:CustomInlineScript    | lso     | Inline URScript string; executes immediately on write     |
 | Control:RunCustomScriptFile    | bo     | Uploads and runs the script file set in CustomScriptFile     |
 | Control:CustomScriptTimeout    | ao     | Timeout in seconds for custom script completion (default 10)     |
+| Control:FKRequest    | aao     | Six joint angles `[J1, J2, J3, J4, J5, J6]` in deg. Requests forward kinematics and updates FKResult. |
+| Control:IKRequest    | aao     | Six-element TCP pose `[x, y, z, rx, ry, rz]`: X/Y/Z in mm and rotation vector in rad. Requests inverse kinematics and updates IKResult. |
 
 ***
 
