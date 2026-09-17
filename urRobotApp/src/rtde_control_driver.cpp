@@ -1,16 +1,18 @@
+#include <atomic>
+#include <optional>
+#include <utility>
+#include <array>
 #include <exception>
 #include <filesystem>
 #include <fstream>
-#include <optional>
-#include <atomic>
-#include <utility>
+#include <asynOctetSyncIO.h>
 #include <epicsExport.h>
 #include <epicsThread.h>
+#include <alarm.h>
 #include <initHooks.h>
 #include <iocsh.h>
-#include <asynOctetSyncIO.h>
-#include "dashboard_driver.hpp"
 #include "rtde_control_driver.hpp"
+#include "dashboard_driver.hpp"
 #include "spdlog/cfg/env.h"
 #include "spdlog/spdlog.h"
 
@@ -18,9 +20,7 @@
 namespace {
 std::atomic<bool> ioc_running{false};
 
-void init_hook_callback(initHookState state) {
-    ioc_running.store(state == initHookAfterIocRunning);
-}
+void init_hook_callback(initHookState state) { ioc_running.store(state == initHookAfterIocRunning); }
 
 // debug print wrapper to only print after IOC running
 template <typename... Args>
@@ -29,7 +29,7 @@ void debug(spdlog::string_view_t fmt, Args&&... args) {
         spdlog::debug(fmt, std::forward<Args>(args)...);
     }
 }
-}
+} // namespace
 
 bool RTDEControl::try_connect() {
     // RTDE class construction automatically tries connecting.
@@ -231,6 +231,10 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("START_CONTACT", asynParamInt32, &startContactIndex_);
     createParam("STOP_CONTACT", asynParamInt32, &stopContactIndex_);
     createParam("READ_CONTACT", asynParamInt32, &readContactIndex_);
+    createParam("FK_REQUEST", asynParamFloat64Array, &fkRequestIndex_);
+    createParam("FK_RESULT", asynParamFloat64Array, &fkResultIndex_);
+    createParam("IK_REQUEST", asynParamFloat64Array, &ikRequestIndex_);
+    createParam("IK_RESULT", asynParamFloat64Array, &ikResultIndex_);
 
     // gets log level from SPDLOG_LEVEL environment variable
     spdlog::cfg::load_env_levels();
@@ -260,6 +264,8 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     // Try connecting to the control server on the robot controller
     if (auto_connect) {
         try_connect();
+    } else {
+        spdlog::info("Deferred connection to UR RTDE Control interface");
     }
 
     epicsThreadCreate("RTDEControlPoller", epicsThreadPriorityLow,
@@ -623,8 +629,8 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             getDoubleParam(jogAccelerationIndex_, &accel);
             rtde_control_->speedL(jog_speeds_, accel, 0.01);
             debug("Starting jog: accel={}, speeds=[{:.2f},{:.2f},{:.2f},{:.2f},{:.2f},{:.2f}]", accel,
-                          jog_speeds_[0], jog_speeds_[1], jog_speeds_[2], jog_speeds_[3], jog_speeds_[4],
-                          jog_speeds_[5]);
+                  jog_speeds_[0], jog_speeds_[1], jog_speeds_[2], jog_speeds_[3], jog_speeds_[4],
+                  jog_speeds_[5]);
             new_jog_ = false;
         }
         setIntegerParam(joggingIndex_, 1);
@@ -716,6 +722,76 @@ skip:
     }
 }
 
+asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* value, size_t nElements) {
+    int function = pasynUser->reason;
+
+    if (!rtde_control_ || !rtde_control_->isConnected()) {
+        spdlog::error("RTDE Control interface not initialized or disconnected");
+        return asynError;
+    }
+
+    auto set_alarm = [&](int index){
+        setParamAlarmStatus(index, epicsAlarmCalc);
+        setParamAlarmSeverity(index, epicsSevMajor);
+    };
+
+    auto clear_alarm = [&](int index){
+        setParamAlarmStatus(index, epicsAlarmNone);
+        setParamAlarmSeverity(index, epicsSevNone);
+    };
+
+    if (function == fkRequestIndex_) {
+        std::vector<double> pose(6, 0.0);
+        if (nElements != 6) {
+            set_alarm(fkResultIndex_);
+            std::array<double, 1> no_data{};
+            doCallbacksFloat64Array(no_data.data(), 0, fkResultIndex_, 0);
+            return asynError;
+        }
+
+        std::vector<double> joints(value, value + nElements);
+        for (auto& j : joints) {
+            j *= M_PI / 180.0; // convert to rad
+        }
+        pose = rtde_control_->getForwardKinematics(joints, rtde_control_->getTCPOffset());
+        for (size_t i = 0; i < 3; i++) {
+            pose[i] *= 1000; // convert m -> mm
+        }
+        clear_alarm(fkResultIndex_);
+        doCallbacksFloat64Array(pose.data(), pose.size(), fkResultIndex_, 0);
+    }
+
+    else if (function == ikRequestIndex_) {
+        std::vector<double> joints(6, 0.0);
+        if (nElements != 6) {
+            set_alarm(ikResultIndex_);
+            std::array<double, 1> no_data{};
+            doCallbacksFloat64Array(no_data.data(), 0, ikResultIndex_, 0);
+            return asynError;
+        }
+
+        std::vector<double> pose(value, value + nElements);
+        for (size_t i = 0; i < 3; i++) {
+            pose[i] /= 1000; // convert mm -> m
+        }
+
+        if (rtde_control_->getInverseKinematicsHasSolution(pose)) {
+            joints = rtde_control_->getInverseKinematics(pose);
+            for (auto& j : joints) {
+                j *= 180.0 / M_PI; // convert rad -> deg
+            }
+            clear_alarm(ikResultIndex_);
+            doCallbacksFloat64Array(joints.data(), joints.size(), ikResultIndex_, 0);
+        } else {
+            set_alarm(ikResultIndex_);
+            std::array<double, 1> no_data{};
+            doCallbacksFloat64Array(no_data.data(), 0, ikResultIndex_, 0);
+        }
+    }
+
+    return asynSuccess;
+}
+
 // register function for iocsh
 extern "C" int RTDEControlConfig(const char* asyn_port_name, const char* dash_drv_name,
                                  const char* recv_drv_name, double poll_period, int auto_connect) {
@@ -728,7 +804,8 @@ static const iocshArg urRobotArg1 = {"Dashboard driver name", iocshArgString};
 static const iocshArg urRobotArg2 = {"Receive driver name", iocshArgString};
 static const iocshArg urRobotArg3 = {"Poll period", iocshArgDouble};
 static const iocshArg urRobotArg4 = {"Auto connect", iocshArgInt};
-static const iocshArg* const urRobotArgs[5] = {&urRobotArg0, &urRobotArg1, &urRobotArg2, &urRobotArg3, &urRobotArg4};
+static const iocshArg* const urRobotArgs[5] = {&urRobotArg0, &urRobotArg1, &urRobotArg2, &urRobotArg3,
+                                               &urRobotArg4};
 static const iocshFuncDef urRobotFuncDef = {"RTDEControlConfig", 5, urRobotArgs};
 
 static void urRobotCallFunc(const iocshArgBuf* args) {

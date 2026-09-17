@@ -1,4 +1,3 @@
-
 #======================
 # Status/Connection
 #======================
@@ -179,6 +178,48 @@ record(fanout, "$(P)Control:sync_both_cmd")
 {
     field(LNK0, "$(P)Control:sync_joint_cmds.PROC")
     field(LNK1, "$(P)Control:sync_pose_cmds.PROC")
+}
+
+record(aao, "$(P)Control:FKRequest") {
+    field(DESC, "FK Request (joint angles)")
+    field(DTYP, "asynFloat64ArrayOut")
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(PREC, 4)
+    field(EGU, "deg")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))FK_REQUEST")
+}
+
+record(aai, "$(P)Control:FKResult") {
+    field(DESC, "FK Result (TCP pose)")
+    field(DTYP, "asynFloat64ArrayIn")
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(PREC, 4)
+    field(EGU, "mm,rad")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))FK_RESULT")
+}
+
+record(aao, "$(P)Control:IKRequest") {
+    field(DESC, "IK Request (TCP pose)")
+    field(DTYP, "asynFloat64ArrayOut")
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(PREC, 4)
+    field(EGU, "mm,rad")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))IK_REQUEST")
+}
+
+record(aai, "$(P)Control:IKResult") {
+    field(DESC, "IK Result (joint angles)")
+    field(DTYP, "asynFloat64ArrayIn")
+    field(FTVL, "DOUBLE")
+    field(NELM, 6)
+    field(PREC, 4)
+    field(EGU, "deg")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))IK_RESULT")
 }
 
 #======================
