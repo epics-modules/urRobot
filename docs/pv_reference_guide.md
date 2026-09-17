@@ -140,6 +140,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:Moving    | bi     | 1 if robot is in motion, else 0     |
 | Control:CustomScriptRunning    | bi     | 1 while a custom URScript is executing     |
 | Control:CustomScriptError    | bi     | 1 if the last custom script timed out or failed     |
+| Control:FKResult    | aai     | Forward-kinematics TCP pose `[x, y, z, rx, ry, rz]`: X/Y/Z in mm and rotation vector in rad. Updated by FKRequest. |
+| Control:IKResult    | aai     | Inverse-kinematics joint angles `[J1, J2, J3, J4, J5, J6]` in deg. Updated by IKRequest. |
 
 ***Outputs***
 
@@ -220,6 +222,8 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | Control:CustomInlineScript    | lso     | Inline URScript string; executes immediately on write     |
 | Control:RunCustomScriptFile    | bo     | Uploads and runs the script file set in CustomScriptFile     |
 | Control:CustomScriptTimeout    | ao     | Timeout in seconds for custom script completion (default 10)     |
+| Control:FKRequest    | aao     | Six joint angles `[J1, J2, J3, J4, J5, J6]` in deg. Requests forward kinematics and updates FKResult. |
+| Control:IKRequest    | aao     | Six-element TCP pose `[x, y, z, rx, ry, rz]`: X/Y/Z in mm and rotation vector in rad. Requests inverse kinematics and updates IKResult. |
 
 ***
 
@@ -287,12 +291,12 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 |-------------- | -------------- | -------------- |
 | RobotiqGripper:Connected    | bi     | Connection status     |
 | RobotiqGripper:Calibrated    | bi     | Calibration status     |
-| RobotiqGripper:IsActive    | bi     | Gripper active status     |
+| RobotiqGripper:Activated    | bi     | Gripper active status     |
 | RobotiqGripper:IsOpen    | bi     | 1 if gripper open     |
 | RobotiqGripper:IsClosed    | bi     | 1 if gripper closed     |
 | RobotiqGripper:IsStoppedInner    | bi     | 1 if stopped on inner object     |
 | RobotiqGripper:IsStoppedOuter    | bi     | 1 if stopped on outer object     |
-| RobotiqGripper:CurrentPosition    | ai     | Current position of gripper  |
+| RobotiqGripper:Position    | ai     | Current position of gripper  |
 | RobotiqGripper:OpenPosition    | ai     | Open position of gripper     |
 | RobotiqGripper:ClosedPosition    | ai     | Closed position of gripper     |
 | RobotiqGripper:MoveStatus    | mbbi     | Enum strings for gripper motion status |
@@ -307,13 +311,15 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 | RobotiqGripper:AutoCalibrate    | bo     | Calibrates open/close positions     |
 | RobotiqGripper:Open    | busy     | Opens Robotiq gripper     |
 | RobotiqGripper:Close    | busy     | Closes Robotiq gripper     |
-| RobotiqGripper:SetPositionRange    | bo     | Sets min/max positions     |
-| RobotiqGripper:SetSpeed    | ao     | Default gripper speed     |
-| RobotiqGripper:SetForce    | ao     | Default gripper force     |
-| RobotiqGripper:PositionUnit    | mbbo     | Enum strings for position units  |
+| RobotiqGripper:SetPositionRange    | bo     | Sets min/max native positions     |
+| RobotiqGripper:SetPosition    | ao     | Target position for move     |
+| RobotiqGripper:Move    | bo     | Moves to target position     |
+| RobotiqGripper:SetSpeed    | longout     | Default gripper speed (percent)     |
+| RobotiqGripper:SetForce    | longout     | Default gripper force (percent)     |
+| RobotiqGripper:Units    | mbbo     | Position-unit selection     |
+| RobotiqGripper:UnitsRaw    | longout     | Integer representing position units     |
 | RobotiqGripper:MinPosition    | longout     | Minimum gripper position     |
 | RobotiqGripper:MaxPosition    | longout     | Maximum gripper position     |
-| RobotiqGripper:PositionUnitRaw    | longout     | Integer representing position units     |
 
 ***
 

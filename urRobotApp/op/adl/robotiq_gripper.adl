@@ -1,14 +1,14 @@
 
 file {
-	name="/xorApps/epics/synApps_6_3/support/urRobot/urRobotApp/op/adl/robotiq_gripper.adl"
+	name="/home/beams0/NMARKS/devel/ur/urRobot/urRobotApp/op/adl/robotiq_gripper.adl"
 	version=030111
 }
 display {
 	object {
-		x=874
-		y=1055
-		width=379
-		height=170
+		x=1573
+		y=891
+		width=417
+		height=249
 	}
 	clr=14
 	bclr=4
@@ -100,10 +100,10 @@ rectangle {
 }
 "message button" {
 	object {
-		x=215
-		y=95
+		x=5
+		y=105
 		width=75
-		height=25
+		height=20
 	}
 	control {
 		chan="$(P)RobotiqGripper:Open"
@@ -127,7 +127,7 @@ text {
 }
 "text update" {
 	object {
-		x=215
+		x=5
 		y=65
 		width=150
 		height=20
@@ -143,10 +143,10 @@ text {
 }
 "message button" {
 	object {
-		x=295
-		y=95
+		x=85
+		y=105
 		width=75
-		height=25
+		height=20
 	}
 	control {
 		chan="$(P)RobotiqGripper:Close"
@@ -158,20 +158,8 @@ text {
 }
 text {
 	object {
-		x=215
-		y=35
-		width=60
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="State:"
-}
-text {
-	object {
-		x=280
-		y=35
+		x=5
+		y=40
 		width=60
 		height=20
 	}
@@ -186,8 +174,8 @@ text {
 }
 text {
 	object {
-		x=280
-		y=35
+		x=5
+		y=40
 		width=60
 		height=20
 	}
@@ -203,37 +191,25 @@ text {
 "text update" {
 	object {
 		x=110
-		y=100
-		width=50
+		y=140
+		width=75
 		height=20
 	}
 	monitor {
-		chan="$(P)RobotiqGripper:CurrentPosition"
-		clr=14
+		chan="$(P)RobotiqGripper:Position"
+		clr=54
 		bclr=2
 	}
 	format="string"
 	limits {
 	}
 }
-text {
-	object {
-		x=10
-		y=100
-		width=95
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Position:"
-}
 "message button" {
 	object {
-		x=5
-		y=135
+		x=200
+		y=45
 		width=80
-		height=25
+		height=20
 	}
 	control {
 		chan="$(P)RobotiqGripper:Connect.PROC"
@@ -245,10 +221,10 @@ text {
 }
 "message button" {
 	object {
-		x=95
-		y=135
+		x=200
+		y=95
 		width=80
-		height=25
+		height=20
 	}
 	control {
 		chan="$(P)RobotiqGripper:AutoCalibrate.PROC"
@@ -260,10 +236,10 @@ text {
 }
 "message button" {
 	object {
-		x=185
-		y=135
+		x=200
+		y=70
 		width=80
-		height=25
+		height=20
 	}
 	control {
 		chan="$(P)RobotiqGripper:Activate.PROC"
@@ -275,8 +251,8 @@ text {
 }
 text {
 	object {
-		x=10
-		y=40
+		x=285
+		y=45
 		width=125
 		height=20
 	}
@@ -291,8 +267,8 @@ text {
 }
 text {
 	object {
-		x=10
-		y=40
+		x=285
+		y=45
 		width=125
 		height=20
 	}
@@ -307,7 +283,7 @@ text {
 }
 text {
 	object {
-		x=10
+		x=285
 		y=70
 		width=100
 		height=20
@@ -317,13 +293,13 @@ text {
 	}
 	"dynamic attribute" {
 		vis="if not zero"
-		chan="$(P)RobotiqGripper:IsActive"
+		chan="$(P)RobotiqGripper:Activated"
 	}
 	textix="Active"
 }
 text {
 	object {
-		x=10
+		x=285
 		y=70
 		width=100
 		height=20
@@ -333,13 +309,13 @@ text {
 	}
 	"dynamic attribute" {
 		vis="if zero"
-		chan="$(P)RobotiqGripper:IsActive"
+		chan="$(P)RobotiqGripper:Activated"
 	}
 	textix="Not Active"
 }
 text {
 	object {
-		x=220
+		x=254
 		y=5
 		width=150
 		height=20
@@ -349,4 +325,185 @@ text {
 	}
 	textix="$(P)"
 	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=110
+		y=195
+		width=50
+		height=20
+	}
+	control {
+		chan="$(P)RobotiqGripper:SetSpeed.VAL"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=195
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Speed:"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=110
+		y=220
+		width=50
+		height=20
+	}
+	control {
+		chan="$(P)RobotiqGripper:SetForce.VAL"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=220
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Force:"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=110
+		y=165
+		width=75
+		height=20
+	}
+	control {
+		chan="$(P)RobotiqGripper:SetPosition.VAL"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=165
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Position:"
+	align="horiz. right"
+}
+"message button" {
+	object {
+		x=190
+		y=165
+		width=50
+		height=20
+	}
+	control {
+		chan="$(P)RobotiqGripper:Move.PROC"
+		clr=14
+		bclr=51
+	}
+	label="Move"
+	press_msg="1"
+}
+menu {
+	object {
+		x=190
+		y=140
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)RobotiqGripper:Units"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=5
+		y=92
+		width=75
+		height=10
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:OpenPosition"
+		clr=54
+		bclr=2
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=85
+		y=92
+		width=75
+		height=10
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:ClosedPosition"
+		clr=54
+		bclr=2
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=165
+		y=200
+		width=20
+		height=15
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:SetSpeed.EGU"
+		clr=54
+		bclr=4
+	}
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=165
+		y=225
+		width=20
+		height=15
+	}
+	monitor {
+		chan="$(P)RobotiqGripper:SetForce.EGU"
+		clr=54
+		bclr=4
+	}
+	format="string"
+	limits {
+	}
 }
