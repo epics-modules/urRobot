@@ -1068,7 +1068,7 @@ menu {
 		height=20
 	}
 	control {
-		chan="$(P)Path$(N):Go.PROC"
+		chan="$(P)Path$(N):Go.VAL"
 		clr=14
 		bclr=51
 	}
