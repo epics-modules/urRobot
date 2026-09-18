@@ -71,8 +71,16 @@ URDashboard::URDashboard(const char* asyn_port_name, const char* robot_ip, doubl
     bool connected = this->try_connect();
     if (connected) {
         setIntegerParam(isConnectedIndex_, 1);
-        setStringParam(polyscopeVersionIndex_, ur_dashboard_->polyscopeVersion());
-        setStringParam(serialNumberIndex_, ur_dashboard_->getSerialNumber());
+        std::string version_str = ur_dashboard_->polyscopeVersion();
+        setStringParam(polyscopeVersionIndex_, version_str);
+        ur_rtde::PolyScopeVersion version(version_str);
+        if (version.major == 5 && version.minor >= 6) {
+            setStringParam(serialNumberIndex_, ur_dashboard_->getSerialNumber());
+            eseries_ = true;
+        } else {
+            setStringParam(serialNumberIndex_, "3.X.X");
+            eseries_ = false;
+        }
         setStringParam(robotModelIndex_, ur_dashboard_->getRobotModel());
     } else {
         setIntegerParam(isConnectedIndex_, 0);
@@ -94,7 +102,9 @@ void URDashboard::poll() {
                 setStringParam(loadedProgramIndex_, ur_dashboard_->getLoadedProgram());
                 setStringParam(safetyStatusIndex_, ur_dashboard_->safetystatus());
                 setIntegerParam(isProgramSavedIndex_, ur_dashboard_->isProgramSaved());
-                setIntegerParam(isInRemoteControlIndex_, ur_dashboard_->isInRemoteControl());
+                if (eseries_) {
+                    setIntegerParam(isInRemoteControlIndex_, ur_dashboard_->isInRemoteControl());
+                }
             } else {
                 setIntegerParam(isConnectedIndex_, 0);
             }
