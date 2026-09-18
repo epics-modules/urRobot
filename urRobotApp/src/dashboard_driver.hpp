@@ -35,6 +35,7 @@ class URDashboard : public asynPortDriver {
     std::unique_ptr<ur_rtde::DashboardClient> ur_dashboard_;
     double poll_period_; ///< seconds between poll cycles
     std::string robot_ip_; ///< robot's IP address useful for other drivers
+    bool eseries_ = true;
 
     /// Connect (or reconnect) to the Dashboard Server on the robot.
     bool try_connect();
