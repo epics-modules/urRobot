@@ -660,10 +660,6 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
     int function = pasynUser->reason;
     bool comm_ok = true;
 
-    const char* name;
-    getParamName(function, &name);
-    printf("writeOctet called for %s\n", name);
-
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
         comm_ok = false;
