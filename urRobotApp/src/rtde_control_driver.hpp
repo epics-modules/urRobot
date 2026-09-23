@@ -5,8 +5,11 @@
 /// and monitors async motion progress in a poll thread.
 
 #pragma once
+#include <atomic>
 #include <optional>
 #include <asynPortDriver.h>
+#include <epicsEvent.h>
+#include <epicsThread.h>
 #include "rtde_receive_driver.hpp"
 #include "ur_rtde/rtde_control_interface.h"
 #include "ur_rtde/script_client.h"
@@ -37,6 +40,9 @@ class RTDEControl : public asynPortDriver {
     /// Poll thread entry point. Runs forever, checking async motion status
     /// and updating asyn parameters each cycle.
     void poll(void);
+
+    /// Servo function called in a worker thread
+    void servo_worker();
 
   private:
     std::unique_ptr<ur_rtde::RTDEControlInterface> rtde_control_;
@@ -113,12 +119,31 @@ class RTDEControl : public asynPortDriver {
         setIntegerParam(moveLIndex_, 0);
     }
 
+    /// Servo trajectory
+    epicsEventId servo_event_ = nullptr;
+    epicsThreadId servo_thread_id_ = nullptr;
+    std::atomic<bool> servo_should_stop_{false};
+    enum class ServoState {
+        Idle,
+        Loaded,
+        Active,
+        Fault
+    } servo_state_ = ServoState::Idle;
+    bool servo_owns_control() const {
+        return servo_state_ == ServoState::Active;
+    }
+
   protected:
     /// Connection management
     int disconnectIndex_;
     int reconnectIndex_;
     int isConnectedIndex_;
     int isSteadyIndex_;
+
+    /// Servo ownership test controls
+    int servoStartIndex_;
+    int servoStopIndex_;
+    int servoStateIndex_;
 
     /// Joint-space motion
     int moveJIndex_;

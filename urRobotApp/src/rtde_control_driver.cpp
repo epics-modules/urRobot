@@ -176,6 +176,11 @@ static void poll_thread_C(void* pPvt) {
     pRTDEControl->poll();
 }
 
+static void servo_thread_C(void* pPvt) {
+    RTDEControl* pRTDEControl = (RTDEControl*)pPvt;
+    pRTDEControl->servo_worker();
+}
+
 constexpr int NUM_JOINTS = 6;
 constexpr int MAX_ADDR = NUM_JOINTS;
 constexpr int ASYN_INTERFACE_MASK =
@@ -193,6 +198,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("RECONNECT", asynParamInt32, &reconnectIndex_);
     createParam("IS_CONNECTED", asynParamInt32, &isConnectedIndex_);
     createParam("IS_STEADY", asynParamInt32, &isSteadyIndex_);
+    createParam("SERVOJ_START", asynParamInt32, &servoStartIndex_);
+    createParam("SERVOJ_STOP", asynParamInt32, &servoStopIndex_);
+    createParam("SERVOJ_STATE", asynParamInt32, &servoStateIndex_);
     createParam("MOVEJ", asynParamInt32, &moveJIndex_);
     createParam("STOPJ", asynParamInt32, &stopJIndex_);
     createParam("ACTUAL_Q", asynParamFloat64Array, &actualQIndex_);
@@ -265,6 +273,12 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
         spdlog::info("Deferred connection to UR RTDE Control interface");
     }
 
+    servo_event_ = epicsEventMustCreate(epicsEventEmpty);
+
+    servo_thread_id_ = epicsThreadMustCreate("RTDEControlServo", epicsThreadPriorityMedium,
+                                            epicsThreadGetStackSize(epicsThreadStackMedium), (EPICSTHREADFUNC)servo_thread_C,
+                                            this);
+
     epicsThreadCreate("RTDEControlPoller", epicsThreadPriorityLow,
                       epicsThreadGetStackSize(epicsThreadStackMedium), (EPICSTHREADFUNC)poll_thread_C, this);
 }
@@ -275,77 +289,110 @@ void RTDEControl::poll() {
     while (true) {
         lock();
 
-        if (rtde_control_ and rtde_control_->isConnected()) {
-
-            setIntegerParam(isConnectedIndex_, 1);
-            int is_steady = 0;
-            if (!custom_script_running_) {
-                is_steady = rtde_control_->isSteady();
-            }
-            setIntegerParam(isSteadyIndex_, is_steady);
-
+        if (servo_owns_control()) {
             int safety_bits = 1;
             drv_receive_->lock();
             drv_receive_->getIntegerParam(safetyStatusBitsParamId_, &safety_bits);
             drv_receive_->unlock();
             if (safety_bits != 1) {
-                if (pending_motion_) {
-                    debug("Motion stopped due to safety.");
-                    set_motion_task_done();
-                }
-                callParamCallbacks();
-                unlock();
-                epicsThreadSleep(poll_period_);
-                continue;
+                servo_should_stop_.store(true, std::memory_order_relaxed);
+                epicsEventSignal(servo_event_);
             }
+        } else {
+            if (rtde_control_ and rtde_control_->isConnected()) {
 
-            if (pending_motion_) {
-                if (motion_status_ == AsyncMotionStatus::Done) {
-                    // starting new asynchronous motion
-                    if (pending_motion_->type == MotionType::Joint) {
-                        rtde_control_->moveJ(cmd_joints_, joint_speed_, joint_accel_, true);
-                    } else if (pending_motion_->type == MotionType::Cartesian) {
-                        rtde_control_->moveL(cmd_pose_, linear_speed_, linear_accel_, true);
+                setIntegerParam(isConnectedIndex_, 1);
+                int is_steady = 0;
+                if (!custom_script_running_) {
+                    is_steady = rtde_control_->isSteady();
+                }
+                setIntegerParam(isSteadyIndex_, is_steady);
+
+                int safety_bits = 1;
+                drv_receive_->lock();
+                drv_receive_->getIntegerParam(safetyStatusBitsParamId_, &safety_bits);
+                drv_receive_->unlock();
+                if (safety_bits != 1) {
+                    if (pending_motion_) {
+                        debug("Motion stopped due to safety.");
+                        set_motion_task_done();
                     }
-                    motion_status_ = AsyncMotionStatus::WaitingMotion;
-                } else { // async motion task in progress
-                    if (motion_status_ == AsyncMotionStatus::WaitingMotion) {
-                        auto op_status = rtde_control_->getAsyncOperationProgressEx();
-                        if (!op_status.isAsyncOperationRunning()) {
-                            if (pending_motion_->action) {
-                                debug("Waypoint reached. Starting action...");
-                                run_action_val = 1 ^ run_action_val; // ensures action PV processes
-                                setIntegerParam(waypointActionDoneIndex_, 0);
-                                setIntegerParam(runWaypointActionIndex_, run_action_val);
-                                motion_status_ = AsyncMotionStatus::WaitingAction;
-                            } else {
-                                debug("Motion complete.");
+                    callParamCallbacks();
+                    unlock();
+                    epicsThreadSleep(poll_period_);
+                    continue;
+                }
+
+                if (pending_motion_) {
+                    if (motion_status_ == AsyncMotionStatus::Done) {
+                        // starting new asynchronous motion
+                        if (pending_motion_->type == MotionType::Joint) {
+                            rtde_control_->moveJ(cmd_joints_, joint_speed_, joint_accel_, true);
+                        } else if (pending_motion_->type == MotionType::Cartesian) {
+                            rtde_control_->moveL(cmd_pose_, linear_speed_, linear_accel_, true);
+                        }
+                        motion_status_ = AsyncMotionStatus::WaitingMotion;
+                    } else { // async motion task in progress
+                        if (motion_status_ == AsyncMotionStatus::WaitingMotion) {
+                            auto op_status = rtde_control_->getAsyncOperationProgressEx();
+                            if (!op_status.isAsyncOperationRunning()) {
+                                if (pending_motion_->action) {
+                                    debug("Waypoint reached. Starting action...");
+                                    run_action_val = 1 ^ run_action_val; // ensures action PV processes
+                                    setIntegerParam(waypointActionDoneIndex_, 0);
+                                    setIntegerParam(runWaypointActionIndex_, run_action_val);
+                                    motion_status_ = AsyncMotionStatus::WaitingAction;
+                                } else {
+                                    debug("Motion complete.");
+                                    set_motion_task_done();
+                                }
+                            }
+                        } else if (motion_status_ == AsyncMotionStatus::WaitingAction) {
+                            if (custom_script_running_) {
+                                poll_custom_script();
+                            }
+                            int done = 0;
+                            getIntegerParam(waypointActionDoneIndex_, &done);
+                            if (done) {
+                                debug("Waypoint action complete.");
                                 set_motion_task_done();
                             }
                         }
-                    } else if (motion_status_ == AsyncMotionStatus::WaitingAction) {
-                        if (custom_script_running_) {
-                            poll_custom_script();
-                        }
-                        int done = 0;
-                        getIntegerParam(waypointActionDoneIndex_, &done);
-                        if (done) {
-                            debug("Waypoint action complete.");
-                            set_motion_task_done();
-                        }
                     }
+                } else if (custom_script_running_) {
+                    poll_custom_script();
                 }
-            } else if (custom_script_running_) {
-                poll_custom_script();
-            }
 
-        } else {
-            setIntegerParam(isConnectedIndex_, 0);
+            } else {
+                setIntegerParam(isConnectedIndex_, 0);
+            }
         }
 
         callParamCallbacks();
         unlock();
         epicsThreadSleep(poll_period_);
+    }
+}
+
+void RTDEControl::servo_worker() {
+    while (true) {
+        epicsEventMustWait(servo_event_);
+
+        lock();
+        if (!servo_owns_control()) {
+            unlock();
+            continue;
+        }
+        unlock();
+
+        while (!servo_should_stop_.load(std::memory_order_relaxed)) {
+            epicsEventMustWait(servo_event_);
+        }
+
+        lock();
+        servo_state_ = ServoState::Idle;
+        setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
+        unlock();
     }
 }
 
@@ -356,6 +403,11 @@ asynStatus RTDEControl::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
 
     int addr = 0;
     getAddress(pasynUser, &addr);
+
+    if (function == tcpOffsetIndex_ && servo_owns_control()) {
+        spdlog::warn("TCP offset rejected while servo owns RTDE control interface");
+        return asynError;
+    }
 
     if (function == jointCmdIndex_) {
         // convert commanded joint angles to radians
@@ -430,6 +482,34 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     int function = pasynUser->reason;
     bool comm_ok = true;
+
+    if (function == servoStartIndex_) {
+        if (servo_state_ != ServoState::Idle || pending_motion_ || custom_script_running_) {
+            spdlog::warn("Cannot start servo ownership test in current driver state");
+            comm_ok = false;
+            goto skip;
+        }
+
+        servo_should_stop_.store(false, std::memory_order_relaxed);
+        servo_state_ = ServoState::Active;
+        setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
+        epicsEventSignal(servo_event_);
+        goto skip;
+    }
+
+    if (function == servoStopIndex_) {
+        if (servo_owns_control()) {
+            servo_should_stop_.store(true, std::memory_order_relaxed);
+            epicsEventSignal(servo_event_);
+        }
+        goto skip;
+    }
+
+    if (servo_owns_control()) {
+        spdlog::warn("Command rejected while servo owns RTDE control interface");
+        comm_ok = false;
+        goto skip;
+    }
 
     if (function == reconnectIndex_) {
         comm_ok = try_connect();
@@ -617,6 +697,12 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
     int function = pasynUser->reason;
     bool comm_ok = true;
 
+    if (servo_owns_control()) {
+        spdlog::warn("String command rejected while servo owns RTDE control interface");
+        comm_ok = false;
+        goto skip;
+    }
+
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
         comm_ok = false;
@@ -677,6 +763,11 @@ skip:
 
 asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* value, size_t nElements) {
     int function = pasynUser->reason;
+
+    if (servo_owns_control()) {
+        spdlog::warn("Array command rejected while servo owns RTDE control interface");
+        return asynError;
+    }
 
     if (!rtde_control_ || !rtde_control_->isConnected()) {
         spdlog::error("RTDE Control interface not initialized or disconnected");

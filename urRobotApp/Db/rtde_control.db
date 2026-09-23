@@ -934,3 +934,34 @@ record(bi, "$(P)Control:CustomScriptError")
     field(ONAM, "Error")
     field(SCAN, "I/O Intr")
 }
+
+
+#======================
+# Servo Trajectory
+#======================
+record(bo, "$(P)Control:ServoStart")
+{
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_START")
+}
+
+record(bo, "$(P)Control:ServoStop")
+{
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_STOP")
+}
+
+record(mbbi, "$(P)Control:ServoState")
+{
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(ZRVL, 0)
+    field(ONVL, 1)
+    field(TWVL, 2)
+    field(THVL, 3)
+    field(ZRST, "Idle")
+    field(ONST, "Loaded")
+    field(TWST, "Active")
+    field(THST, "Fault")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_STATE")
+}
