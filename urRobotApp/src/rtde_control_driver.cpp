@@ -195,11 +195,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("IS_STEADY", asynParamInt32, &isSteadyIndex_);
     createParam("MOVEJ", asynParamInt32, &moveJIndex_);
     createParam("STOPJ", asynParamInt32, &stopJIndex_);
-    createParam("ACTUAL_Q", asynParamFloat64Array, &actualQIndex_);
     createParam("JOINT_CMD", asynParamFloat64, &jointCmdIndex_);
     createParam("MOVEL", asynParamInt32, &moveLIndex_);
     createParam("STOPL", asynParamInt32, &stopLIndex_);
-    createParam("ACTUAL_TCP_POSE", asynParamFloat64Array, &actualTCPPoseIndex_);
     createParam("POSE_CMD", asynParamFloat64, &poseCmdIndex_);
     createParam("TCP_OFFSET", asynParamFloat64, &tcpOffsetIndex_);
     createParam("REUPLOAD_CONTROL_SCRIPT", asynParamInt32, &reuploadCtrlScriptIndex_);
