@@ -1,6 +1,8 @@
 #include <atomic>
 #include <optional>
 #include <utility>
+#include <limits>
+#include <algorithm>
 #include <array>
 #include <exception>
 #include <filesystem>
@@ -704,7 +706,13 @@ asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* val
         for (auto& j : joints) {
             j *= M_PI / 180.0; // convert to rad
         }
-        pose = rtde_control_->getForwardKinematics(joints, rtde_control_->getTCPOffset());
+
+        auto tcp_offset = rtde_control_->getTCPOffset();
+        if (std::all_of(tcp_offset.begin(), tcp_offset.end(),
+                        [](double value) { return value == 0.0; })) {
+            tcp_offset[0] = std::numeric_limits<double>::epsilon();
+        }
+        pose = rtde_control_->getForwardKinematics(joints, tcp_offset);
         for (size_t i = 0; i < 3; i++) {
             pose[i] *= 1000; // convert m -> mm
         }
