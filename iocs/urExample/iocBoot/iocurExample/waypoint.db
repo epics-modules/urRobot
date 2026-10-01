@@ -1,0 +1,123 @@
+record(ao, "$(P)Waypoint:$(N):P0") {
+    field(EGU, "deg")
+    field(PREC, 4)
+}
+record(ao, "$(P)Waypoint:$(N):P1") {
+    field(PREC, 4)
+}
+record(ao, "$(P)Waypoint:$(N):P2") {
+    field(PREC, 4)
+}
+record(ao, "$(P)Waypoint:$(N):P3") {
+    field(PREC, 4)
+}
+record(ao, "$(P)Waypoint:$(N):P4") {
+    field(PREC, 4)
+}
+record(ao, "$(P)Waypoint:$(N):P5") {
+    field(PREC, 4)
+}
+
+record(bo, "$(P)Waypoint:$(N):Space") {
+    field(ZNAM, "Joint")
+    field(ONAM, "Cartesian")
+    field(FLNK, "$(P)Waypoint:$(N):change_space_.PROC")
+}
+
+record(luascript, "$(P)Waypoint:$(N):change_space_") {
+    field(INPA, "$(P)Waypoint:$(N):Space")
+    field(INPB, "$(P)Waypoint:$(N):P0")
+    field(INPC, "$(P)Waypoint:$(N):P1")
+    field(INPD, "$(P)Waypoint:$(N):P2")
+    field(INPE, "$(P)Waypoint:$(N):P3")
+    field(INPF, "$(P)Waypoint:$(N):P4")
+    field(INPG, "$(P)Waypoint:$(N):P5")
+    field(INAA, "$(P)Waypoint:$(N):P0.EGU")
+    field(CODE, "@waypoint.lua change_space({P='$(P)',N='$(N)'})")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):request_fk_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):P0 NPP NMS")
+    field(INPB, "$(P)Waypoint:$(N):P1 NPP NMS")
+    field(INPC, "$(P)Waypoint:$(N):P2 NPP NMS")
+    field(INPD, "$(P)Waypoint:$(N):P3 NPP NMS")
+    field(INPE, "$(P)Waypoint:$(N):P4 NPP NMS")
+    field(INPF, "$(P)Waypoint:$(N):P5 NPP NMS")
+    field(CALC, "(IX=0)*A+(IX=1)*B+(IX=2)*C+(IX=3)*D+(IX=4)*E+(IX=5)*F")
+    field(OUT, "$(P)Control:FKRequest PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):request_ik_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):P0 NPP NMS")
+    field(INPB, "$(P)Waypoint:$(N):P1 NPP NMS")
+    field(INPC, "$(P)Waypoint:$(N):P2 NPP NMS")
+    field(INPD, "$(P)Waypoint:$(N):P3 NPP NMS")
+    field(INPE, "$(P)Waypoint:$(N):P4 NPP NMS")
+    field(INPF, "$(P)Waypoint:$(N):P5 NPP NMS")
+    field(CALC, "(IX=0)*A+(IX=1)*B+(IX=2)*C+(IX=3)*D+(IX=4)*E+(IX=5)*F")
+    field(OUT, "$(P)Control:IKRequest PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_0_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[0,0]):DBL(AA[0,0])")
+    field(OUT, "$(P)Waypoint:$(N):P0 PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_1_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[1,1]):DBL(AA[1,1])")
+    field(OUT, "$(P)Waypoint:$(N):P1 PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_2_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[2,2]):DBL(AA[2,2])")
+    field(OUT, "$(P)Waypoint:$(N):P2 PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_3_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[3,3]):DBL(AA[3,3])")
+    field(OUT, "$(P)Waypoint:$(N):P3 PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_4_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[4,4]):DBL(AA[4,4])")
+    field(OUT, "$(P)Waypoint:$(N):P4 PP")
+}
+
+record(acalcout, "$(P)Waypoint:$(N):copy_result_5_") {
+    field(NELM, 6)
+    field(NUSE, 6)
+    field(INPA, "$(P)Waypoint:$(N):Space NPP NMS")
+    field(INAA, "$(P)Control:IKResult CP NMS")
+    field(INBB, "$(P)Control:FKResult CP NMS")
+    field(CALC, "A?DBL(BB[5,5]):DBL(AA[5,5])")
+    field(OUT, "$(P)Waypoint:$(N):P5 PP")
+}
