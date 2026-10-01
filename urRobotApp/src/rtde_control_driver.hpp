@@ -149,7 +149,6 @@ class RTDEControl : public asynPortDriver {
     int moveJIndex_;
     int stopJIndex_;
     int jointCmdIndex_; ///< per-joint commanded angle (addr 0-5)
-    int actualQIndex_;  ///< actual joint angles (float64 array)
     int jointSpeedIndex_;
     int jointAccelIndex_;
     int jointBlendIndex_;
@@ -158,7 +157,6 @@ class RTDEControl : public asynPortDriver {
     int moveLIndex_;
     int stopLIndex_;
     int poseCmdIndex_;       ///< per-axis commanded pose (addr 0-5)
-    int actualTCPPoseIndex_; ///< actual TCP pose (float64 array)
     int tcpOffsetIndex_;     ///< per-axis TCP offset (addr 0-5)
     int linearSpeedIndex_;
     int linearAccelIndex_;
