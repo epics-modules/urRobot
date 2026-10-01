@@ -1,6 +1,8 @@
 #include <atomic>
 #include <optional>
 #include <utility>
+#include <limits>
+#include <algorithm>
 #include <array>
 #include <exception>
 #include <filesystem>
@@ -195,11 +197,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("IS_STEADY", asynParamInt32, &isSteadyIndex_);
     createParam("MOVEJ", asynParamInt32, &moveJIndex_);
     createParam("STOPJ", asynParamInt32, &stopJIndex_);
-    createParam("ACTUAL_Q", asynParamFloat64Array, &actualQIndex_);
     createParam("JOINT_CMD", asynParamFloat64, &jointCmdIndex_);
     createParam("MOVEL", asynParamInt32, &moveLIndex_);
     createParam("STOPL", asynParamInt32, &stopLIndex_);
-    createParam("ACTUAL_TCP_POSE", asynParamFloat64Array, &actualTCPPoseIndex_);
     createParam("POSE_CMD", asynParamFloat64, &poseCmdIndex_);
     createParam("TCP_OFFSET", asynParamFloat64, &tcpOffsetIndex_);
     createParam("REUPLOAD_CONTROL_SCRIPT", asynParamInt32, &reuploadCtrlScriptIndex_);
@@ -617,10 +617,6 @@ asynStatus RTDEControl::writeOctet(asynUser* pasynUser, const char* value, size_
     int function = pasynUser->reason;
     bool comm_ok = true;
 
-    const char* name;
-    getParamName(function, &name);
-    printf("writeOctet called for %s\n", name);
-
     if (!rtde_control_) {
         spdlog::error("RTDE Control interface not initialized");
         comm_ok = false;
@@ -710,7 +706,13 @@ asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* val
         for (auto& j : joints) {
             j *= M_PI / 180.0; // convert to rad
         }
-        pose = rtde_control_->getForwardKinematics(joints, rtde_control_->getTCPOffset());
+
+        auto tcp_offset = rtde_control_->getTCPOffset();
+        if (std::all_of(tcp_offset.begin(), tcp_offset.end(),
+                        [](double value) { return value == 0.0; })) {
+            tcp_offset[0] = std::numeric_limits<double>::epsilon();
+        }
+        pose = rtde_control_->getForwardKinematics(joints, tcp_offset);
         for (size_t i = 0; i < 3; i++) {
             pose[i] *= 1000; // convert m -> mm
         }

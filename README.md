@@ -16,14 +16,15 @@
      </a>
 </p>
 
-EPICS support module for controlling Universal Robots e-series arms (UR3e, UR5e)
+EPICS support module for controlling robotic arms from Universal Robots.
 
 ## Key Features
-- Access to large number of UR robot commands and status information
+- Access to large number of robot commands and status information
 - Control individual joints and end-effector position
 - Define joint or Cartesian space waypoints with associated waypoint actions in EPICS PVs
 - Define paths to move through a series of waypoints
 - GUIs in MEDM, caQtDM, and CSS-Phoebus
+- Supports all e-Series arms and CB-Series from CB3/CB3.1 software 3.3
 
 ## Documentation
 Full build instructions, IOC integration, usage guides, and PV reference:
