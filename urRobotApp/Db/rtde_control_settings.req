@@ -4,10 +4,19 @@ $(P)Control:J3TweakVal
 $(P)Control:J4TweakVal
 $(P)Control:J5TweakVal
 $(P)Control:J6TweakVal
+$(P)Control:J1CmdU.DESC
+$(P)Control:J2CmdU.DESC
+$(P)Control:J3CmdU.DESC
+$(P)Control:J4CmdU.DESC
+$(P)Control:J5CmdU.DESC
+$(P)Control:J6CmdU.DESC
 
 $(P)Control:PoseXTweakVal.VAL
 $(P)Control:PoseYTweakVal.VAL
 $(P)Control:PoseZTweakVal.VAL
+$(P)Control:PoseXCmdU.DESC
+$(P)Control:PoseYCmdU.DESC
+$(P)Control:PoseZCmdU.DESC
 
 $(P)Control:TCPOffset_X.VAL
 $(P)Control:TCPOffset_Y.VAL

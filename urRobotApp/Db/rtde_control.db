@@ -332,7 +332,7 @@ record(ao, "$(P)Control:J1Cmd")
 }
 record(ao, "$(P)Control:J1CmdU")
 {
-    field(DESC, "Sets J1 target and executes moveJ")
+    field(DESC, "Joint 1")
     field(OUT,  "$(P)Control:J1Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -373,7 +373,7 @@ record(ao, "$(P)Control:J2Cmd")
 }
 record(ao, "$(P)Control:J2CmdU")
 {
-    field(DESC, "Sets J2 target and executes moveJ")
+    field(DESC, "Joint 2")
     field(OUT,  "$(P)Control:J2Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -414,7 +414,7 @@ record(ao, "$(P)Control:J3Cmd")
 }
 record(ao, "$(P)Control:J3CmdU")
 {
-    field(DESC, "Sets J3 target and executes moveJ")
+    field(DESC, "Joint 3")
     field(OUT,  "$(P)Control:J3Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -455,7 +455,7 @@ record(ao, "$(P)Control:J4Cmd")
 }
 record(ao, "$(P)Control:J4CmdU")
 {
-    field(DESC, "Sets J4 target and executes moveJ")
+    field(DESC, "Joint 4")
     field(OUT,  "$(P)Control:J4Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -496,7 +496,7 @@ record(ao, "$(P)Control:J5Cmd")
 }
 record(ao, "$(P)Control:J5CmdU")
 {
-    field(DESC, "Sets J5 target and executes moveJ")
+    field(DESC, "Joint 5")
     field(OUT,  "$(P)Control:J5Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -537,7 +537,7 @@ record(ao, "$(P)Control:J6Cmd")
 }
 record(ao, "$(P)Control:J6CmdU")
 {
-    field(DESC, "Sets J6 target and executes moveJ")
+    field(DESC, "Joint 6")
     field(OUT,  "$(P)Control:J6Cmd.VAL PP")
     field(EGU, "deg")
     field(PREC, 4)
@@ -662,7 +662,7 @@ record(ao, "$(P)Control:PoseXCmd")
 }
 record(ao, "$(P)Control:PoseXCmdU")
 {
-    field(DESC, "Sets X target and executes moveL")
+    field(DESC, "X")
     field(OUT,  "$(P)Control:PoseXCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
@@ -705,7 +705,7 @@ record(ao, "$(P)Control:PoseYCmd")
 }
 record(ao, "$(P)Control:PoseYCmdU")
 {
-    field(DESC, "Sets Y target and executes moveL")
+    field(DESC, "Y")
     field(OUT,  "$(P)Control:PoseYCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
@@ -749,7 +749,7 @@ record(ao, "$(P)Control:PoseZCmd")
 }
 record(ao, "$(P)Control:PoseZCmdU")
 {
-    field(DESC, "Sets Z target and executes moveL")
+    field(DESC, "Z")
     field(OUT,  "$(P)Control:PoseZCmd.VAL PP")
     field(EGU, "mm")
     field(PREC, 4)
