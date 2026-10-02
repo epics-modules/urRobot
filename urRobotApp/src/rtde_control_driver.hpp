@@ -123,6 +123,7 @@ class RTDEControl : public asynPortDriver {
     epicsEventId servo_event_ = nullptr;
     epicsThreadId servo_thread_id_ = nullptr;
     std::atomic<bool> servo_should_stop_{false};
+    std::vector<std::vector<double>> servo_trajectory_;
     enum class ServoState {
         Idle,
         Loaded,
