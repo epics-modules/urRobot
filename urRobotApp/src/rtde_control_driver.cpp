@@ -3,6 +3,7 @@
 #include <utility>
 #include <limits>
 #include <algorithm>
+#include <chrono>
 #include <array>
 #include <exception>
 #include <filesystem>
@@ -200,9 +201,10 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("RECONNECT", asynParamInt32, &reconnectIndex_);
     createParam("IS_CONNECTED", asynParamInt32, &isConnectedIndex_);
     createParam("IS_STEADY", asynParamInt32, &isSteadyIndex_);
-    createParam("SERVOJ_START", asynParamInt32, &servoStartIndex_);
-    createParam("SERVOJ_STOP", asynParamInt32, &servoStopIndex_);
-    createParam("SERVOJ_STATE", asynParamInt32, &servoStateIndex_);
+    createParam("SERVO_START", asynParamInt32, &servoStartIndex_);
+    createParam("SERVO_STOP", asynParamInt32, &servoStopIndex_);
+    createParam("SERVO_STATE", asynParamInt32, &servoStateIndex_);
+    createParam("SERVO_TRAJ", asynParamFloat64Array, &servoTrajIndex_);
     createParam("MOVEJ", asynParamInt32, &moveJIndex_);
     createParam("STOPJ", asynParamInt32, &stopJIndex_);
     createParam("JOINT_CMD", asynParamFloat64, &jointCmdIndex_);
@@ -383,11 +385,34 @@ void RTDEControl::servo_worker() {
             unlock();
             continue;
         }
+        setIntegerParam(isSteadyIndex_, 0);
+        callParamCallbacks();
         unlock();
 
-        while (!servo_should_stop_.load(std::memory_order_relaxed)) {
-            epicsEventMustWait(servo_event_);
+        // epicsEventMustWait(servo_event_);
+        // Execute 500Hz control loop for 2 seconds, each cycle is ~2ms
+        std::vector<double> joint_q = {-1.54, -1.83, -2.28, -0.59, 1.60, 0.023};
+        double velocity = 0.5;
+        double acceleration = 0.5;
+        double dt = 1.0/500; // 2ms
+        double lookahead_time = 0.1;
+        double gain = 300;
+        printf("[servo worker] moving to initial position with moveJ\n");
+        rtde_control_->moveJ(joint_q); // TODO: remove this
+        printf("[servo worker] starting servo loop\n");
+        for (unsigned int i = 0; i < 2000; i++) {
+            if (servo_should_stop_.load()) {
+                break;
+            }
+            std::chrono::steady_clock::time_point t_start = rtde_control_->initPeriod();
+            rtde_control_->servoJ(joint_q, velocity, acceleration, dt, lookahead_time, gain);
+            joint_q[0] += 0.001;
+            joint_q[1] += 0.001;
+            rtde_control_->waitPeriod(t_start);
         }
+
+        printf("[servo worker] done\n");
+        rtde_control_->servoStop();
 
         lock();
         servo_state_ = ServoState::Idle;
@@ -499,8 +524,9 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function == servoStopIndex_) {
         if (servo_owns_control()) {
+            printf("Stopping servo motion\n");
             servo_should_stop_.store(true, std::memory_order_relaxed);
-            epicsEventSignal(servo_event_);
+            // epicsEventSignal(servo_event_);
         }
         goto skip;
     }
@@ -768,6 +794,10 @@ asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* val
         spdlog::warn("Array command rejected while servo owns RTDE control interface");
         return asynError;
     }
+
+    // if (function == servoTrajIndex_) {
+        //
+    // }
 
     if (!rtde_control_ || !rtde_control_->isConnected()) {
         spdlog::error("RTDE Control interface not initialized or disconnected");

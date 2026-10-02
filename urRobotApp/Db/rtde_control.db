@@ -942,13 +942,23 @@ record(bi, "$(P)Control:CustomScriptError")
 record(bo, "$(P)Control:ServoStart")
 {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_START")
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_START")
 }
 
 record(bo, "$(P)Control:ServoStop")
 {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_STOP")
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_STOP")
+}
+
+record(aao, "$(P)Control:ServoTraj") {
+    field(DESC, "Joint angles trajectory")
+    field(DTYP, "asynFloat64ArrayOut")
+    field(FTVL, "DOUBLE")
+    field(NELM, 30000)
+    field(PREC, 4)
+    field(EGU, "deg")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_TRAJ")
 }
 
 record(mbbi, "$(P)Control:ServoState")
@@ -963,5 +973,5 @@ record(mbbi, "$(P)Control:ServoState")
     field(ONST, "Loaded")
     field(TWST, "Active")
     field(THST, "Fault")
-    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVOJ_STATE")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_STATE")
 }

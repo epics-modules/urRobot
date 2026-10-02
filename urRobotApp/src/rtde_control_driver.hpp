@@ -144,6 +144,7 @@ class RTDEControl : public asynPortDriver {
     int servoStartIndex_;
     int servoStopIndex_;
     int servoStateIndex_;
+    int servoTrajIndex_;
 
     /// Joint-space motion
     int moveJIndex_;
