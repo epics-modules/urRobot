@@ -215,33 +215,29 @@ record(calcout, "$(P)WaypointJ:$(N):moveJ_IfEnabled")
 
 record(seq, "$(P)WaypointJ:$(N):moveJ_seq1")
 {
-    # Disable AutoMoveJ
-    field(DOL0, "0")
-    field(LNK0, "$(P)Control:AutoMoveJ PP")
-
     # Set Control:JxCmd to WaypointJ:$(N):Jx
-    field(DOL1, "$(P)WaypointJ:$(N):J1")
-    field(LNK1, "$(P)Control:J1Cmd PP")
-    field(DOL2, "$(P)WaypointJ:$(N):J2")
-    field(LNK2, "$(P)Control:J2Cmd PP")
-    field(DOL3, "$(P)WaypointJ:$(N):J3")
-    field(LNK3, "$(P)Control:J3Cmd PP")
-    field(DOL4, "$(P)WaypointJ:$(N):J4")
-    field(LNK4, "$(P)Control:J4Cmd PP")
-    field(DOL5, "$(P)WaypointJ:$(N):J5")
-    field(LNK5, "$(P)Control:J5Cmd PP")
-    field(DOL6, "$(P)WaypointJ:$(N):J6")
-    field(LNK6, "$(P)Control:J6Cmd PP")
+    field(DOL0, "$(P)WaypointJ:$(N):J1")
+    field(LNK0, "$(P)Control:J1Cmd PP")
+    field(DOL1, "$(P)WaypointJ:$(N):J2")
+    field(LNK1, "$(P)Control:J2Cmd PP")
+    field(DOL2, "$(P)WaypointJ:$(N):J3")
+    field(LNK2, "$(P)Control:J3Cmd PP")
+    field(DOL3, "$(P)WaypointJ:$(N):J4")
+    field(LNK3, "$(P)Control:J4Cmd PP")
+    field(DOL4, "$(P)WaypointJ:$(N):J5")
+    field(LNK4, "$(P)Control:J5Cmd PP")
+    field(DOL5, "$(P)WaypointJ:$(N):J6")
+    field(LNK5, "$(P)Control:J6Cmd PP")
+
+    field(DOL6, "1")
+    field(LNK6, "$(P)WaypointJ:$(N):Busy PP")
 
     field(DOL7, "1")
-    field(LNK7, "$(P)WaypointJ:$(N):Busy PP")
-
-    field(DOL8, "1")
-    field(LNK8, "$(P)waypoint_clear_reached.PROC")
-    field(DOL9, 0)
-    field(LNK9, "$(P)waypoint_active_type.VAL PP")
-    field(DOLA, "$(N)")
-    field(LNKA, "$(P)waypoint_active_number.VAL PP")
+    field(LNK7, "$(P)waypoint_clear_reached.PROC")
+    field(DOL8, 0)
+    field(LNK8, "$(P)waypoint_active_type.VAL PP")
+    field(DOL9, "$(N)")
+    field(LNK9, "$(P)waypoint_active_number.VAL PP")
 
     field(FLNK, "$(P)WaypointJ:$(N):moveJ_seq2.PROC")
 }
