@@ -159,6 +159,7 @@ record(ai, "$(P)Receive:ActualRobotCurrent")
 
 record(waveform, "$(P)Receive:ActualJointPositions")
 {
+    alias("$(P)Receive:Joints")
     field(DESC, "Actual joint positions")
     field(DTYP, "asynFloat64ArrayIn")
     field(FTVL, "DOUBLE")
@@ -254,6 +255,7 @@ record(waveform, "$(P)Receive:JointControlCurrents")
 
 record(waveform, "$(P)Receive:ActualTCPPose")
 {
+    alias("$(P)Receive:Pose")
     field(DESC, "Actual TCP pose (x,y,z,r,p,y)")
     field(DTYP, "asynFloat64ArrayIn")
     field(FTVL, "DOUBLE")
