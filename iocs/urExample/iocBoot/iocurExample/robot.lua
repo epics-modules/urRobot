@@ -102,8 +102,7 @@ function robot.run_program(prefix, record_name, script_name)
             PREFIX = prefix,
             G_RECORD_NAME = record_name
         },
-        "async=true"
-        -- {async = true}
+        {async = 1}
     )
     if err ~= nil then
         error(err, 2)
