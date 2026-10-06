@@ -17,7 +17,7 @@ local function wait_motion_done(count_before, timeout)
     local deadline = osi.monotonic() + timeout
 
     while true do
-        local safety, err = epics.get("urExample:Receive:SafetyStatusBits")
+        local safety, err = epics.get(PREFIX .. "Receive:SafetyStatusBits")
         if safety == nil then
             error("Could not read safety status: " .. tostring(err), 2)
         end
@@ -30,8 +30,8 @@ local function wait_motion_done(count_before, timeout)
         end
 
         if osi.monotonic() >= deadline then
-            epics.put("urExample:Control:Stop", 1)
-            error(string.format("Timed out after %.1f seconds waiting for moveJ", timeout), 2)
+            epics.put(PREFIX .. "Control:Stop", 1)
+            error(string.format("Timed out after %.1f seconds waiting for move", timeout), 2)
         end
 
         osi.sleep(0.05)
@@ -42,10 +42,10 @@ function robot.moveJ(target, timeout)
     timeout = timeout or 300.0
 
     if type(target) ~= "table" or #target ~= 6 then
-        error("moveJ target must contain exactly six joint positions", 2)
+        error("moveJ target must be length 6", 2)
     end
 
-    local done, err = epics.get("urExample:Control:AsyncMoveDone")
+    local done, err = epics.get(PREFIX .. "Control:AsyncMoveDone")
     if done == nil then
         error("Could not read AsyncMoveDone: " .. tostring(err), 2)
     end
@@ -57,19 +57,50 @@ function robot.moveJ(target, timeout)
         if type(value) ~= "number" then
             error(string.format("moveJ target element %d is not a number", i), 2)
         end
-        epics.put(string.format("urExample:Control:J%dCmd", i), value)
+        epics.put(string.format("%sControl:J%dCmd", PREFIX, i), value)
     end
 
     local count_before = get_motion_done_count()
 
-    epics.put("urExample:Control:moveJ", 1)
+    epics.put(PREFIX .. "Control:moveJ", 1)
     wait_motion_done(count_before, timeout)
 end
 
-function robot.run_program(record_name, script_name)
+function robot.moveL(target, timeout)
+    timeout = timeout or 300.0
+
+    if type(target) ~= "table" or #target ~= 6 then
+        error("moveL target must be length 6", 2)
+    end
+
+    local done, err = epics.get(PREFIX .. "Control:AsyncMoveDone")
+    if done == nil then
+        error("Could not read AsyncMoveDone: " .. tostring(err), 2)
+    end
+    if done ~= 1 then
+        error("Cannot start moveL: another motion is active", 2)
+    end
+
+    for i, value in ipairs(target) do
+        if type(value) ~= "number" then
+            error(string.format("moveL target element %d is not a number", i), 2)
+        end
+        epics.put(string.format("%sControl:Pose%dCmd", PREFIX, i), value)
+    end
+
+    local count_before = get_motion_done_count()
+
+    epics.put(PREFIX .. "Control:moveL", 1)
+    wait_motion_done(count_before, timeout)
+end
+
+function robot.run_program(prefix, record_name, script_name)
     local err = luaRunFile(
         script_name,
-        {G_RECORD_NAME = record_name},
+        {
+            PREFIX = prefix,
+            G_RECORD_NAME = record_name
+        },
         {async = true}
     )
     if err ~= nil then
@@ -86,20 +117,42 @@ end
 -- During IOC startup, G_RECORD_NAME is nil, so robot.register() creates the
 -- luascript record. The record's CODE field calls run_program(record_name).
 --
--- At runtime, run_program() executes user_program.lua again and injects the
+-- At runtime, run_program() executes the calling script again and injects the
 -- selected record name as G_RECORD_NAME. Each robot.register() call is then
 -- evaluated, but only the function whose record_name matches G_RECORD_NAME is
--- executed. No records are created during this asynchronous execution.
+-- executed. Automatic command/readback synchronization is disabled while that
+-- function runs and restored afterward, including when the function fails.
 function robot.register(record_name, func)
-    local info = debug.getinfo(2, "S")
-    local script_name = info.source:sub(2)
     if G_RECORD_NAME == nil then
+        -- Get the name of the user script
+        local info = debug.getinfo(2, "S")
+        if info == nil or info.source:sub(1,1) ~= "@" then
+            error("robot.register must be called directly from a lua file", 2)
+        end
+        local script_name = info.source:sub(2)
+
+        -- Create the EPICS luascript record
         db.record("luascript", record_name) {
-            CODE = string.format("return require('robot').run_program(%q, %q)", record_name, script_name),
+            CODE = string.format("return require('robot').run_program(%q, %q, %q)", PREFIX, record_name, script_name),
             SYNC = "Sync",
         }
     elseif G_RECORD_NAME == record_name then
-        return func()
+        local joint_sync_disa_pv = PREFIX .. "Control:sync_joint_cmd.DISA"
+        local pose_sync_disa_pv = PREFIX .. "Control:sync_pose_cmd.DISA"
+
+        epics.put(joint_sync_disa_pv, 1)
+        epics.put(pose_sync_disa_pv, 1)
+
+        local result = table.pack(xpcall(func, debug.traceback))
+
+        epics.put(joint_sync_disa_pv, 0)
+        epics.put(pose_sync_disa_pv, 0)
+
+        if not result[1] then
+            error(result[2], 0)
+        end
+
+        return table.unpack(result, 2, result.n)
     end
 end
 
