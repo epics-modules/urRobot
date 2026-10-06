@@ -1,6 +1,7 @@
 local db = require("db")
 local epics = require("epics")
 local asyn = require("asyn")
+local event = require("event")
 local osi = require("osi")
 
 local robot = {}
@@ -101,7 +102,8 @@ function robot.run_program(prefix, record_name, script_name)
             PREFIX = prefix,
             G_RECORD_NAME = record_name
         },
-        {async = true}
+        "async=true"
+        -- {async = true}
     )
     if err ~= nil then
         error(err, 2)
@@ -120,7 +122,8 @@ end
 -- At runtime, run_program() executes the calling script again and injects the
 -- selected record name as G_RECORD_NAME. Each robot.register() call is then
 -- evaluated, but only the function whose record_name matches G_RECORD_NAME is
--- executed. Automatic command/readback synchronization is disabled while that
+-- executed. Concurrent programs for the same robot prefix are rejected.
+-- Automatic command/readback synchronization is disabled while the selected
 -- function runs and restored afterward, including when the function fails.
 function robot.register(record_name, func)
     if G_RECORD_NAME == nil then
@@ -131,12 +134,19 @@ function robot.register(record_name, func)
         end
         local script_name = info.source:sub(2)
 
+        event.flag("robot-program-lock:" .. PREFIX):set()
+
         -- Create the EPICS luascript record
         db.record("luascript", record_name) {
             CODE = string.format("return require('robot').run_program(%q, %q, %q)", PREFIX, record_name, script_name),
             SYNC = "Sync",
         }
     elseif G_RECORD_NAME == record_name then
+        local program_lock = event.flag("robot-program-lock:" .. PREFIX)
+        if not program_lock:testAndClear() then
+            error("Another robot program is already running", 2)
+        end
+
         local joint_sync_disa_pv = PREFIX .. "Control:sync_joint_cmd.DISA"
         local pose_sync_disa_pv = PREFIX .. "Control:sync_pose_cmd.DISA"
 
@@ -147,6 +157,7 @@ function robot.register(record_name, func)
 
         epics.put(joint_sync_disa_pv, 0)
         epics.put(pose_sync_disa_pv, 0)
+        program_lock:set()
 
         if not result[1] then
             error(result[2], 0)
