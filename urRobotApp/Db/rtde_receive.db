@@ -266,6 +266,7 @@ record(waveform, "$(P)Receive:ActualTCPPose")
 
 record(ai, "$(P)Receive:PoseX")
 {
+    alias("$(P)Receive:Pose1")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),0,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
@@ -274,6 +275,7 @@ record(ai, "$(P)Receive:PoseX")
 }
 record(ai, "$(P)Receive:PoseY")
 {
+    alias("$(P)Receive:Pose2")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),1,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
@@ -282,6 +284,7 @@ record(ai, "$(P)Receive:PoseY")
 }
 record(ai, "$(P)Receive:PoseZ")
 {
+    alias("$(P)Receive:Pose3")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),2,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
@@ -290,6 +293,7 @@ record(ai, "$(P)Receive:PoseZ")
 }
 record(ai, "$(P)Receive:PoseRx")
 {
+    alias("$(P)Receive:Pose4")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),3,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
@@ -298,6 +302,7 @@ record(ai, "$(P)Receive:PoseRx")
 }
 record(ai, "$(P)Receive:PoseRy")
 {
+    alias("$(P)Receive:Pose5")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),4,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
@@ -306,6 +311,7 @@ record(ai, "$(P)Receive:PoseRy")
 }
 record(ai, "$(P)Receive:PoseRz")
 {
+    alias("$(P)Receive:Pose6")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),5,$(TIMEOUT=1))ACTUAL_TCP_POSE")
     field(PREC, 4)
