@@ -227,6 +227,16 @@ function M.get_pose()
     return value
 end
 
+function M.open_gripper()
+    epics.put(g_prefix .. "RobotiqGripper:Open", 1)
+    wait_pv(g_prefix .. "RobotiqGripper:Open", function(value) return value == 0 end, 5.0)
+end
+
+function M.close_gripper()
+    epics.put(g_prefix .. "RobotiqGripper:Close", 1)
+    wait_pv(g_prefix .. "RobotiqGripper:Close", function(value) return value == 0 end, 5.0)
+end
+
 --- Starts a registered program in an asynchronous Lua state.
 -- @function run_program
 -- @tparam string prefix Robot PV prefix.
