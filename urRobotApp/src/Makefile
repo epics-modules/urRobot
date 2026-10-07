@@ -32,6 +32,9 @@ urRobot_LIBS += rtde
 urRobot_LIBS += $(EPICS_BASE_IOC_LIBS)
 urRobot_SYS_LIBS += boost_thread
 
+# Install lua library
+LIB_INSTALLS += ../lua/ur_robot.lua
+
 # Tool for calibrating the Robotiq Gripper
 PROD += calibrate_gripper
 calibrate_gripper_SRCS += calibrate_gripper.cpp

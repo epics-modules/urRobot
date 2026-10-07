@@ -70,6 +70,14 @@ record(bi, "$(P)Control:AsyncMoveDone")
     field(SCAN, "I/O Intr")
 }
 
+record(longin, "$(P)Control:motion_done_count")
+{
+    field(DESC, "Increments each time motion completes")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))MOTION_DONE_COUNT")
+    field(SCAN, "I/O Intr")
+}
+
 record(calcout, "$(P)Control:moving_calc")
 {
     field(INPA, "$(P)Control:Steady.VAL CP")
