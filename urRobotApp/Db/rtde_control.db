@@ -663,6 +663,7 @@ record(sseq, "$(P)Control:sync_pose_cmd")
 
 record(ao, "$(P)Control:PoseXCmd")
 {
+    alias("$(P)Control:Pose1Cmd")
     field(DESC, "Commanded TCP X")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),0,$(TIMEOUT=1))POSE_CMD")
@@ -672,6 +673,7 @@ record(ao, "$(P)Control:PoseXCmd")
 }
 record(ao, "$(P)Control:PoseXCmdU")
 {
+    alias("$(P)Control:Pose1CmdU")
     field(DESC, "X")
     field(OUT,  "$(P)Control:PoseXCmd.VAL PP")
     field(EGU, "mm")
@@ -706,6 +708,7 @@ record(calcout, "$(P)Control:PoseXTweakRev")
 
 record(ao, "$(P)Control:PoseYCmd")
 {
+    alias("$(P)Control:Pose2Cmd")
     field(DESC, "Commanded TCP Y")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),1,$(TIMEOUT=1))POSE_CMD")
@@ -715,6 +718,7 @@ record(ao, "$(P)Control:PoseYCmd")
 }
 record(ao, "$(P)Control:PoseYCmdU")
 {
+    alias("$(P)Control:Pose2CmdU")
     field(DESC, "Y")
     field(OUT,  "$(P)Control:PoseYCmd.VAL PP")
     field(EGU, "mm")
@@ -750,6 +754,7 @@ record(calcout, "$(P)Control:PoseYTweakRev")
 
 record(ao, "$(P)Control:PoseZCmd")
 {
+    alias("$(P)Control:Pose3Cmd")
     field(DESC, "Commanded TCP Z")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),2,$(TIMEOUT=1))POSE_CMD")
@@ -759,6 +764,7 @@ record(ao, "$(P)Control:PoseZCmd")
 }
 record(ao, "$(P)Control:PoseZCmdU")
 {
+    alias("$(P)Control:Pose3CmdU")
     field(DESC, "Z")
     field(OUT,  "$(P)Control:PoseZCmd.VAL PP")
     field(EGU, "mm")
@@ -793,7 +799,8 @@ record(calcout, "$(P)Control:PoseZTweakRev")
 
 record(ao, "$(P)Control:PoseRxCmd")
 {
-    field(DESC, "Commanded TCP rx")
+    alias("$(P)Control:Pose4Cmd")
+    field(DESC, "Commanded TCP Rx")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),3,$(TIMEOUT=1))POSE_CMD")
     field(EGU, "rad")
@@ -804,7 +811,8 @@ record(ao, "$(P)Control:PoseRxCmd")
 
 record(ao, "$(P)Control:PoseRyCmd")
 {
-    field(DESC, "Commanded TCP ry")
+    alias("$(P)Control:Pose5Cmd")
+    field(DESC, "Commanded TCP Ry")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),4,$(TIMEOUT=1))POSE_CMD")
     field(EGU, "rad")
@@ -815,7 +823,8 @@ record(ao, "$(P)Control:PoseRyCmd")
 
 record(ao, "$(P)Control:PoseRzCmd")
 {
-    field(DESC, "Commanded TCP rz")
+    alias("$(P)Control:Pose6Cmd")
+    field(DESC, "Commanded TCP Rz")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),5,$(TIMEOUT=1))POSE_CMD")
     field(EGU, "rad")
