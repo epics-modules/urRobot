@@ -2820,7 +2820,7 @@ caMenu{
                 <enum>EPushButton::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Path$(N):Go.PROC</string>
+                <string>$(P)Path$(N):Go.VAL</string>
             </property>
             <property name="foreground">
                 <color alpha="255">
