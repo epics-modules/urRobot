@@ -163,10 +163,18 @@ record(stringin, "$(P)Dashboard:RobotModel")
     field(SCAN, "I/O Intr")
 }
 
-record(stringin, "$(P)Dashboard:LoadedProgram")
+# record(stringin, "$(P)Dashboard:LoadedProgram")
+# {
+    # field(DESC, "Loaded program")
+    # field(DTYP, "asynOctetRead")
+    # field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))LOADED_PROGRAM")
+    # field(SCAN, "I/O Intr")
+# }
+record(lsi, "$(P)Dashboard:LoadedProgram")
 {
     field(DESC, "Loaded program")
     field(DTYP, "asynOctetRead")
+    field(SIZV, 1024)
     field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))LOADED_PROGRAM")
     field(SCAN, "I/O Intr")
 }

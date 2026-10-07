@@ -750,7 +750,7 @@ caMenu{
                 <enum>caLineEdit::WidthAndHeight</enum>
             </property>
             <property name="channel">
-                <string>$(P)Dashboard:LoadedProgram</string>
+                <string>$(P)Dashboard:LoadedProgram.VAL$</string>
             </property>
             <property name="foreground">
                 <color alpha="255">

@@ -329,7 +329,7 @@ text {
 		height=25
 	}
 	monitor {
-		chan="$(P)Dashboard:LoadedProgram"
+		chan="$(P)Dashboard:LoadedProgram.VAL$"
 		clr=54
 		bclr=4
 	}
