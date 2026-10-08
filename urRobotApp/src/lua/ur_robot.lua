@@ -67,17 +67,8 @@ local function wait_motion_done(count_before, timeout, move_name)
 
     while true do
         -- Abort if safety state changed
-        local safety, err = epics.get(g_prefix .. "Receive:SafetyStatusBits")
-        if safety == nil then
-            error("Could not read safety status: " .. tostring(err), 2)
-        end
-        if safety ~= 1 then
-            error("Motion stopped by robot safety state", 2)
-        end
-
-        -- This means motion completed
-        if get_motion_done_count() ~= count_before then
-            return
+        if epics.get(g_prefix .. "Receive:SafetyStatusBits") ~= 1 then
+            error("Motion stopped due to safety (or Receive:SafetyStatusBits unreachable)", 2)
         end
 
         now = osi.monotonic()
@@ -86,15 +77,16 @@ local function wait_motion_done(count_before, timeout, move_name)
         -- * Target outside safety limits
         -- * Robot is in state not ready for motion (e.g. e-stop, powered off, etc)
         if not accepted then
-            local done, done_err = epics.get(g_prefix .. "Control:AsyncMoveDone")
-            if done == nil then
-                error("Could not read AsyncMoveDone: " .. tostring(done_err), 2)
-            end
-            if done == 0 then
+            if epics.get(g_prefix .. "Control:AsyncMoveDone") == 0 then
                 accepted = true
             elseif now >= acceptance_deadline then
-                error(move_name .. " was rejected by the controller", 2)
+                error(move_name .. " failed to start", 2)
             end
+        end
+
+        -- If the count was incremented, that means the move completed
+        if get_motion_done_count() > count_before then
+            return
         end
 
         -- Time out and issue a stop if the move is taking too long to complete
@@ -107,6 +99,25 @@ local function wait_motion_done(count_before, timeout, move_name)
     end
 end
 
+local function validate_move_target(target)
+    if type(target) ~= "table" or #target ~= 6 then
+        error("Target must be length 6", 3)
+    end
+
+    for i, value in ipairs(target) do
+        if type(value) ~= "number" then
+            error(string.format("Target element %d is not a number", i), 3)
+        end
+    end
+end
+
+local function robot_ready()
+    return epics.get(g_prefix .. "Dashboard:RobotMode") == "Robotmode: RUNNING"
+       and epics.get(g_prefix .. "Control:Connected") == 1
+       and epics.get(g_prefix .. "Control:AsyncMoveDone") == 1
+       and epics.get(g_prefix .. "Receive:RuntimeState") == 2
+end
+
 --- Moves the robot to a joint target and waits for completion.
 -- @function moveJ
 -- @tparam table target Six joint angles in degrees.
@@ -114,31 +125,24 @@ end
 function M.moveJ(target, timeout)
     timeout = timeout or 300.0
 
-    if type(target) ~= "table" or #target ~= 6 then
-        error("moveJ target must be length 6", 2)
+    validate_move_target(target)
+
+    if not robot_ready() then
+        error("Robot not ready for motion", 2)
     end
 
-    local done, err = epics.get(g_prefix .. "Control:AsyncMoveDone")
-    if done == nil then
-        error("Could not read AsyncMoveDone: " .. tostring(err), 2)
-    end
-    if done ~= 1 then
-        error("Cannot start moveJ: another motion is active", 2)
-    end
-
+    -- Set the target values
     for i, value in ipairs(target) do
-        if type(value) ~= "number" then
-            error(string.format("moveJ target element %d is not a number", i), 2)
-        end
         epics.put(string.format("%sControl:J%dCmd", g_prefix, i), value)
     end
 
+    -- Get the counter value and disable command/readback syncing
     local count_before = get_motion_done_count()
-
     ensure_rbv_sync_disabled()
-    local move_err = epics.put(g_prefix .. "Control:moveJ", 1)
-    if move_err ~= nil then
-        error("Failed to submit moveJ: " .. tostring(move_err), 2)
+
+    -- Start motion and block until it's done
+    if epics.put(g_prefix .. "Control:moveJ", 1) ~= nil then
+        error("Failed to trigger moveJ", 2)
     end
     wait_motion_done(count_before, timeout, "moveJ")
 end
@@ -150,31 +154,25 @@ end
 function M.moveL(target, timeout)
     timeout = timeout or 300.0
 
-    if type(target) ~= "table" or #target ~= 6 then
-        error("moveL target must be length 6", 2)
+    validate_move_target(target)
+
+    if not robot_ready() then
+        error("Robot not ready for motion", 2)
     end
 
-    local done, err = epics.get(g_prefix .. "Control:AsyncMoveDone")
-    if done == nil then
-        error("Could not read AsyncMoveDone: " .. tostring(err), 2)
-    end
-    if done ~= 1 then
-        error("Cannot start moveL: another motion is active", 2)
-    end
-
+    -- Set the target values
     for i, value in ipairs(target) do
-        if type(value) ~= "number" then
-            error(string.format("moveL target element %d is not a number", i), 2)
-        end
         epics.put(string.format("%sControl:Pose%dCmd", g_prefix, i), value)
     end
 
+    -- Get the counter value
+    -- Disable command/readback syncing
     local count_before = get_motion_done_count()
-
     ensure_rbv_sync_disabled()
-    local move_err = epics.put(g_prefix .. "Control:moveL", 1)
-    if move_err ~= nil then
-        error("Failed to submit moveL: " .. tostring(move_err), 2)
+
+    -- Start motion and block until it's done
+    if epics.put(g_prefix .. "Control:moveL", 1) ~= nil then
+        error("Failed to trigger moveL", 2)
     end
     wait_motion_done(count_before, timeout, "moveL")
 end
