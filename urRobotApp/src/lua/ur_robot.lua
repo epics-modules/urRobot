@@ -395,13 +395,14 @@ if g_user_script ~= nil then
     -- if so, call func.
     epics.put(g_prefix .. "LuaUR:Running", 1)
     local result = table.pack(xpcall(dofile, traceback, g_user_script))
-    epics.put(g_prefix .. "LuaUR:Running", 0)
 
     -- Restore command/readback sync. Wrap in pcall so errors don't prevent later lock cleanup
-    local cleanup_ok, cleanup_err = table.pack(pcall(ensure_rbv_sync_enabled))
+    local cleanup_ok, cleanup_err = pcall(ensure_rbv_sync_enabled)
 
-    -- Clear cancellation flag; Clear program flag to allow other programs to start
+    -- Clear cancellation flag and mark this robot instance as no longer running a Lua program,
+    -- so another registered program for the same robot can start.
     local gate = acquire_program_gate(g_prefix)
+    epics.put(g_prefix .. "LuaUR:Running", 0)
     program_cancel(g_prefix):clear()
     program_lock(g_prefix):set()
     gate:set()
