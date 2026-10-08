@@ -71,12 +71,12 @@ robot controller, `caput Dashboard:Play 1` and `caput Dashboard:Play.PROC 1` (an
 |-------------- | -------------- | -------------- |
 | Receive:Connected    | bi     | 1 if connected to RTDE Receive interface, otherwise 0     |
 | Receive:ControllerTimestamp    | ai     | Time since controller started     |
-| Receive:SafetyStatusBits    | ai     | Bits 0-10: Is normal mode, Is reduced mode, Is protective stopped, Is recovery mode, Is safeguard stopped, Is system emergency stopped, Is robot emergency stopped, Is emergency stopped, Is violation, Is fault, Is stopped due to safety      |
-| Receive:DigitalInputBits    | ai     | Digital input bits (18bits)     |
-| Receive:DigitalOutputBits    | ai     | Digital output bits (18bits)     |
-| Receive:RuntimeState    | ai     | Bits 0-5: Stopping, Stopped, Playing, Pausing, Paused, Resuming     |
-| Receive:RobotMode    | ai     | -1=NO CONTROLLER, 0=DISCONNECTED, 1=CONFIRM SAFETY, 2=BOOTING, 3=POWER OFF, 4=POWER ON, 5=IDLE, 6=BACKDRIVE, 7=RUNNING, 8=UPDATING FIRMWARE      |
-| Receive:SafetyMode    | ai     | Safety mode     |
+| Receive:SafetyStatusBits    | longin     | Bits 0-10: Is normal mode, Is reduced mode, Is protective stopped, Is recovery mode, Is safeguard stopped, Is system emergency stopped, Is robot emergency stopped, Is emergency stopped, Is violation, Is fault, Is stopped due to safety      |
+| Receive:DigitalInputBits    | longin     | Digital input bits (18bits)     |
+| Receive:DigitalOutputBits    | longin     | Digital output bits (18bits)     |
+| Receive:RuntimeState    | longin     | Bits 0-5: Stopping, Stopped, Playing, Pausing, Paused, Resuming     |
+| Receive:RobotMode    | longin     | -1=NO CONTROLLER, 0=DISCONNECTED, 1=CONFIRM SAFETY, 2=BOOTING, 3=POWER OFF, 4=POWER ON, 5=IDLE, 6=BACKDRIVE, 7=RUNNING, 8=UPDATING FIRMWARE      |
+| Receive:SafetyMode    | longin     | Safety mode     |
 | Receive:AnalogInput0    | ai     | Standard A0 input     |
 | Receive:AnalogInput1    | ai     | Standard A1 input     |
 | Receive:AnalogOutput0    | ai     | Standard A0 output     |

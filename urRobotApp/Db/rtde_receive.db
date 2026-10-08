@@ -29,7 +29,7 @@ record(ai, "$(P)Receive:ControllerTimestamp")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:SafetyStatusBits")
+record(longin, "$(P)Receive:SafetyStatusBits")
 {
     field(DESC, "Safety status bits")
     field(DTYP, "asynInt32")
@@ -37,7 +37,7 @@ record(ai, "$(P)Receive:SafetyStatusBits")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:DigitalInputBits")
+record(longin, "$(P)Receive:DigitalInputBits")
 {
     field(DESC, "Digital input bits (18bits)")
     field(DTYP, "asynInt32")
@@ -45,7 +45,7 @@ record(ai, "$(P)Receive:DigitalInputBits")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:DigitalOutputBits")
+record(longin, "$(P)Receive:DigitalOutputBits")
 {
     field(DESC, "Digital output bits (18bits)")
     field(DTYP, "asynInt32")
@@ -53,7 +53,7 @@ record(ai, "$(P)Receive:DigitalOutputBits")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:RuntimeState")
+record(longin, "$(P)Receive:RuntimeState")
 {
     field(DESC, "Runtime state")
     field(DTYP, "asynInt32")
@@ -61,7 +61,7 @@ record(ai, "$(P)Receive:RuntimeState")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:RobotMode")
+record(longin, "$(P)Receive:RobotMode")
 {
     field(DESC, "Robot mode")
     field(DTYP, "asynInt32")
@@ -69,7 +69,7 @@ record(ai, "$(P)Receive:RobotMode")
     field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)Receive:SafetyMode")
+record(longin, "$(P)Receive:SafetyMode")
 {
     field(DESC, "Safety mode")
     field(DTYP, "asynInt32")
