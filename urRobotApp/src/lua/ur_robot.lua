@@ -10,12 +10,44 @@ local osi = require("osi")
 local M = {}
 
 local rbv_sync_disabled = false
+local program_cancelled = {}
 
 -- Injected globals:
 ---@diagnostic disable-next-line: undefined-global
 local g_prefix = PREFIX
 ---@diagnostic disable-next-line: undefined-global
 local g_record_name = G_RECORD_NAME
+---@diagnostic disable-next-line: undefined-global
+local g_user_script = G_USER_SCRIPT
+
+local module_info = debug.getinfo(1, "S")
+local module_script_name = module_info.source:sub(2)
+
+local function program_lock(prefix)
+    return event.flag("robot-program-lock:" .. prefix)
+end
+
+local function program_cancel(prefix)
+    return event.flag("robot-program-cancel:" .. prefix)
+end
+
+local function program_gate(prefix)
+    return event.flag("robot-program-gate:" .. prefix)
+end
+
+local function acquire_program_gate(prefix)
+    local gate = program_gate(prefix)
+    while not gate:testAndClear() do
+        gate:wait(-1)
+    end
+    return gate
+end
+
+local function check_program_cancelled()
+    if g_record_name ~= nil and program_cancel(g_prefix):test() then
+        error(program_cancelled, 0)
+    end
+end
 
 -- Continually reads a pv, passes its value to fn,
 -- returning if fn(pv_value) == true, or if timeout
@@ -123,6 +155,7 @@ end
 -- @tparam table target Six joint angles in degrees.
 -- @tparam[opt=300.0] number timeout Maximum completion time in seconds.
 function M.moveJ(target, timeout)
+    check_program_cancelled()
     timeout = timeout or 300.0
 
     validate_move_target(target)
@@ -145,6 +178,7 @@ function M.moveJ(target, timeout)
         error("Failed to trigger moveJ", 2)
     end
     wait_motion_done(count_before, timeout, "moveJ")
+    check_program_cancelled()
 end
 
 --- Moves the robot linearly to a Cartesian pose and waits for completion.
@@ -152,6 +186,7 @@ end
 -- @tparam table target Six values: X,Y,Z in millimeters and rotation-vector Rx,Ry,Rz in radians.
 -- @tparam[opt=300.0] number timeout Maximum completion time in seconds.
 function M.moveL(target, timeout)
+    check_program_cancelled()
     timeout = timeout or 300.0
 
     validate_move_target(target)
@@ -175,6 +210,7 @@ function M.moveL(target, timeout)
         error("Failed to trigger moveL", 2)
     end
     wait_motion_done(count_before, timeout, "moveL")
+    check_program_cancelled()
 end
 
 --- Runs a URP program on the controller and waits for completion.
@@ -182,6 +218,7 @@ end
 -- @tparam string filename URP filename to load.
 -- @tparam[opt=300.0] number completion_timeout Maximum execution time in seconds.
 function M.run_urp(filename, completion_timeout)
+    check_program_cancelled()
     completion_timeout = completion_timeout or 300.0
 
     -- Stop control script
@@ -201,16 +238,19 @@ function M.run_urp(filename, completion_timeout)
 
     -- Wait for program to be done
     wait_pv(g_prefix .. "Dashboard:Running", function(value) return value == 0 end, completion_timeout)
+    check_program_cancelled()
 end
 
 --- Reads the current joint positions.
 -- @function get_joints
 -- @treturn table Six joint angles in degrees.
 function M.get_joints()
+    check_program_cancelled()
     local value, err = epics.get(g_prefix .. "Receive:Joints")
     if value == nil then
         error("Failed to read joints: " .. tostring(err), 2)
     end
+    check_program_cancelled()
     return value
 end
 
@@ -218,21 +258,27 @@ end
 -- @function get_pose
 -- @treturn table X,Y,Z in millimeters and rotation-vector Rx,Ry,Rz in radians.
 function M.get_pose()
+    check_program_cancelled()
     local value, err = epics.get(g_prefix .. "Receive:Pose")
     if value == nil then
         error("Failed to read pose: " .. tostring(err), 2)
     end
+    check_program_cancelled()
     return value
 end
 
 function M.open_gripper()
+    check_program_cancelled()
     epics.put(g_prefix .. "RobotiqGripper:Open", 1)
     wait_pv(g_prefix .. "RobotiqGripper:Open", function(value) return value == 0 end, 5.0)
+    check_program_cancelled()
 end
 
 function M.close_gripper()
+    check_program_cancelled()
     epics.put(g_prefix .. "RobotiqGripper:Close", 1)
     wait_pv(g_prefix .. "RobotiqGripper:Close", function(value) return value == 0 end, 5.0)
+    check_program_cancelled()
 end
 
 --- Starts a registered program in an asynchronous Lua state.
@@ -241,17 +287,42 @@ end
 -- @tparam string record_name Registered record name to execute.
 -- @tparam string script_name Lua script containing the registration.
 function M.run_program(prefix, record_name, script_name)
+    local gate = acquire_program_gate(prefix)
+    local lock = program_lock(prefix)
+    local cancel = program_cancel(prefix)
+
+    if not lock:testAndClear() then
+        gate:set()
+        error("Another robot program is already running", 2)
+    end
+
+    cancel:clear()
     local err = luaRunFile(
-        script_name,
+        module_script_name,
         {
             PREFIX = prefix,
-            G_RECORD_NAME = record_name
+            G_RECORD_NAME = record_name,
+            G_USER_SCRIPT = script_name,
         },
         {async = 1}
     )
+
+    if err ~= nil then
+        lock:set()
+    end
+    gate:set()
+
     if err ~= nil then
         error(err, 2)
     end
+end
+
+function M.stop_program(prefix)
+    local gate = acquire_program_gate(prefix)
+    if not program_lock(prefix):test() then
+        program_cancel(prefix):set()
+    end
+    gate:set()
 end
 
 
@@ -283,32 +354,64 @@ function M.register(record_name, func)
         end
         local script_name = info.source:sub(2)
 
-        event.flag("robot-program-lock:" .. g_prefix):set()
+        program_lock(g_prefix):set()
+        program_gate(g_prefix):set()
 
-        -- Create the EPICS luascript record
+        -- Create the EPICS luascript records
         db.record("luascript", record_name) {
             CODE = string.format("return require('ur_robot').run_program(%q, %q, %q)", g_prefix, record_name, script_name),
             SYNC = "Sync",
         }
+        db.record("luascript", g_prefix .. "LuaUR:Stop") {
+            CODE = string.format("return require('ur_robot').stop_program(%q)", g_prefix),
+            SYNC = "Sync",
+            FLNK = g_prefix .. "Control:Stop.PROC",
+        }
+        db.record("bo", g_prefix .. "LuaUR:Running") {
+            ZNAM = "Done",
+            ONAM = "Running"
+        }
     elseif g_record_name == record_name then
-        local program_lock = event.flag("robot-program-lock:" .. g_prefix)
-        if not program_lock:testAndClear() then
-            error("Another robot program is already running", 2)
+        return func()
+    end
+end
+
+if g_user_script ~= nil then
+    -- Sets this module instance to be returned to the user
+    -- script's call to require("ur_robot")
+    package.loaded["ur_robot"] = M
+
+    -- Traceback for potential user script errors
+    local function traceback(err)
+        if err == program_cancelled then
+            return err
         end
+        return debug.traceback(err, 2)
+    end
 
-        -- Call the user's function
-        local result = table.pack(xpcall(func, debug.traceback))
+    -- This runs the complete user's script.
+    -- The script will call robot.register(record_name, func). This is not during IOC initialization
+    -- so g_record_name is not nil, so each call the register will check if record_name == g_record_name,
+    -- if so, call func.
+    epics.put(g_prefix .. "LuaUR:Running", 1)
+    local result = table.pack(xpcall(dofile, traceback, g_user_script))
+    epics.put(g_prefix .. "LuaUR:Running", 0)
 
-        -- if command/readback sync was disabled, re-enable it
-        ensure_rbv_sync_enabled()
+    -- Restore command/readback sync. Wrap in pcall so errors don't prevent later lock cleanup
+    local cleanup_ok, cleanup_err = table.pack(pcall(ensure_rbv_sync_enabled))
 
-        program_lock:set()
+    -- Clear cancellation flag; Clear program flag to allow other programs to start
+    local gate = acquire_program_gate(g_prefix)
+    program_cancel(g_prefix):clear()
+    program_lock(g_prefix):set()
+    gate:set()
 
-        if not result[1] then
-            error(result[2], 0)
-        end
-
-        return table.unpack(result, 2, result.n)
+    -- Report errors
+    if not cleanup_ok then
+        error(cleanup_err, 0)
+    end
+    if not result[1] and result[2] ~= program_cancelled then
+        error(result[2], 0)
     end
 end
 

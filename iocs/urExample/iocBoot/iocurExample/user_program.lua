@@ -1,4 +1,5 @@
 local robot = require("ur_robot")
+local osi = require("osi")
 
 local function print_table(tab)
     io.write("[")
