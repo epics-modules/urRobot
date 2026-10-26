@@ -390,11 +390,14 @@ void RTDEControl::servo_worker() {
         callParamCallbacks();
         unlock();
 
+        // TODO: set this depending on the robot model (e-series or CB3)
         constexpr double dt = 1.0 / 500.0;
+        // TODO: Make these configurable
         constexpr double lookahead_time = 0.1;
         constexpr double gain = 300.0;
 
         const double end_time = trajectory_.points.back().time;
+        std::vector<double> last_joints(NUM_JOINTS);
         for (size_t step = 0;; ++step) {
             if (servo_should_stop_.load(std::memory_order_relaxed)) {
                 break;
@@ -405,18 +408,29 @@ void RTDEControl::servo_worker() {
             rtde_control_->servoJ(joints, 0.0, 0.0, dt, lookahead_time, gain);
             rtde_control_->waitPeriod(t_start);
             if (time >= end_time) {
+                last_joints = joints;
                 break;
             }
         }
 
-        // for (const auto& joints : servo_trajectory_) {
-            // if (servo_should_stop_.load(std::memory_order_relaxed)) {
-                // break;
-            // }
-            // auto t_start = rtde_control_->initPeriod();
-            // rtde_control_->servoJ(joints, 0.0, 0.0, dt, lookahead_time, gain);
-            // rtde_control_->waitPeriod(t_start);
-        // }
+        // hold to ensure we reach the final target
+        // TODO: run until within a tolerance or timeout
+        auto start = std::chrono::steady_clock::now();
+        while (true) {
+            if (servo_should_stop_.load(std::memory_order_relaxed)) {
+                break;
+            }
+
+            auto t_start = rtde_control_->initPeriod();
+            rtde_control_->servoJ(last_joints, 0.0, 0.0, dt, lookahead_time, gain);
+            rtde_control_->waitPeriod(t_start);
+
+            auto now = std::chrono::steady_clock::now();
+            auto elap_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+            if (elap_ms >= 1000) {
+                break;
+            }
+        }
 
         rtde_control_->servoStop();
 

@@ -12,12 +12,6 @@ Trajectory build_trajectory(const std::vector<double>& values) {
     traj.points.reserve(trajectory_points.size());
 
     for (const auto& row : trajectory_points) {
-        // std::array<double, NUM_JOINTS> pos;
-        // std::array<double, NUM_JOINTS> vel;
-        // std::array<double, NUM_JOINTS> acc;
-        // std::copy(row.begin() + 1, row.begin() + 7, pos.begin());
-        // std::copy(row.begin() + 7, row.begin() + 13, vel.begin());
-        // std::copy(row.begin() + 13, row.begin() + 19, acc.begin());
         std::vector<double> pos(row.begin() + 1, row.begin() + 7);
         std::vector<double> vel(row.begin() + 7, row.begin() + 13);
         std::vector<double> acc(row.begin() + 13, row.begin() + 19);
