@@ -122,10 +122,10 @@ class RTDEControl : public asynPortDriver {
     }
 
     /// Servo trajectory
+    double servo_dt_ = 0.002;
     epicsEventId servo_event_ = nullptr;
     epicsThreadId servo_thread_id_ = nullptr;
     std::atomic<bool> servo_should_stop_{false};
-    // std::vector<std::vector<double>> servo_trajectory_;
     Trajectory trajectory_;
     enum class ServoState {
         Idle,
@@ -144,11 +144,14 @@ class RTDEControl : public asynPortDriver {
     int isConnectedIndex_;
     int isSteadyIndex_;
 
-    /// Servo ownership test controls
+    /// Servo motion
     int servoStartIndex_;
     int servoStopIndex_;
     int servoStateIndex_;
     int servoTrajIndex_;
+    int servoLookaheadIndex_;
+    int servoGainIndex_;
+    int servoSettleTimeIndex_;
 
     /// Joint-space motion
     int moveJIndex_;

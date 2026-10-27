@@ -206,6 +206,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
     createParam("SERVO_STOP", asynParamInt32, &servoStopIndex_);
     createParam("SERVO_STATE", asynParamInt32, &servoStateIndex_);
     createParam("SERVO_TRAJ", asynParamFloat64Array, &servoTrajIndex_);
+    createParam("SERVO_LOOKAHEAD", asynParamFloat64, &servoLookaheadIndex_);
+    createParam("SERVO_GAIN", asynParamFloat64, &servoGainIndex_);
+    createParam("SERVO_SETTLE_TIME", asynParamFloat64, &servoSettleTimeIndex_);
     createParam("MOVEJ", asynParamInt32, &moveJIndex_);
     createParam("STOPJ", asynParamInt32, &stopJIndex_);
     createParam("JOINT_CMD", asynParamFloat64, &jointCmdIndex_);
@@ -254,6 +257,9 @@ RTDEControl::RTDEControl(const char* asyn_port_name, const char* dash_drv_name, 
         return;
     }
     robot_ip_ = dash->get_ip();
+
+    // Get the servo control period which is model dependent
+    servo_dt_ = dash->get_control_period();
 
     // Get the version of Polyscope and connect the script client
     auto [major, minor] = get_polyscope_version(dash);
@@ -386,15 +392,17 @@ void RTDEControl::servo_worker() {
             unlock();
             continue;
         }
+
+        double lookahead_time;
+        double gain;
+        double servo_settle_time;
+        getDoubleParam(servoLookaheadIndex_, &lookahead_time);
+        getDoubleParam(servoGainIndex_, &gain);
+        getDoubleParam(servoSettleTimeIndex_, &servo_settle_time);
+
         setIntegerParam(isSteadyIndex_, 0);
         callParamCallbacks();
         unlock();
-
-        // TODO: set this depending on the robot model (e-series or CB3)
-        constexpr double dt = 1.0 / 500.0;
-        // TODO: Make these configurable
-        constexpr double lookahead_time = 0.1;
-        constexpr double gain = 300.0;
 
         const double end_time = trajectory_.points.back().time;
         std::vector<double> last_joints(NUM_JOINTS);
@@ -402,10 +410,10 @@ void RTDEControl::servo_worker() {
             if (servo_should_stop_.load(std::memory_order_relaxed)) {
                 break;
             }
-            const double time = step * dt;
+            const double time = step * servo_dt_;
             auto joints = sample_trajectory(trajectory_, time);
             auto t_start = rtde_control_->initPeriod();
-            rtde_control_->servoJ(joints, 0.0, 0.0, dt, lookahead_time, gain);
+            rtde_control_->servoJ(joints, 0.0, 0.0, servo_dt_, lookahead_time, gain);
             rtde_control_->waitPeriod(t_start);
             if (time >= end_time) {
                 last_joints = joints;
@@ -413,8 +421,7 @@ void RTDEControl::servo_worker() {
             }
         }
 
-        // hold to ensure we reach the final target
-        // TODO: run until within a tolerance or timeout
+        // TODO: Break if within tolerance before timeout
         auto start = std::chrono::steady_clock::now();
         while (true) {
             if (servo_should_stop_.load(std::memory_order_relaxed)) {
@@ -422,12 +429,12 @@ void RTDEControl::servo_worker() {
             }
 
             auto t_start = rtde_control_->initPeriod();
-            rtde_control_->servoJ(last_joints, 0.0, 0.0, dt, lookahead_time, gain);
+            rtde_control_->servoJ(last_joints, 0.0, 0.0, servo_dt_, lookahead_time, gain);
             rtde_control_->waitPeriod(t_start);
 
             auto now = std::chrono::steady_clock::now();
             auto elap_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-            if (elap_ms >= 1000) {
+            if (elap_ms >= servo_settle_time * 1000.0) {
                 break;
             }
         }
@@ -817,19 +824,8 @@ asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* val
     }
 
     if (function == servoTrajIndex_) {
-        // std::vector<std::vector<double>> trajectory;
-        // trajectory.reserve(nElements / NUM_JOINTS);
-        // for (size_t offset = 0; offset < nElements; offset += NUM_JOINTS) {
-            // std::vector<double> joints(value + offset, value + offset + NUM_JOINTS);
-            // for (auto& joint : joints) {
-                // joint *= M_PI / 180.0;
-            // }
-            // trajectory.push_back(std::move(joints));
-        // }
-        // servo_trajectory_ = std::move(trajectory);
-
-        std::vector<double> sparse_points(value, value + nElements);
-        trajectory_ = build_trajectory(sparse_points);
+        // std::vector<double> sparse_points(value, value + nElements);
+        trajectory_ = build_trajectory(std::vector<double>{value, value + nElements});
         servo_state_ = ServoState::Loaded;
         setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
         callParamCallbacks();

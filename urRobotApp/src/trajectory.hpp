@@ -62,7 +62,7 @@ std::vector<T> flatten(const std::vector<std::vector<T>>& input) {
 template <typename T>
 std::vector<std::vector<T>> unflatten(const std::vector<T>& input, size_t inner_size) {
     if (inner_size == 0 || (input.size() % inner_size) != 0) {
-        throw std::invalid_argument("Flat vector cannot be reshaped to requested size");
+        throw std::invalid_argument("trajectory.hpp:unflatten - Flat vector cannot be reshaped to requested size");
     }
     std::vector<std::vector<T>> result;
 

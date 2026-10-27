@@ -31,10 +31,14 @@ class URDashboard : public asynPortDriver {
     /// Returns the IP address of the robot
     std::string get_ip() { return robot_ip_; }
 
+    /// Returns the control loop period depending on controller type
+    double get_control_period() { return control_period_; }
+
   private:
     std::unique_ptr<ur_rtde::DashboardClient> ur_dashboard_;
-    double poll_period_; ///< seconds between poll cycles
-    std::string robot_ip_; ///< robot's IP address useful for other drivers
+    double poll_period_;            ///< seconds between poll cycles
+    std::string robot_ip_;          ///< robot's IP address useful for other drivers
+    double control_period_ = 0.002; ///< Controller poll period
     bool eseries_ = true;
 
     /// Connect (or reconnect) to the Dashboard Server on the robot.

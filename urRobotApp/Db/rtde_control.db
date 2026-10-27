@@ -960,6 +960,45 @@ record(bo, "$(P)Control:ServoStop")
     field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_STOP")
 }
 
+record(ao, "$(P)Control:ServoLookahead")
+{
+    field(DTYP, "asynFloat64")
+    field(PREC, 2)
+    field(PINI, 1)
+    field(EGU, "sec")
+    field(VAL, 0.1)
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_LOOKAHEAD")
+}
+
+record(ao, "$(P)Control:ServoGain")
+{
+    field(DTYP, "asynFloat64")
+    field(PREC, 2)
+    field(PINI, 1)
+    field(VAL, 300.0)
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_GAIN")
+}
+
+record(ao, "$(P)Control:ServoSettleTime")
+{
+    field(DTYP, "asynFloat64")
+    field(PREC, 2)
+    field(PINI, 1)
+    field(EGU, "sec")
+    field(VAL, 1.0)
+    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_SETTLE_TIME")
+}
+
+# record(ao, "$(P)Control:ServoSettleTol")
+# {
+    # field(DTYP, "asynFloat64")
+    # field(PREC, 4)
+    # field(PINI, 1)
+    # field(EGU, "deg")
+    # field(VAL, 0.1)
+    # field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_SETTLE_TOL")
+# }
+
 record(aao, "$(P)Control:ServoTraj") {
     field(DESC, "Joint angles trajectory")
     field(DTYP, "asynFloat64ArrayOut")

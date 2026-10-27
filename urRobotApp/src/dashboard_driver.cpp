@@ -77,9 +77,11 @@ URDashboard::URDashboard(const char* asyn_port_name, const char* robot_ip, doubl
         if (version.major == 5 && version.minor >= 6) {
             setStringParam(serialNumberIndex_, ur_dashboard_->getSerialNumber());
             eseries_ = true;
+            control_period_ = 0.002;
         } else {
             setStringParam(serialNumberIndex_, "3.X.X");
             eseries_ = false;
+            control_period_ = 0.008;
         }
         setStringParam(robotModelIndex_, ur_dashboard_->getRobotModel());
     } else {
