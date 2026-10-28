@@ -28,8 +28,9 @@ MAIN(testCollisions) {
         3.0300,-0.5500,-1.1500,-1.5500,-1.3500,1.1000,0.1000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
     };
 
-    auto traj = build_trajectory(sparse_traj);
-    for (const auto& p : traj.points) {
+    auto [traj, msg] = build_quintic_trajectory(sparse_traj);
+    testOk1(traj.has_value());
+    for (const auto& p : traj->points) {
         printf("Time = %lf\n", p.time);
         print_vector(p.position);
         print_vector(p.velocity);
@@ -37,37 +38,12 @@ MAIN(testCollisions) {
         printf("\n");
     }
 
-    // printf("Segment count = %zu\n", traj.segments.size());
-    // for (size_t segment_index = 0; segment_index < traj.segments.size(); ++segment_index) {
-        // const auto& segment = traj.segments[segment_index];
-        // const double duration = segment.end_time - segment.start_time;
-//
-        // printf("\nSegment %zu: [%lf, %lf]\n", segment_index, segment.start_time, segment.end_time);
-        // for (size_t joint = 0; joint < NUM_JOINTS; ++joint) {
-            // const auto& c = segment.coefficients[joint];
-            // const double start_position = c[0];
-            // const double end_position = c[0] + c[1] + c[2] + c[3] + c[4] + c[5];
-            // const double start_velocity = c[1] / duration;
-            // const double end_velocity =
-                // (c[1] + 2.0 * c[2] + 3.0 * c[3] + 4.0 * c[4] + 5.0 * c[5]) / duration;
-            // const double start_acceleration = 2.0 * c[2] / (duration * duration);
-            // const double end_acceleration =
-                // (2.0 * c[2] + 6.0 * c[3] + 12.0 * c[4] + 20.0 * c[5]) /
-                // (duration * duration);
-//
-            // printf("Joint %zu: q=(%.6f, %.6f) v=(%.6f, %.6f) a=(%.6f, %.6f)\n", joint,
-                   // start_position, end_position, start_velocity, end_velocity, start_acceleration,
-                   // end_acceleration);
-        // }
-    // }
-
-    testOk1(1==1);
-
     {
         std::vector<int> vec = {1, 2, 3, 4, 5, 6};
         auto unflattened_vec = unflatten(vec, 3);
-        testOk1(unflattened_vec.size() == 2);
-        testOk1(unflattened_vec[0].size() == 3);
+        testOk1(unflattened_vec.has_value());
+        testOk1(unflattened_vec->size() == 2);
+        testOk1(unflattened_vec.value()[0].size() == 3);
     }
 
     {

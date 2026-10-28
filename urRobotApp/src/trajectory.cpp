@@ -1,22 +1,59 @@
-#include <stdexcept>
 #include "trajectory.hpp"
+#include <cmath>
+#include <algorithm>
 
-Trajectory build_trajectory(const std::vector<double>& values) {
+/// For this robot which has 6 joints, each point is length 19:
+/// (1 timestamp + position[6] + velocity[6] + acceleration[6])
+constexpr size_t POINT_NUM_VALUES = 19;
 
-    if (values.size() < FLAT_POINT_LENGTH * 2) {
-        throw std::invalid_argument("Sparse flat trajectory is invalid length");
+std::pair<std::optional<Trajectory>, std::string> build_quintic_trajectory(const std::vector<double>& values) {
+
+    if (values.size() < 2 * POINT_NUM_VALUES ||
+        values.size() % POINT_NUM_VALUES != 0) {
+        return {std::nullopt, "Invalid size of flat trajectory"};
     }
 
-    auto trajectory_points = unflatten(values, FLAT_POINT_LENGTH);
-    Trajectory traj;
-    traj.points.reserve(trajectory_points.size());
+    auto trajectory_points = unflatten(values, POINT_NUM_VALUES);
+    if (!trajectory_points) {
+        return {std::nullopt, "Failed to reshape flat trajectory"};
+    }
 
-    for (const auto& row : trajectory_points) {
+    Trajectory traj{};
+    traj.points.reserve(trajectory_points->size());
+
+    auto finite = [](const std::vector<double>& vec) -> bool {
+        return std::all_of(
+            vec.begin(),
+            vec.end(),
+            [](double value){
+                return std::isfinite(value);
+            });
+    };
+
+    double last_time = 0.0;
+    for (auto it = trajectory_points->begin(); it != trajectory_points->end(); ++it) {
+        const auto& row = *it;
         std::vector<double> pos(row.begin() + 1, row.begin() + 7);
         std::vector<double> vel(row.begin() + 7, row.begin() + 13);
         std::vector<double> acc(row.begin() + 13, row.begin() + 19);
+        const double t = row[0];
+
+        if (it == trajectory_points->begin()) {
+            if (t != 0.0) {
+                return {std::nullopt, "First timestamp must be 0.0"};
+            }
+        } else if (t <= last_time || !std::isfinite(t)) {
+            return {std::nullopt, "Timestamps must be strictly increasing finite values"};
+        }
+        last_time = t;
+
+
+        if (!finite(pos) || !finite(vel) || !finite(acc)) {
+            return {std::nullopt, "Trajectory contains non-finite values"};
+        }
+
         traj.points.push_back(TrajectoryPoint{
-            row[0],
+            t,
             pos, vel, acc
         });
     }
@@ -49,7 +86,7 @@ Trajectory build_trajectory(const std::vector<double>& values) {
         traj.segments.push_back(segment);
     }
 
-    return traj;
+    return std::pair{std::move(traj), ""};
 }
 
 std::vector<double> sample_trajectory(const Trajectory& trajectory, double time) {

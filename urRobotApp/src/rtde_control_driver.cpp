@@ -185,7 +185,8 @@ static void servo_thread_C(void* pPvt) {
     pRTDEControl->servo_worker();
 }
 
-// constexpr int NUM_JOINTS = 6;
+// Must match Control:ServoTraj aao record's .NELM field
+constexpr int SERVO_TRAJECTORY_NELM = 38000;
 constexpr int MAX_ADDR = NUM_JOINTS;
 constexpr int ASYN_INTERFACE_MASK =
     asynInt32Mask | asynFloat64Mask | asynOctetMask | asynFloat64ArrayMask | asynDrvUserMask;
@@ -552,9 +553,7 @@ asynStatus RTDEControl::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function == servoStopIndex_) {
         if (servo_owns_control()) {
-            printf("Stopping servo motion\n");
             servo_should_stop_.store(true, std::memory_order_relaxed);
-            // epicsEventSignal(servo_event_);
         }
         goto skip;
     }
@@ -819,13 +818,29 @@ asynStatus RTDEControl::writeFloat64Array(asynUser* pasynUser, epicsFloat64* val
     int function = pasynUser->reason;
 
     if (servo_owns_control()) {
-        spdlog::warn("Array command rejected while servo owns RTDE control interface");
+        spdlog::warn("writeFloat64Array rejected while servo owns RTDE control interface");
         return asynError;
     }
 
     if (function == servoTrajIndex_) {
-        // std::vector<double> sparse_points(value, value + nElements);
-        trajectory_ = build_trajectory(std::vector<double>{value, value + nElements});
+        if (nElements == SERVO_TRAJECTORY_NELM) {
+            spdlog::error("Trajectory array possibly truncated to ServoTraj.NELM = "
+                          + std::to_string(SERVO_TRAJECTORY_NELM));
+            servo_state_ = ServoState::Idle;
+            setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
+            callParamCallbacks();
+            return asynError;
+        }
+        auto [traj_opt, msg] = build_quintic_trajectory(std::vector<double>(value, value + nElements));
+        if (!traj_opt) {
+            spdlog::error("Error building trajectory: " + msg);
+            servo_state_ = ServoState::Idle;
+            setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
+            callParamCallbacks();
+            return asynError;
+        } else {
+            trajectory_ = std::move(*traj_opt);
+        }
         servo_state_ = ServoState::Loaded;
         setIntegerParam(servoStateIndex_, static_cast<int>(servo_state_));
         callParamCallbacks();

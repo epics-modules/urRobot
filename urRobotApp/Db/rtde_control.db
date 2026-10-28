@@ -1000,12 +1000,11 @@ record(ao, "$(P)Control:ServoSettleTime")
 # }
 
 record(aao, "$(P)Control:ServoTraj") {
-    field(DESC, "Joint angles trajectory")
+    field(DESC, "Time-parametrized joint trajectory")
     field(DTYP, "asynFloat64ArrayOut")
     field(FTVL, "DOUBLE")
-    field(NELM, 30000)
+    field(NELM, 38000)
     field(PREC, 4)
-    field(EGU, "deg")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))SERVO_TRAJ")
 }
 

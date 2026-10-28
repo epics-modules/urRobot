@@ -2,10 +2,12 @@
 #include <array>
 #include <cstddef>
 #include <vector>
-#include <stdexcept>
+#include <utility>
+#include <string>
+#include <optional>
 
 inline constexpr size_t NUM_JOINTS = 6;
-constexpr size_t FLAT_POINT_LENGTH = 19;
+inline constexpr size_t NUM_QUINTIC_COEFFICIENTS = 6;
 
 /// @brief A single configuration along a trajectory including
 /// a timestamp and arrays: position, velocity, and acceleration.
@@ -21,7 +23,7 @@ struct TrajectoryPoint {
 struct TrajectorySegment {
     double start_time;
     double end_time;
-    std::array<std::array<double, NUM_JOINTS>, NUM_JOINTS> coefficients;
+    std::array<std::array<double, NUM_QUINTIC_COEFFICIENTS>, NUM_JOINTS> coefficients;
 };
 
 /// @brief A time-scaled trajectory and segments along the trajectory
@@ -30,13 +32,14 @@ struct Trajectory {
     std::vector<TrajectorySegment> segments;
 };
 
-/// @brief Builds a Trajectory from a sparse, flat, time-stamped list of via points.
+/// @brief Builds a quintic time scaled trajectory from a sparse, flat,
+/// time-stamped list of via points.
 ///
 /// For this robot which has 6 joints, each point is length 19:
-/// (1 timestamp + 6vec position + 6vec velocity + 6vec acceleration). Therefore,
-/// a valid list of points is divisble by 19
+/// (1 timestamp + position[6] + velocity[6] + acceleration[6]).
+/// Therefore, a valid list of points is divisble by 19.
 /// @param values flatten list of via points in the trajectory
-Trajectory build_trajectory(const std::vector<double>& values);
+std::pair<std::optional<Trajectory>, std::string> build_quintic_trajectory(const std::vector<double>& values);
 
 /// @brief Finds the joint positions alonge the trajectory at a given time
 /// @param trajectory Time-parametrized Trajectory
@@ -60,9 +63,9 @@ std::vector<T> flatten(const std::vector<std::vector<T>>& input) {
 
 /// @brief Reshapes a flat vector to a 2d vector with the specified inner
 template <typename T>
-std::vector<std::vector<T>> unflatten(const std::vector<T>& input, size_t inner_size) {
+std::optional<std::vector<std::vector<T>>> unflatten(const std::vector<T>& input, size_t inner_size) {
     if (inner_size == 0 || (input.size() % inner_size) != 0) {
-        throw std::invalid_argument("trajectory.hpp:unflatten - Flat vector cannot be reshaped to requested size");
+        return std::nullopt;
     }
     std::vector<std::vector<T>> result;
 
